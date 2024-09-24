@@ -23,9 +23,12 @@
 
 #include <QTreeView>
 
+#include <Kanoop/utility/loggingbaseclass.h>
+
 class QStyledItemDelegate;
 class AbstractItemModel;
-class TreeViewBase : public QTreeView
+class TreeViewBase : public QTreeView,
+                     public LoggingBaseClass
 {
     Q_OBJECT
 public:

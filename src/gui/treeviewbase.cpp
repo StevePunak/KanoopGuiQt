@@ -24,7 +24,8 @@
 #include <QStyledItemDelegate>
 
 TreeViewBase::TreeViewBase(QWidget *parent) :
-    QTreeView(parent)
+    QTreeView(parent),
+    LoggingBaseClass()
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setExpandsOnDoubleClick(false);
