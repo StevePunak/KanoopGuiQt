@@ -137,6 +137,11 @@ AbstractItemModel *TreeViewBase::sourceModel() const
     return static_cast<AbstractItemModel*>(model());
 }
 
+void TreeViewBase::setSourceModel(AbstractItemModel *model)
+{
+    setModel(model);
+}
+
 void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 {
     QStyledItemDelegate* existing = _columnDelegates.value(type);

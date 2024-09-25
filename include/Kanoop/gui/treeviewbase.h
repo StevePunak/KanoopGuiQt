@@ -45,6 +45,7 @@ public:
     void restoreHeaderStates();
 
     AbstractItemModel* sourceModel() const;
+    void setSourceModel(AbstractItemModel* model);
 
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
