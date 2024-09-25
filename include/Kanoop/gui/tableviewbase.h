@@ -17,8 +17,6 @@
 ******************************************************************************************/
 #ifndef TABLEVIEWBASE_H
 #define TABLEVIEWBASE_H
-#include "tableheader.h"
-
 #include <Kanoop/entitymetadata.h>
 #include <Kanoop/utility/loggingbaseclass.h>
 
@@ -36,7 +34,7 @@ public:
     explicit TableViewBase(QWidget* parent = nullptr);
     virtual ~TableViewBase();
 
-    virtual void setModel(AbstractItemModel* model);
+    virtual void setSourceModel(AbstractItemModel* model);
 
     int entityTypeAtPos(const QPoint& pos);
     EntityMetadata currentMetadata() const;
@@ -60,7 +58,7 @@ signals:
     void horizontalHeaderChanged();
     void verticalHeaderChanged();
 
-    void selectionChanged();
+    void currentSelectionChanged();
 
     // Model updates
     void itemAdded(const EntityMetadata& metadata);

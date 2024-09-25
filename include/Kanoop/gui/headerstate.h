@@ -8,6 +8,8 @@ class HeaderState : public ISerializableToJson,
                     public IDeserializableFromJson
 {
 public:
+    virtual ~HeaderState() {}
+
     virtual QByteArray serializeToJson() const override;
     virtual void deserializeFromJson(const QByteArray &json) override;
 
@@ -19,6 +21,7 @@ public:
             _section(0), _size(100) {}
         SectionState(int section, const QString& text, int size) :
             _section(section), _text(text), _size(size)  {}
+        virtual ~SectionState() {}
 
         virtual QJsonObject serializeToJsonObject() const override;
         virtual void deserializeFromJsonObject(const QJsonObject &jsonObject) override;

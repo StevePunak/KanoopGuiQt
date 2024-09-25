@@ -57,14 +57,14 @@ TableViewBase::~TableViewBase()
     qDeleteAll(_columnDelegates);
 }
 
-void TableViewBase::setModel(AbstractItemModel *model)
+void TableViewBase::setSourceModel(AbstractItemModel *model)
 {
     // TODO: Don't always use proxy model
     _proxyModel = new QSortFilterProxyModel(this);
     _proxyModel->setSourceModel(model);
     QTableView::setModel(_proxyModel);
 
-    connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &TableViewBase::selectionChanged);
+    connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &TableViewBase::currentSelectionChanged);
 }
 
 int TableViewBase::entityTypeAtPos(const QPoint &pos)
