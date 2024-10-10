@@ -11,7 +11,7 @@
 #include <QIcon>
 #include <Kanoop/kanoopcommon.h>
 
-class Resources
+class LIBKANOOPGUI_EXPORT Resources
 {
 public:
     static void registerImage(int id, const QString& resourcePath);

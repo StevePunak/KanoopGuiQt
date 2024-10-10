@@ -3,9 +3,10 @@
 #include <Kanoop/serialization/iserializabletojson.h>
 #include <Kanoop/serialization/ideserializablefromjson.h>
 #include <Kanoop/serialization/serializablejsonlist.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class HeaderState : public ISerializableToJson,
-                    public IDeserializableFromJson
+class LIBKANOOPGUI_EXPORT HeaderState : public ISerializableToJson,
+                                        public IDeserializableFromJson
 {
 public:
     virtual ~HeaderState() {}

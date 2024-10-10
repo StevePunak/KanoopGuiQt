@@ -19,12 +19,13 @@
 #define GUISETTINGS_H
 #include <QSettings>
 #include <QWidget>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QHeaderView;
 class QSplitter;
 class AbstractItemModel;
 class TreeViewBase;
-class GuiSettings
+class LIBKANOOPGUI_EXPORT GuiSettings
 {
 public:
     GuiSettings();

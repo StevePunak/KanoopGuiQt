@@ -22,8 +22,8 @@
 #include <Kanoop/gui/tableheader.h>
 #include <Kanoop/utility/loggingbaseclass.h>
 
-class AbstractItemModel : public QAbstractItemModel,
-                          public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT AbstractItemModel : public QAbstractItemModel,
+                                              public LoggingBaseClass
 {
     Q_OBJECT
 public:

@@ -19,8 +19,9 @@
 #define TABLEHEADER_H
 #include <QColor>
 #include <QMap>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class TableHeader
+class LIBKANOOPGUI_EXPORT TableHeader
 {
 public:
     TableHeader() : _type(0), _orientation(Qt::Horizontal) {}
