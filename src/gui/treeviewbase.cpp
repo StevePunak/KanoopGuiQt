@@ -15,6 +15,7 @@
 ** Created: Sun Oct 22 17:41:53 2023
 **
 ******************************************************************************************/
+#include <QSortFilterProxyModel>
 #include <abstractitemmodel.h>
 #include <guisettings.h>
 #include <treeviewbase.h>
@@ -25,7 +26,8 @@
 
 TreeViewBase::TreeViewBase(QWidget *parent) :
     QTreeView(parent),
-    LoggingBaseClass()
+    LoggingBaseClass(),
+    _sourceModel(nullptr)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setExpandsOnDoubleClick(false);
@@ -132,14 +134,31 @@ void TreeViewBase::restoreHeaderStates()
     }
 }
 
-AbstractItemModel *TreeViewBase::sourceModel() const
+void TreeViewBase::setModel(QAbstractItemModel* model)
 {
-    return static_cast<AbstractItemModel*>(model());
+    QSortFilterProxyModel* proxyModel = dynamic_cast<QSortFilterProxyModel*>(model);
+    if(proxyModel == nullptr) {
+        QTreeView::setModel(model);
+        AbstractItemModel* abstractModel = dynamic_cast<AbstractItemModel*>(model);
+        if(abstractModel != nullptr) {
+            _sourceModel = abstractModel;
+        }
+        else {
+            logText(LVL_ERROR, "The provided model is not an AbstractItemModel. Results are now undefined.");
+        }
+    }
+    else {
+        _proxyModel = proxyModel;
+        _sourceModel = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
+        QTreeView::setModel(_proxyModel);
+    }
 }
 
-void TreeViewBase::setSourceModel(AbstractItemModel *model)
+void TreeViewBase::refreshVisible()
 {
-    setModel(model);
+    QModelIndex topLeft = indexAt(rect().topLeft());
+    QModelIndex bottomRight = indexAt(rect().topLeft());
+    _sourceModel->refresh(topLeft, bottomRight);
 }
 
 void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)

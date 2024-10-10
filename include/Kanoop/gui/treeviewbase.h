@@ -25,6 +25,7 @@
 
 #include <Kanoop/utility/loggingbaseclass.h>
 
+class QSortFilterProxyModel;
 class QStyledItemDelegate;
 class AbstractItemModel;
 class TreeViewBase : public QTreeView,
@@ -44,8 +45,10 @@ public:
 
     void restoreHeaderStates();
 
-    AbstractItemModel* sourceModel() const;
-    void setSourceModel(AbstractItemModel* model);
+    virtual void setModel(QAbstractItemModel* model) override;
+    AbstractItemModel* sourceModel() const { return _sourceModel; }
+
+    void refreshVisible();
 
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
@@ -54,6 +57,8 @@ protected:
     QModelIndexList findParents(const QModelIndex& index) const;
 
 private:
+    AbstractItemModel* _sourceModel;
+    QSortFilterProxyModel* _proxyModel;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
 signals:

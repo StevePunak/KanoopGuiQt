@@ -21,13 +21,12 @@
 #include <QColor>
 #include <QString>
 
-
-
 class StyleSheets
 {
 public:
     static QString backgroundColor(const QColor& color);
     static QString foregroundColor(const QColor& color);
+    static QString borderRadius(int radius);
 };
 
 #endif // STYLESHEETS_H

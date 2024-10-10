@@ -28,3 +28,8 @@ QString StyleSheets::foregroundColor(const QColor &color)
     // color: rgb(85, 85, 255);
     return QString("color: rgb(%1, %2, %3);").arg(color.red()).arg(color.green()).arg(color.blue());
 }
+
+QString StyleSheets::borderRadius(int radius)
+{
+    return QString("border-radius: %1px);").arg(radius);
+}

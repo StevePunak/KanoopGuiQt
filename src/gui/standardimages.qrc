@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/close-button.png</file>
+        <file>assets/spinner.png</file>
+    </qresource>
+</RCC>

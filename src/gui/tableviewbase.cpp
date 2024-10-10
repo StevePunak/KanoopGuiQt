@@ -25,7 +25,7 @@
 
 TableViewBase::TableViewBase(QWidget *parent) :
     QTableView(parent),
-    _proxyModel(nullptr)
+    _sourceModel(nullptr), _proxyModel(nullptr)
 {
     // No grid
     setGridStyle(Qt::NoPen);
@@ -57,12 +57,24 @@ TableViewBase::~TableViewBase()
     qDeleteAll(_columnDelegates);
 }
 
-void TableViewBase::setSourceModel(AbstractItemModel *model)
+void TableViewBase::setModel(QAbstractItemModel *model)
 {
-    // TODO: Don't always use proxy model
-    _proxyModel = new QSortFilterProxyModel(this);
-    _proxyModel->setSourceModel(model);
-    QTableView::setModel(_proxyModel);
+    QSortFilterProxyModel* proxyModel = dynamic_cast<QSortFilterProxyModel*>(model);
+    if(proxyModel == nullptr) {
+        QTableView::setModel(model);
+        AbstractItemModel* abstractModel = dynamic_cast<AbstractItemModel*>(model);
+        if(abstractModel != nullptr) {
+            _sourceModel = abstractModel;
+        }
+        else {
+            logText(LVL_ERROR, "The provided model is not an AbstractItemModel. Results are now undefined.");
+        }
+    }
+    else {
+        _proxyModel = proxyModel;
+        _sourceModel = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
+        QTableView::setModel(_proxyModel);
+    }
 
     connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &TableViewBase::currentSelectionChanged);
 }
@@ -100,15 +112,6 @@ EntityMetadata TableViewBase::metadataAtPos(const QPoint &pos) const
         metadata = index.data(KANOOP::EntityMetadataRole).value<EntityMetadata>();
     }
     return metadata;
-}
-
-AbstractItemModel *TableViewBase::sourceModel() const
-{
-    AbstractItemModel* result = nullptr;
-    if(_proxyModel != nullptr) {
-        result = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
-    }
-    return result;
 }
 
 void TableViewBase::deleteRow(const QModelIndex &index)

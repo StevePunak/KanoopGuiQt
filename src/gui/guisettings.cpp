@@ -45,7 +45,6 @@ GuiSettings::GuiSettings() :
     _settings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::instance()->organizationName(), QCoreApplication::instance()->applicationName()),
     _maxRecentFiles(10)
 {
-    GuiSettings::ensureValidDefaults();
 }
 
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
@@ -188,6 +187,11 @@ QString GuiSettings::makeFileTypeKey(const QString &key, const QString &extensio
     QString fixed = extension;
     fixed.removeIf([extension](const QChar& it) { return it.isPunct() || it.isSpace(); });
     return QString("%1/%2").arg(key, fixed);
+}
+
+QString GuiSettings::makeFileTypeKey(const QString& key, int fileType)
+{
+    return QString("%1/%2").arg(key, QString("type_%1").arg(fileType));
 }
 
 QString GuiSettings::makeCompoundObjectKey(const QString &key, const QObject *object)

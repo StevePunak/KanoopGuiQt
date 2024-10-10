@@ -65,7 +65,9 @@ public:
     void setMaxRecentFiles(int value) { _maxRecentFiles = value; }
 
     QString lastDirectory(const QString& extension) const { return _settings.value(makeFileTypeKey(KEY_LAST_DIRECTORY, extension)).toString(); }
+    QString lastDirectory(int fileType) const { return _settings.value(makeFileTypeKey(KEY_LAST_DIRECTORY, fileType)).toString(); }
     void saveLastDirectory(const QString& extension, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, extension), value); }
+    void saveLastDirectory(int fileType, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, fileType), value); }
 
     int fontSize() const { return _settings.value(makeStandardKey(KEY_FONT_SIZE)).toInt(); }
     void setFontSize(int value) { _settings.setValue(makeStandardKey(KEY_FONT_SIZE), value); }
@@ -78,6 +80,7 @@ protected:
     static QString makeKey(const QString& key, const QString& subKey) { return QString("%1/%2").arg(key).arg(subKey); }
     static QString makeObjectKey(const QObject* object);
     static QString makeFileTypeKey(const QString& key, const QString& extension);
+    static QString makeFileTypeKey(const QString& key, int fileType);
     static QString makeCompoundObjectKey(const QString& key, const QObject* object);
 
     virtual void ensureValidDefaults();
