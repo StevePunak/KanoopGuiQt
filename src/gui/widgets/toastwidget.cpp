@@ -69,7 +69,7 @@ void ToastWidget::resizeEvent(QResizeEvent* event)
 
 void ToastWidget::onCloseTimer()
 {
-    _opacity -= .02;
+    _opacity -= .01;
     if(_opacity <= 0) {
         emit complete();
     }
@@ -78,7 +78,7 @@ void ToastWidget::onCloseTimer()
 
         // setWindowOpacity(_opacity);
         update();
-        QTimer::singleShot(20, this, &ToastWidget::onCloseTimer);
+        QTimer::singleShot(50, this, &ToastWidget::onCloseTimer);
     }
 }
 
