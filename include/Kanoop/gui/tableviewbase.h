@@ -21,12 +21,13 @@
 #include <Kanoop/utility/loggingbaseclass.h>
 
 #include <QTableView>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QStyledItemDelegate;
 class QSortFilterProxyModel;
 class AbstractItemModel;
-class TableViewBase : public QTableView,
-                      public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT TableViewBase : public QTableView,
+                                          public LoggingBaseClass
 {
     Q_OBJECT
 

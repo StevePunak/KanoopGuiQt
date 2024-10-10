@@ -20,10 +20,9 @@
 
 #include <QColor>
 #include <QString>
+#include <Kanoop/gui/libkanoopgui.h>
 
-
-
-class StyleSheets
+class LIBKANOOPGUI_EXPORT StyleSheets
 {
 public:
     static QString backgroundColor(const QColor& color);

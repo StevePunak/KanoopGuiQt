@@ -17,18 +17,17 @@
 ******************************************************************************************/
 #ifndef TREEVIEWBASE_H
 #define TREEVIEWBASE_H
-#include "tableheader.h"
-
 #include <Kanoop/entitymetadata.h>
 
 #include <QTreeView>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QStyledItemDelegate;
 class AbstractItemModel;
-class TreeViewBase : public QTreeView,
-                     public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT TreeViewBase : public QTreeView,
+                                         public LoggingBaseClass
 {
     Q_OBJECT
 public:

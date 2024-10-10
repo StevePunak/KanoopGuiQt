@@ -9,8 +9,9 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 #include <QIcon>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class Resources
+class LIBKANOOPGUI_EXPORT Resources
 {
 public:
     static void registerImage(int entityMetadataType, const QString& resourcePath);

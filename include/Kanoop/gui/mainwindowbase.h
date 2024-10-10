@@ -21,10 +21,11 @@
 #include <QMainWindow>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QMdiArea;
-class MainWindowBase : public QMainWindow,
-                       public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT MainWindowBase : public QMainWindow,
+                                           public LoggingBaseClass
 {
     Q_OBJECT
 public:
