@@ -24,7 +24,7 @@
 #include <Kanoop/gui/libkanoopgui.h>
 
 class AbstractItemModel;
-class AbstractModelItem
+class LIBKANOOPGUI_EXPORT AbstractModelItem
 {
 public:
     AbstractModelItem();

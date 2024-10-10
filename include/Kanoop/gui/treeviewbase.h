@@ -17,15 +17,18 @@
 ******************************************************************************************/
 #ifndef TREEVIEWBASE_H
 #define TREEVIEWBASE_H
-#include "tableheader.h"
-
 #include <Kanoop/entitymetadata.h>
 
 #include <QTreeView>
 
+#include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
+
+class QSortFilterProxyModel;
 class QStyledItemDelegate;
 class AbstractItemModel;
-class TreeViewBase : public QTreeView
+class LIBKANOOPGUI_EXPORT TreeViewBase : public QTreeView,
+                                         public LoggingBaseClass
 {
     Q_OBJECT
 public:
@@ -41,7 +44,10 @@ public:
 
     void restoreHeaderStates();
 
-    AbstractItemModel* sourceModel() const;
+    virtual void setModel(QAbstractItemModel* model) override;
+    AbstractItemModel* sourceModel() const { return _sourceModel; }
+
+    void refreshVisible();
 
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
@@ -50,6 +56,8 @@ protected:
     QModelIndexList findParents(const QModelIndex& index) const;
 
 private:
+    AbstractItemModel* _sourceModel;
+    QSortFilterProxyModel* _proxyModel;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
 signals:

@@ -18,10 +18,11 @@
 #ifndef GUITYPES_H
 #define GUITYPES_H
 #include <Qt>
+#include <Kanoop/gui/libkanoopgui.h>
 
 namespace GUI
 {
-void registerMetatypes();
+LIBKANOOPGUI_EXPORT void registerMetatypes();
 } // namespace GUI
 
 

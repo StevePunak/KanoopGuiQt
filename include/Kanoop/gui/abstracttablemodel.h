@@ -19,7 +19,7 @@
 #define ABSTRACTTABLEMODEL_H
 #include "abstractitemmodel.h"
 
-class AbstractTableModel : public AbstractItemModel
+class LIBKANOOPGUI_EXPORT AbstractTableModel : public AbstractItemModel
 {
     Q_OBJECT
 public:
