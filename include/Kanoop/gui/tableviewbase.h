@@ -17,18 +17,17 @@
 ******************************************************************************************/
 #ifndef TABLEVIEWBASE_H
 #define TABLEVIEWBASE_H
-#include "tableheader.h"
-
 #include <Kanoop/entitymetadata.h>
 #include <Kanoop/utility/loggingbaseclass.h>
 
 #include <QTableView>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QStyledItemDelegate;
 class QSortFilterProxyModel;
 class AbstractItemModel;
-class TableViewBase : public QTableView,
-                      public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT TableViewBase : public QTableView,
+                                          public LoggingBaseClass
 {
     Q_OBJECT
 
@@ -36,13 +35,13 @@ public:
     explicit TableViewBase(QWidget* parent = nullptr);
     virtual ~TableViewBase();
 
-    virtual void setModel(AbstractItemModel* model);
+    virtual void setModel(QAbstractItemModel* model) override;
 
     int entityTypeAtPos(const QPoint& pos);
     EntityMetadata currentMetadata() const;
     EntityMetadata metadataAtPos(const QPoint& pos) const;
 
-    AbstractItemModel* sourceModel() const;
+    AbstractItemModel* sourceModel() const { return _sourceModel; }
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
     virtual void deleteRow(const QModelIndex& index);
     virtual void addRow(const EntityMetadata& metadata) { emit addItem(metadata); }
@@ -53,6 +52,7 @@ public:
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
 private:
+    AbstractItemModel* _sourceModel;
     QSortFilterProxyModel* _proxyModel;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
@@ -60,7 +60,7 @@ signals:
     void horizontalHeaderChanged();
     void verticalHeaderChanged();
 
-    void selectionChanged();
+    void currentSelectionChanged();
 
     // Model updates
     void itemAdded(const EntityMetadata& metadata);

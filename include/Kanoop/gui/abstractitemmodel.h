@@ -22,8 +22,8 @@
 #include <Kanoop/gui/tableheader.h>
 #include <Kanoop/utility/loggingbaseclass.h>
 
-class AbstractItemModel : public QAbstractItemModel,
-                          public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT AbstractItemModel : public QAbstractItemModel,
+                                              public LoggingBaseClass
 {
     Q_OBJECT
 public:
@@ -41,6 +41,7 @@ public:
     QModelIndex firstIndexOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
     QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
     QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
+    QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
 
     TableHeader::List columnHeaders() const;
     TableHeader columnHeader(int column) const { return _columnHeadersIntMap.value(column); }
@@ -48,6 +49,8 @@ public:
     int columnForHeader(int type) const;
 
     QModelIndexList getPersistentIndexes() const;
+
+    void refresh(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
     // QAbstractItemModel interface
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;

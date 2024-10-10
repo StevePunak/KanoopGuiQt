@@ -237,6 +237,16 @@ QModelIndex AbstractItemModel::firstIndexOfChildEntityType(const QModelIndex &pa
     return result;
 }
 
+QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags) const
+{
+    QModelIndex result;
+    QModelIndexList found = match(startSearchIndex, role, value, 1, flags);
+    if(found.count() > 0) {
+        result = found.first();
+    }
+    return result;
+}
+
 TableHeader::List AbstractItemModel::columnHeaders() const
 {
     TableHeader::List result;
@@ -297,6 +307,11 @@ int AbstractItemModel::columnForHeader(int type) const
 QModelIndexList AbstractItemModel::getPersistentIndexes() const
 {
     return persistentIndexList();
+}
+
+void AbstractItemModel::refresh(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    emit dataChanged(topLeft, bottomRight);
 }
 
 void AbstractItemModel::deleteRootItem(AbstractModelItem *item)
