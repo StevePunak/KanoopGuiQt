@@ -2,8 +2,9 @@
 #define TABWIDGET_H
 
 #include <QTabWidget>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class TabWidget : public QTabWidget
+class LIBKANOOPGUI_EXPORT TabWidget : public QTabWidget
 {
     Q_OBJECT
 public:

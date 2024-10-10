@@ -2,11 +2,12 @@
 #define BUTTONLABEL_H
 
 #include <QWidget>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QHBoxLayout;
 class QToolButton;
 class QLabel;
-class ButtonLabel : public QWidget
+class LIBKANOOPGUI_EXPORT ButtonLabel : public QWidget
 {
     Q_OBJECT
 public:

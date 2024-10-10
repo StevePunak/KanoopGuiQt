@@ -2,8 +2,9 @@
 #define COMBOBOX_H
 
 #include <QComboBox>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class ComboBox : public QComboBox
+class LIBKANOOPGUI_EXPORT ComboBox : public QComboBox
 {
     Q_OBJECT
 public:

@@ -3,10 +3,11 @@
 
 #include <QListView>
 #include <Kanoop/entitymetadata.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QStandardItemModel;
 class SidebarPaintDelegate;
-class SidebarWidget : public QListView
+class LIBKANOOPGUI_EXPORT SidebarWidget : public QListView
 {
     Q_OBJECT
 public:

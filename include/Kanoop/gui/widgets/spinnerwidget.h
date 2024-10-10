@@ -2,8 +2,9 @@
 #define SPINNERWIDGET_H
 #include <QTimer>
 #include <QFrame>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class SpinnerWidget : public QFrame
+class LIBKANOOPGUI_EXPORT SpinnerWidget : public QFrame
 {
     Q_OBJECT
 public:

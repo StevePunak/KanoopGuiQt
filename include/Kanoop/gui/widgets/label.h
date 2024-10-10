@@ -2,8 +2,9 @@
 #define LABEL_H
 
 #include <QLabel>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class Label : public QLabel
+class LIBKANOOPGUI_EXPORT Label : public QLabel
 {
     Q_OBJECT
 public:

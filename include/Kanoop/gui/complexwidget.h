@@ -4,8 +4,9 @@
 #include <QWidget>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class ComplexWidget : public QWidget,
+class LIBKANOOPGUI_EXPORT ComplexWidget : public QWidget,
                       public LoggingBaseClass
 {
     Q_OBJECT

@@ -23,10 +23,11 @@
 #include <Kanoop/utility/loggingbaseclass.h>
 #include <Kanoop/entitymetadata.h>
 #include <Kanoop/timespan.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
 #define COMPARE(a, b)       compare(a, b)
 
-class Dialog : public QDialog,
+class LIBKANOOPGUI_EXPORT Dialog : public QDialog,
                public LoggingBaseClass
 {
     Q_OBJECT

@@ -9,6 +9,7 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 #include <QIcon>
+#include <Kanoop/gui/libkanoopgui.h>
 #include <Kanoop/kanoopcommon.h>
 
 class LIBKANOOPGUI_EXPORT Resources

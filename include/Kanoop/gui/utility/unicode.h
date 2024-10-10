@@ -2,9 +2,10 @@
 #define UNICODE_H
 
 #include <QMap>
+#include <Kanoop/gui/libkanoopgui.h>
 
 
-class Unicode
+class LIBKANOOPGUI_EXPORT Unicode
 {
 public:
     enum SpecialCharacter

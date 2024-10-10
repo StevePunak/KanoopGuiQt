@@ -5,13 +5,14 @@
 #include <QFrame>
 
 #include <Kanoop/timespan.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QGraphicsOpacityEffect;
 class Label;
 class QToolButton;
 class QLabel;
 class ToastWidget;
-class ToastManager : public QObject
+class LIBKANOOPGUI_EXPORT ToastManager : public QObject
 {
     Q_OBJECT
 public:
