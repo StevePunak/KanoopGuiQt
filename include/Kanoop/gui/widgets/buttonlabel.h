@@ -14,7 +14,9 @@ public:
     explicit ButtonLabel(QWidget *parent = nullptr);
     explicit ButtonLabel(const QString& text, QWidget *parent = nullptr);
 
+    QString text() const { return _text; }
     void setText(const QString& text);
+
     void setIcon(const QIcon& activeIcon, const QIcon& inactiveIcon = QIcon());
 
     void setButtonAlignment(Qt::Alignment alignment);
