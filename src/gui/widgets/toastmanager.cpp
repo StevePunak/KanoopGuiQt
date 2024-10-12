@@ -21,7 +21,8 @@ namespace Colors = QColorConstants::Svg;
 
 ToastManager::ToastManager(QWidget *parent) :
     _parentWidget(parent),
-    _autoCloseTime(TimeSpan::fromSeconds(5)),
+    _beginFadeTime(TimeSpan::fromSeconds(3.5)),
+    _fadeTime(TimeSpan::fromSeconds(10)),
     _messageBackgroundColor(ToastWidget::DefaultMessageBackground),
     _messageForegroundColor(ToastWidget::DefaultMessageForeground),
     _errorBackgroundColor(ToastWidget::DefaultErrorBackground),
@@ -31,7 +32,7 @@ ToastManager::ToastManager(QWidget *parent) :
 
 void ToastManager::displayToast(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor)
 {
-    ToastWidget* toast = new ToastWidget(text, backgroundColor, foregroundColor, _autoCloseTime, _parentWidget);
+    ToastWidget* toast = new ToastWidget(text, backgroundColor, foregroundColor, _beginFadeTime, _fadeTime, _parentWidget);
     connect(toast, &ToastWidget::complete, this, &ToastManager::closeToast);
     _toasts.append(toast);
 

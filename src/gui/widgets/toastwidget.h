@@ -12,7 +12,7 @@ class ToastWidget : public QFrame
 {
     Q_OBJECT
 public:
-    ToastWidget(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor, const TimeSpan& closeTime, QWidget* parent = nullptr);
+    ToastWidget(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor, const TimeSpan& beginFadeTime, const TimeSpan& fadeTime, QWidget* parent = nullptr);
 
     QDateTime createTime() const { return _createTime; }
 
@@ -28,6 +28,9 @@ private:
     QColor _foregroundColor;
 
     double _opacity = 1.0;
+
+    TimeSpan _fadeSleepTime;
+    double _opacityQuanta = 0;
 
 public:
     static const QColor DefaultMessageForeground;
