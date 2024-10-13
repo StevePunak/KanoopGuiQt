@@ -4,6 +4,8 @@
 #include <QLabel>
 #include <QToolButton>
 
+#include <utility/stylesheet.h>
+
 ButtonLabel::ButtonLabel(QWidget *parent) :
     QWidget(parent),
     _active(false)
@@ -27,9 +29,22 @@ void ButtonLabel::commonInit()
     _layout->addWidget(_label);
     _layout->addWidget(_button);
 
+    _backgroundColor = palette().color(QPalette::Window);
+    _foregroundColor = palette().color(QPalette::Text);
+    setBackgroundColor(_backgroundColor);
+    setForegroundColor(_foregroundColor);
+
     setLayout(_layout);
 
     connect(_button, &QToolButton::clicked, this, &ButtonLabel::onButtonClicked);
+}
+
+void ButtonLabel::makeStyleSheet()
+{
+    StyleSheet<QLabel> ss;
+    ss.setProperty(SP_Color, _foregroundColor);
+    ss.setProperty(SP_BackgroundColor, _backgroundColor);
+    _label->setStyleSheet(ss.toString());
 }
 
 void ButtonLabel::setText(const QString& text)
@@ -56,6 +71,18 @@ void ButtonLabel::setActive(bool active)
     _active = active;
     _button->setIcon(active ? _activeIcon : _inactiveIcon);
     emit activeChanged();
+}
+
+void ButtonLabel::setForegroundColor(const QColor& color)
+{
+    _foregroundColor = color;
+    makeStyleSheet();
+}
+
+void ButtonLabel::setBackgroundColor(const QColor& color)
+{
+    _backgroundColor = color;
+    makeStyleSheet();
 }
 
 void ButtonLabel::relayout()
