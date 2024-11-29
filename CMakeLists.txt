@@ -4,7 +4,7 @@ include(GNUInstallDirs)
 set(PROJ KanoopQtGui)
 project(${PROJ})
 
-find_package(Qt6 REQUIRED COMPONENTS Network)
+find_package(Qt6 REQUIRED COMPONENTS Network Designer)
 qt_standard_project_setup()
 
 set(CMAKE_AUTOMOC ON)
@@ -39,7 +39,7 @@ get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 target_include_directories(${PROJ} PRIVATE ${PARENT_DIR}/KanoopCommon/include)
 
 find_package(Qt6 REQUIRED COMPONENTS Gui Widgets Network)
-target_link_libraries(${PROJ} PRIVATE PRIVATE Qt6::Gui Qt6::Widgets Qt6::Network KanoopCommon)
+target_link_libraries(${PROJ} PRIVATE PRIVATE Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Designer KanoopCommon)
 
 add_compile_definitions(KANOOP_QTGUI_LIBRARY)
 add_compile_definitions(QT_DEPRECATED_WARNINGS)

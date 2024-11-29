@@ -2,5 +2,12 @@
     <qresource prefix="/">
         <file>assets/close-button.png</file>
         <file>assets/spinner.png</file>
+        <file>assets/next-track.png</file>
+        <file>assets/pause.png</file>
+        <file>assets/play.png</file>
+        <file>assets/prev-track.png</file>
+        <file>assets/stop.png</file>
+        <file>assets/refresh.png</file>
+        <file>assets/lidar.png</file>
     </qresource>
 </RCC>
