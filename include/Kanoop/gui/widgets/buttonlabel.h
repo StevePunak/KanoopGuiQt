@@ -14,7 +14,9 @@ public:
     explicit ButtonLabel(QWidget *parent = nullptr);
     explicit ButtonLabel(const QString& text, QWidget *parent = nullptr);
 
+    QString text() const { return _text; }
     void setText(const QString& text);
+
     void setIcon(const QIcon& activeIcon, const QIcon& inactiveIcon = QIcon());
 
     void setButtonAlignment(Qt::Alignment alignment);
@@ -22,8 +24,12 @@ public:
     void setActive(bool active);
     bool isActive() const { return _active; }
 
+    void setForegroundColor(const QColor& color);
+    void setBackgroundColor(const QColor& color);
+
 private:
     void commonInit();
+    void makeStyleSheet();
     void relayout();
 
     QHBoxLayout* _layout = nullptr;
@@ -34,6 +40,8 @@ private:
     bool _active = false;
     Qt::Alignment _buttonAlignment = Qt::AlignRight;
     QString _text;
+    QColor _backgroundColor;
+    QColor _foregroundColor;
 
 signals:
     void clicked();

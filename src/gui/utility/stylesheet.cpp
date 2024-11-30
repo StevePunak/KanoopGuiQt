@@ -1,6 +1,7 @@
 #include "utility/stylesheet.h"
 #include <QFrame>
 #include <QLabel>
+#include <QPushButton>
 
 
 template<typename T>
@@ -43,3 +44,4 @@ QString StyleSheet<T>::toString() const
 template class StyleSheet<QWidget>;
 template class StyleSheet<QFrame>;
 template class StyleSheet<QLabel>;
+template class StyleSheet<QPushButton>;
