@@ -26,6 +26,9 @@ AbstractModelItem::AbstractModelItem() :
     _model(nullptr),
     _parent(nullptr) {}
 
+AbstractModelItem::AbstractModelItem(AbstractItemModel* model) :
+    _model(model), _parent(nullptr) {}
+
 AbstractModelItem::AbstractModelItem(const EntityMetadata &entityMetadata, AbstractItemModel *model, const QUuid& uuid) :
     _entityMetadata(entityMetadata), _model(model), _uuid(uuid), _parent(nullptr)
 {

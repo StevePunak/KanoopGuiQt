@@ -19,7 +19,7 @@ const QColor ToastWidget::DefaultMessageBackground      = Colors::lightgreen;
 const QColor ToastWidget::DefaultErrorForeground        = Colors::white;
 const QColor ToastWidget::DefaultErrorBackground        = Colors::red;
 
-ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor, const TimeSpan& closeTime, QWidget* parent) :
+ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor, const TimeSpan& beginFadeTime, const TimeSpan& fadeTime, QWidget* parent) :
     QFrame(parent),
     _createTime(QDateTime::currentDateTimeUtc()),
     _backgroundColor(backgroundColor),
@@ -53,7 +53,12 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
     _label->setStyleSheet(styleSheet());
     _closeButton->setStyleSheet(styleSheet());
 
-    QTimer::singleShot(closeTime.totalMilliseconds(), this, &ToastWidget::onCloseTimer);
+    // calculate fade sleep
+    _fadeSleepTime = TimeSpan::fromMilliseconds(50);
+    double steps = fadeTime.totalMilliseconds() / _fadeSleepTime.totalMilliseconds();
+    _opacityQuanta = 1.0 / steps;
+
+    QTimer::singleShot(beginFadeTime.totalMilliseconds(), this, &ToastWidget::onCloseTimer);
 }
 
 void ToastWidget::resizeEvent(QResizeEvent* event)
@@ -69,16 +74,14 @@ void ToastWidget::resizeEvent(QResizeEvent* event)
 
 void ToastWidget::onCloseTimer()
 {
-    _opacity -= .01;
+    _opacity -= _opacityQuanta;
     if(_opacity <= 0) {
         emit complete();
     }
     else {
         _opacityEffect->setOpacity(_opacity);
-
-        // setWindowOpacity(_opacity);
         update();
-        QTimer::singleShot(50, this, &ToastWidget::onCloseTimer);
+        QTimer::singleShot(_fadeSleepTime.totalMilliseconds(), this, &ToastWidget::onCloseTimer);
     }
 }
 

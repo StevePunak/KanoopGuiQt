@@ -28,6 +28,7 @@ class LIBKANOOPGUI_EXPORT AbstractModelItem
 {
 public:
     AbstractModelItem();
+    AbstractModelItem(AbstractItemModel* model);
     AbstractModelItem(const EntityMetadata& entityMetadata, AbstractItemModel* model, const QUuid& uuid = QUuid());
 
     virtual ~AbstractModelItem() {

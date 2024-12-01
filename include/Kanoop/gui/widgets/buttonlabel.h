@@ -24,8 +24,12 @@ public:
     void setActive(bool active);
     bool isActive() const { return _active; }
 
+    void setForegroundColor(const QColor& color);
+    void setBackgroundColor(const QColor& color);
+
 private:
     void commonInit();
+    void makeStyleSheet();
     void relayout();
 
     QHBoxLayout* _layout = nullptr;
@@ -36,6 +40,8 @@ private:
     bool _active = false;
     Qt::Alignment _buttonAlignment = Qt::AlignRight;
     QString _text;
+    QColor _backgroundColor;
+    QColor _foregroundColor;
 
 signals:
     void clicked();

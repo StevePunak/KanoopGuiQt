@@ -25,7 +25,13 @@ public:
         UnknownImage = 0,
 
         CloseButton,
+        NextTrack,
+        Pause,
+        Play,
+        PreviousTrack,
+        Refresh,
         Spinner,
+        Stop,
     };
 
     static const int FirstUserResource = 100000;
@@ -39,7 +45,13 @@ private:
         StandardImageToStringMap()
         {
             insert(CloseButton,         "close-button.png");
+            insert(NextTrack,           "next-track.png");
+            insert(Pause,               "pause.png");
+            insert(Play,                "play.png");
+            insert(PreviousTrack,       "prev-track.png");
+            insert(Refresh,             "refresh.png");
             insert(Spinner,             "spinner.png");
+            insert(Stop,                "stop.png");
         }
     };
 
