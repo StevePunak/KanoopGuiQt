@@ -26,6 +26,8 @@ public:
     static Palette fusionLight();
     static Palette fusionDark();
 
+    static void debugDumpPalette(const Palette& palette);
+
 private:
 };
 

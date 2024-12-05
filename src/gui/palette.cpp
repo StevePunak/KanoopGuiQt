@@ -1,5 +1,8 @@
 #include "palette.h"
 
+#include <QMetaEnum>
+#include <Kanoop/log.h>
+
 Palette Palette::fusionLight()
 {
     const QColor windowTextColor = Qt::black;
@@ -97,4 +100,36 @@ Palette Palette::fusionDark()
 
     palette.setBrush(QPalette::Link, highlightColor);
     return palette;
+}
+
+void Palette::debugDumpPalette(const Palette& palette)
+{
+    static const QList<ColorRole> roles = {
+        Accent,
+        AlternateBase,
+        Base,
+        BrightText,
+        Button,
+        ButtonText,
+        Dark,
+        Highlight,
+        HighlightedText,
+        Light,
+        Link,
+        LinkVisited,
+        Mid,
+        Midlight,
+        NoRole,
+        PlaceholderText,
+        Shadow,
+        Text,
+        ToolTipBase, ToolTipText,
+        Window,
+        WindowText,
+    };
+
+    QMetaEnum metaEnum = QMetaEnum::fromType<ColorRole>();
+    for(ColorRole role : roles) {
+        Log::logText(LVL_DEBUG, QString("%1: 0x%2").arg(QString(metaEnum.valueToKey(role)).leftJustified(32)).arg(palette.color(role).name()));
+    }
 }
