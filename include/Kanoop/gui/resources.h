@@ -24,8 +24,16 @@ public:
     {
         UnknownImage = 0,
 
+        BackDelete,
         CloseButton,
+        NextTrack,
+        Pause,
+        Play,
+        PreviousTrack,
+        Refresh,
+        Search,
         Spinner,
+        Stop,
     };
 
     static const int FirstUserResource = 100000;
@@ -38,8 +46,16 @@ private:
     public:
         StandardImageToStringMap()
         {
+            insert(BackDelete,          "back-delete.png");
             insert(CloseButton,         "close-button.png");
+            insert(NextTrack,           "next-track.png");
+            insert(Pause,               "pause.png");
+            insert(Play,                "play.png");
+            insert(PreviousTrack,       "prev-track.png");
+            insert(Refresh,             "refresh.png");
+            insert(Search,              "search.png");
             insert(Spinner,             "spinner.png");
+            insert(Stop,                "stop.png");
         }
     };
 

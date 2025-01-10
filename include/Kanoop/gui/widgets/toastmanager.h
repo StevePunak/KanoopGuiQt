@@ -21,8 +21,11 @@ public:
     void errorMessage(const QString& text) { displayToast(text, _errorBackgroundColor, _errorForegroundColor); }
     void displayToast(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor);
 
-    TimeSpan autoCloseTime() const { return _autoCloseTime; }
-    void setAutoCloseTime(const TimeSpan& value) { _autoCloseTime = value; }
+    TimeSpan beginFadeTime() const { return _beginFadeTime; }
+    void setBeginFadeTime(const TimeSpan& value) { _beginFadeTime = value; }
+
+    TimeSpan fadeTime() const { return _fadeTime; }
+    void setFadeTime(TimeSpan value) { _fadeTime = value; }
 
     QColor messageForegroundColor() const { return _messageForegroundColor; }
     void setMessageForegroundColor(const QColor& value) { _messageForegroundColor = value; }
@@ -46,7 +49,8 @@ private:
     void performLayout();
 
     QWidget* _parentWidget;
-    TimeSpan _autoCloseTime;
+    TimeSpan _beginFadeTime;
+    TimeSpan _fadeTime;
     QPoint _pos;
     QSize _size;
 

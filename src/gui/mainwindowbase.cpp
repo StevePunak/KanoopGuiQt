@@ -59,7 +59,7 @@ QMdiArea *MainWindowBase::parentMdiArea()
 
 void MainWindowBase::moveEvent(QMoveEvent *event)
 {
-    if(_formLoadComplete) {
+    if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
     }
     QMainWindow::moveEvent(event);
@@ -67,7 +67,7 @@ void MainWindowBase::moveEvent(QMoveEvent *event)
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
-    if(_formLoadComplete) {
+    if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
     QMainWindow::resizeEvent(event);
@@ -77,11 +77,22 @@ void MainWindowBase::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
     if(_formLoadComplete == false) {
-        if(parentWidget() != nullptr) {
-            parentWidget()->setGeometry(QRect(GuiSettings::globalInstance()->getLastWindowPosition(this), GuiSettings::globalInstance()->getLastWindowSize(this)));
-        }
-        else {
-            setGeometry(QRect(GuiSettings::globalInstance()->getLastWindowPosition(this), GuiSettings::globalInstance()->getLastWindowSize(this)));
+        if(_persistPosition || _persistSize) {
+            QRect geometryRect = parentWidget() != nullptr ? parentWidget()->geometry() : geometry();
+
+            if(_persistPosition) {
+                geometryRect.setTopLeft(GuiSettings::globalInstance()->getLastWindowPosition(this));
+            }
+            if(_persistSize) {
+                geometryRect.setSize(GuiSettings::globalInstance()->getLastWindowSize(this));
+            }
+
+            if(parentWidget() != nullptr) {
+                parentWidget()->setGeometry(geometryRect);
+            }
+            else {
+                setGeometry(geometryRect);
+            }
         }
         _formLoadComplete = true;
         if(_formLoadFailed) {

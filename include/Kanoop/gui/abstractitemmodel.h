@@ -64,6 +64,7 @@ public:
 protected:
     // Retrieve root items
     AbstractModelItem::List rootItems() const { return _rootItems; }
+    int rootItemCount() const { return _rootItems.count(); }
 
     // Append new items
     AbstractModelItem* appendRootItem(AbstractModelItem* item);
@@ -89,6 +90,8 @@ protected:
 
     TableHeader::IntMap columnHeadersIntMap() const { return _columnHeadersIntMap; }
     TableHeader::IntMap rowHeadersIntMap() const { return _rowHeadersIntMap; }
+
+    void emitRowChanged(const QModelIndex &rowIndex);
 
     static QString toString(const QModelIndex& value);
 

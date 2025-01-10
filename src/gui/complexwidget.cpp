@@ -43,7 +43,6 @@ void ComplexWidget::onPreferencesChanged()
     int pointSize = GuiSettings::globalInstance()->fontSize();
     newFont.setPointSize(pointSize);
     setFont(newFont);
-
 }
 
 void ComplexWidget::onSplitterMoved()
