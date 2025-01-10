@@ -9,5 +9,7 @@
         <file>assets/stop.png</file>
         <file>assets/refresh.png</file>
         <file>assets/lidar.png</file>
+        <file>assets/back-delete.png</file>
+        <file>assets/search.png</file>
     </qresource>
 </RCC>

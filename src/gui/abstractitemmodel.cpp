@@ -361,6 +361,13 @@ void AbstractItemModel::updateItemsAtIndexes(const QModelIndexList &indexes, con
     }
 }
 
+void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
+{
+    QModelIndex firstColIndex = index(rowIndex.row(), 0, rowIndex.parent());
+    QModelIndex lastColIndex = index(rowIndex.row(), columnCount(rowIndex) - 1, rowIndex.parent());
+    emit dataChanged(firstColIndex, lastColIndex);
+}
+
 QString AbstractItemModel::toString(const QModelIndex &value)
 {
     return QString("row: %1  col: %2  ptr: 0x%3").arg(value.row()).arg(value.column()).arg((qint64)value.constInternalPointer(), 0, 16);

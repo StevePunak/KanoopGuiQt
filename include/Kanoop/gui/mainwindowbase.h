@@ -31,6 +31,12 @@ class LIBKANOOPGUI_EXPORT MainWindowBase : public QMainWindow,
 public:
     explicit MainWindowBase(const QString& loggingCategory, QWidget *parent = nullptr);
 
+    bool persistPosition() const { return _persistPosition; }
+    void setPersistPosition(bool value) { _persistPosition = value; }
+
+    bool persistSize() const { return _persistSize; }
+    void setPersistSize(bool value) { _persistSize = value; }
+
 protected:
     void initializeBase();
 
@@ -48,8 +54,10 @@ protected:
     virtual void showEvent(QShowEvent *event) override;
 
 private:
-    bool _formLoadComplete;
-    bool _formLoadFailed;
+    bool _formLoadComplete = false;
+    bool _formLoadFailed = false;
+    bool _persistPosition = true;
+    bool _persistSize = true;
 
 signals:
 

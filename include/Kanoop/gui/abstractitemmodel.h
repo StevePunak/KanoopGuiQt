@@ -91,6 +91,8 @@ protected:
     TableHeader::IntMap columnHeadersIntMap() const { return _columnHeadersIntMap; }
     TableHeader::IntMap rowHeadersIntMap() const { return _rowHeadersIntMap; }
 
+    void emitRowChanged(const QModelIndex &rowIndex);
+
     static QString toString(const QModelIndex& value);
 
 private:
