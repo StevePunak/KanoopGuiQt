@@ -19,12 +19,20 @@ private:
 
 protected:
     void initializeBase();
+    void connectValidationSignals();
+
+    virtual void validate() {}
+
+private:
+    void connectLineEditSignals();
+    void connectComboBoxSignals();
 
 public slots:
     virtual void onPreferencesChanged();
 
 private slots:
     void onSplitterMoved();
+    void stringChanged(const QString&);
 
 signals:
 
