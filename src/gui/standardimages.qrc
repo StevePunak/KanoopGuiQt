@@ -11,5 +11,9 @@
         <file>assets/lidar.png</file>
         <file>assets/back-delete.png</file>
         <file>assets/search.png</file>
+        <file>assets/green-plus.png</file>
+        <file>assets/red-minus.png</file>
+        <file>assets/dropdown-down.png</file>
+        <file>assets/dropdown-up.png</file>
     </qresource>
 </RCC>

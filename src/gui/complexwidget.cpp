@@ -1,5 +1,7 @@
 #include "complexwidget.h"
 
+#include <QComboBox>
+#include <QLineEdit>
 #include <QSplitter>
 #include <guisettings.h>
 
@@ -33,6 +35,26 @@ void ComplexWidget::initializeBase()
     }
 }
 
+void ComplexWidget::connectValidationSignals()
+{
+    connectLineEditSignals();
+    connectComboBoxSignals();
+}
+
+void ComplexWidget::connectLineEditSignals()
+{
+    for(QLineEdit* widget : findChildren<QLineEdit*>()) {
+        connect(widget, &QLineEdit::textChanged, this, &ComplexWidget::stringChanged);
+    }
+}
+
+void ComplexWidget::connectComboBoxSignals()
+{
+    for(QComboBox* widget : findChildren<QComboBox*>()) {
+        connect(widget, &QComboBox::currentTextChanged, this, &ComplexWidget::stringChanged);
+    }
+}
+
 void ComplexWidget::onPreferencesChanged()
 {
     if(GuiSettings::globalInstance() == nullptr) {
@@ -48,4 +70,9 @@ void ComplexWidget::onPreferencesChanged()
 void ComplexWidget::onSplitterMoved()
 {
     GuiSettings::globalInstance()->saveLastSplitterState(static_cast<QSplitter*>(sender()));
+}
+
+void ComplexWidget::stringChanged(const QString&)
+{
+    validate();
 }

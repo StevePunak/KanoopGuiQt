@@ -2,6 +2,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QPushButton>
+#include <QTextEdit>
 
 
 template<typename T>
@@ -45,3 +46,4 @@ template class StyleSheet<QWidget>;
 template class StyleSheet<QFrame>;
 template class StyleSheet<QLabel>;
 template class StyleSheet<QPushButton>;
+template class StyleSheet<QTextEdit>;

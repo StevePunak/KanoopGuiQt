@@ -51,6 +51,8 @@ protected:
 
     void connectValidationSignals();
 
+    QDialogButtonBox* buttonBox() const { return _buttonBox; }
+
     virtual void validate() = 0;
 
     bool compare(const QString& a, const QString& b) { return a != b; }
@@ -59,11 +61,12 @@ protected:
     bool compare(const int a, int b) { return a != b; }
     bool compare(const TimeSpan& a, const TimeSpan& b) { return a != b; }
 
-    virtual void enableAppropriateButtons();
-
     virtual void okClicked() {}
     virtual void applyClicked() {}
     virtual void cancelClicked() {}
+
+protected slots:
+    virtual void enableAppropriateButtons();
 
 private:
     void commonInit();

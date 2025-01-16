@@ -25,11 +25,15 @@ public:
         UnknownImage = 0,
 
         BackDelete,
+        DropDownDown,
+        DropDownUp,
         CloseButton,
+        GreenPlus,
         NextTrack,
         Pause,
         Play,
         PreviousTrack,
+        RedMinus,
         Refresh,
         Search,
         Spinner,
@@ -48,10 +52,14 @@ private:
         {
             insert(BackDelete,          "back-delete.png");
             insert(CloseButton,         "close-button.png");
+            insert(DropDownDown,        "dropdown-down.png");
+            insert(DropDownUp,          "dropdown-up.png");
+            insert(GreenPlus,           "green-plus.png");
             insert(NextTrack,           "next-track.png");
             insert(Pause,               "pause.png");
             insert(Play,                "play.png");
             insert(PreviousTrack,       "prev-track.png");
+            insert(RedMinus,            "red-minus.png");
             insert(Refresh,             "refresh.png");
             insert(Search,              "search.png");
             insert(Spinner,             "spinner.png");

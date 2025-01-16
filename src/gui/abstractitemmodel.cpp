@@ -317,7 +317,11 @@ void AbstractItemModel::refresh(const QModelIndex& topLeft, const QModelIndex& b
 void AbstractItemModel::deleteRootItem(AbstractModelItem *item)
 {
     if(_rootItems.contains(item) == true) {
+        int row = _rootItems.indexOf(item);
+        QModelIndex index = createIndex(row, 0, item);
+        beginRemoveRows(index, row, row);
         _rootItems.removeAll(item);
+        endRemoveRows();
     }
     else {
         logText(LVL_WARNING, "Failed to find root item for deletion");
