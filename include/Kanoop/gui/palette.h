@@ -1,8 +1,9 @@
 #ifndef PALETTE_H
 #define PALETTE_H
 #include <QPalette>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class Palette : public QPalette
+class LIBKANOOPGUI_EXPORT Palette : public QPalette
 {
 public:
     Palette() :

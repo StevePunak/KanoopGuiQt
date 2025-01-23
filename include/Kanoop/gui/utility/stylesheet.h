@@ -3,11 +3,12 @@
 
 #include <Kanoop/kanoopcommon.h>
 #include <Kanoop/gui/utility/stylesheettypes.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
 #include <QWidget>
 
 template <typename T>
-class StyleSheet
+class LIBKANOOPGUI_EXPORT StyleSheet
 {
 public:
     static_assert(std::is_base_of<QWidget, T>::value, "Templatized class type must be subclass of QWidget");
