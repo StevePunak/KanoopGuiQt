@@ -3,9 +3,10 @@
 
 #include <QPushButton>
 #include <QWidget>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class AccordionItem;
-class AccordionWidget : public QWidget
+class LIBKANOOPGUI_EXPORT AccordionWidget : public QWidget
 {
     Q_OBJECT
 public:

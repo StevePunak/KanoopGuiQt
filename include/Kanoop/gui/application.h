@@ -4,8 +4,9 @@
 #include <QApplication>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class Application : public QApplication,
+class LIBKANOOPGUI_EXPORT Application : public QApplication,
                     public LoggingBaseClass
 {
     Q_OBJECT
