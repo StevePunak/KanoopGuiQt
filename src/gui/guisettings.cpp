@@ -12,12 +12,15 @@
 #include "guisettings.h"
 #include "headerstate.h"
 #include "treeviewbase.h"
+#include <QApplication>
 #include <QCoreApplication>
 #include <QHeaderView>
 #include <QMutex>
+#include <QScreen>
 #include <QSplitter>
 #include <QUuid>
 #include <Kanoop/log.h>
+#include <Kanoop/geometry/rectangle.h>
 
 const QString GuiSettings::KEY_APP                          = "app";
 const QString GuiSettings::KEY_FONT_SIZE                    = "font_size";
@@ -38,6 +41,24 @@ GuiSettings::GuiSettings() :
     _settings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::instance()->organizationName(), QCoreApplication::instance()->applicationName()),
     _maxRecentFiles(10)
 {
+}
+
+QPoint GuiSettings::getLastWindowPosition(const QWidget* widget) const
+{
+    QPoint result;
+    QString key = makeKey(KEY_LAST_WIDGET_POS, widget->objectName());
+    if(_settings.contains(key)) {
+        result = _settings.value(key).toPoint();
+    }
+    else {
+        // Center the widget on the primary screen
+        QScreen* screen = QApplication::primaryScreen();
+        Rectangle screenGeometry = screen->geometry();
+        Rectangle widgetGeometry = widget->geometry();
+        result = QPoint(screenGeometry.centerPoint().x() - (widgetGeometry.width() / 2),
+                        screenGeometry.centerPoint().y() - (widgetGeometry.height() / 2));
+    }
+    return result;
 }
 
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
