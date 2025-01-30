@@ -81,15 +81,30 @@ void Dialog::connectComboBoxSignals()
 void Dialog::connectButtonBoxSignals()
 {
     if(_buttonBox->button(QDialogButtonBox::Ok) != nullptr) {
+        disconnect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
         connect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
     }
 
     if(_buttonBox->button(QDialogButtonBox::Apply) != nullptr) {
+        disconnect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
         connect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
     }
     if(_buttonBox->button(QDialogButtonBox::Cancel) != nullptr) {
+        disconnect(_buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &Dialog::onCancelClicked);
         connect(_buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &Dialog::onCancelClicked);
     }
+}
+
+void Dialog::setButtonBoxButtons()
+{
+    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Cancel;
+    if(_applyEnabled) {
+        buttons |= QDialogButtonBox::Apply;
+    }
+    if(_okEnabled) {
+        buttons |= QDialogButtonBox::Ok;
+    }
+    _buttonBox->setStandardButtons(buttons);
 }
 
 void Dialog::setValid(bool value)
@@ -104,12 +119,15 @@ void Dialog::setDirty(bool value)
 
 void Dialog::setApplyEnabled(bool value)
 {
-    if(value == false) {
-        _buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    }
-    else {
-        _buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
-    }
+    _applyEnabled = value;
+    setButtonBoxButtons();
+    connectButtonBoxSignals();
+}
+
+void Dialog::setOkEnabled(bool value)
+{
+    _okEnabled = value;
+    setButtonBoxButtons();
     connectButtonBoxSignals();
 }
 
@@ -162,7 +180,6 @@ void Dialog::enableAppropriateButtons()
 
 void Dialog::onPreferencesChanged()
 {
-    logText(LVL_DEBUG, QString("%1").arg(__FUNCTION__));
     if(GuiSettings::globalInstance() == nullptr) {
         return;
     }

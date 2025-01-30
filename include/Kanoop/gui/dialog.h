@@ -41,6 +41,7 @@ protected:
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
     void setApplyEnabled(bool value);
+    void setOkEnabled(bool value);
 
     void connectValidationSignals();
 
@@ -71,12 +72,16 @@ private:
     void connectLineEditSignals();
     void connectComboBoxSignals();
     void connectButtonBoxSignals();
+    void setButtonBoxButtons();
 
     QDialogButtonBox* _buttonBox;
     bool _formLoadComplete;
     bool _formLoadFailed;
     bool _valid;
     bool _dirty;
+
+    bool _applyEnabled = true;
+    bool _okEnabled = true;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);
