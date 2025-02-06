@@ -45,23 +45,10 @@ void Dialog::commonInit()
     _buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
     connectButtonBoxSignals();
 
+    _statusBar = new QStatusBar(this);
+    _statusBar->setVisible(false);
+
     Dialog::onPreferencesChanged();
-}
-
-void Dialog::moveEvent(QMoveEvent *event)
-{
-    if(_formLoadComplete) {
-        GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
-    }
-    QDialog::moveEvent(event);
-}
-
-void Dialog::resizeEvent(QResizeEvent *event)
-{
-    if(_formLoadComplete) {
-        GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
-    }
-    QDialog::resizeEvent(event);
 }
 
 void Dialog::connectLineEditSignals()
@@ -81,15 +68,30 @@ void Dialog::connectComboBoxSignals()
 void Dialog::connectButtonBoxSignals()
 {
     if(_buttonBox->button(QDialogButtonBox::Ok) != nullptr) {
+        disconnect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
         connect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
     }
 
     if(_buttonBox->button(QDialogButtonBox::Apply) != nullptr) {
+        disconnect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
         connect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
     }
     if(_buttonBox->button(QDialogButtonBox::Cancel) != nullptr) {
+        disconnect(_buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &Dialog::onCancelClicked);
         connect(_buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &Dialog::onCancelClicked);
     }
+}
+
+void Dialog::setButtonBoxButtons()
+{
+    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Cancel;
+    if(_applyEnabled) {
+        buttons |= QDialogButtonBox::Apply;
+    }
+    if(_okEnabled) {
+        buttons |= QDialogButtonBox::Ok;
+    }
+    _buttonBox->setStandardButtons(buttons);
 }
 
 void Dialog::setValid(bool value)
@@ -104,12 +106,15 @@ void Dialog::setDirty(bool value)
 
 void Dialog::setApplyEnabled(bool value)
 {
-    if(value == false) {
-        _buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    }
-    else {
-        _buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
-    }
+    _applyEnabled = value;
+    setButtonBoxButtons();
+    connectButtonBoxSignals();
+}
+
+void Dialog::setOkEnabled(bool value)
+{
+    _okEnabled = value;
+    setButtonBoxButtons();
     connectButtonBoxSignals();
 }
 
@@ -119,6 +124,22 @@ void Dialog::connectValidationSignals()
     connectComboBoxSignals();
 }
 
+void Dialog::moveEvent(QMoveEvent *event)
+{
+    if(_formLoadComplete) {
+        GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
+    }
+    QDialog::moveEvent(event);
+}
+
+void Dialog::resizeEvent(QResizeEvent *event)
+{
+    if(_formLoadComplete && isVisible()) {
+        GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
+    }
+    QDialog::resizeEvent(event);
+}
+
 void Dialog::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
@@ -126,7 +147,8 @@ void Dialog::showEvent(QShowEvent *event)
         QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this);
         QSize size = GuiSettings::globalInstance()->getLastWindowSize(this);
         if(pos.isNull() == false && size.isNull() == false) {
-            setGeometry(QRect(pos, size));
+            resize(size);
+            move(pos);
         }
         _formLoadComplete = true;
         if(_formLoadFailed) {
@@ -142,6 +164,7 @@ void Dialog::performLayout()
         // should we check to ensure vertical layout?
         QLayout* myLayout = layout();
         myLayout->addWidget(_buttonBox);
+        myLayout->addWidget(_statusBar);
     }
 }
 
@@ -162,7 +185,6 @@ void Dialog::enableAppropriateButtons()
 
 void Dialog::onPreferencesChanged()
 {
-    logText(LVL_DEBUG, QString("%1").arg(__FUNCTION__));
     if(GuiSettings::globalInstance() == nullptr) {
         return;
     }

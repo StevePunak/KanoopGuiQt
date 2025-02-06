@@ -12,6 +12,7 @@
 #define DIALOG_H
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QStatusBar>
 #include <QUuid>
 #include <Kanoop/utility/loggingbaseclass.h>
 #include <Kanoop/entitymetadata.h>
@@ -41,10 +42,12 @@ protected:
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
     void setApplyEnabled(bool value);
+    void setOkEnabled(bool value);
 
     void connectValidationSignals();
 
     QDialogButtonBox* buttonBox() const { return _buttonBox; }
+    QStatusBar* statusBar() const { return _statusBar; }
 
     virtual void validate() = 0;
 
@@ -71,12 +74,17 @@ private:
     void connectLineEditSignals();
     void connectComboBoxSignals();
     void connectButtonBoxSignals();
+    void setButtonBoxButtons();
 
-    QDialogButtonBox* _buttonBox;
+    QDialogButtonBox* _buttonBox = nullptr;
+    QStatusBar* _statusBar = nullptr;
     bool _formLoadComplete;
     bool _formLoadFailed;
     bool _valid;
     bool _dirty;
+
+    bool _applyEnabled = true;
+    bool _okEnabled = true;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);
