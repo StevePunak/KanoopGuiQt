@@ -45,23 +45,10 @@ void Dialog::commonInit()
     _buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
     connectButtonBoxSignals();
 
+    _statusBar = new QStatusBar(this);
+    _statusBar->setVisible(false);
+
     Dialog::onPreferencesChanged();
-}
-
-void Dialog::moveEvent(QMoveEvent *event)
-{
-    if(_formLoadComplete) {
-        GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
-    }
-    QDialog::moveEvent(event);
-}
-
-void Dialog::resizeEvent(QResizeEvent *event)
-{
-    if(_formLoadComplete) {
-        GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
-    }
-    QDialog::resizeEvent(event);
 }
 
 void Dialog::connectLineEditSignals()
@@ -137,6 +124,22 @@ void Dialog::connectValidationSignals()
     connectComboBoxSignals();
 }
 
+void Dialog::moveEvent(QMoveEvent *event)
+{
+    if(_formLoadComplete) {
+        GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
+    }
+    QDialog::moveEvent(event);
+}
+
+void Dialog::resizeEvent(QResizeEvent *event)
+{
+    if(_formLoadComplete && isVisible()) {
+        GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
+    }
+    QDialog::resizeEvent(event);
+}
+
 void Dialog::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
@@ -144,7 +147,8 @@ void Dialog::showEvent(QShowEvent *event)
         QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this);
         QSize size = GuiSettings::globalInstance()->getLastWindowSize(this);
         if(pos.isNull() == false && size.isNull() == false) {
-            setGeometry(QRect(pos, size));
+            resize(size);
+            move(pos);
         }
         _formLoadComplete = true;
         if(_formLoadFailed) {
@@ -160,6 +164,7 @@ void Dialog::performLayout()
         // should we check to ensure vertical layout?
         QLayout* myLayout = layout();
         myLayout->addWidget(_buttonBox);
+        myLayout->addWidget(_statusBar);
     }
 }
 

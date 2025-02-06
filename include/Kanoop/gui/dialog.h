@@ -12,6 +12,7 @@
 #define DIALOG_H
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QStatusBar>
 #include <QUuid>
 #include <Kanoop/utility/loggingbaseclass.h>
 #include <Kanoop/entitymetadata.h>
@@ -46,6 +47,7 @@ protected:
     void connectValidationSignals();
 
     QDialogButtonBox* buttonBox() const { return _buttonBox; }
+    QStatusBar* statusBar() const { return _statusBar; }
 
     virtual void validate() = 0;
 
@@ -74,7 +76,8 @@ private:
     void connectButtonBoxSignals();
     void setButtonBoxButtons();
 
-    QDialogButtonBox* _buttonBox;
+    QDialogButtonBox* _buttonBox = nullptr;
+    QStatusBar* _statusBar = nullptr;
     bool _formLoadComplete;
     bool _formLoadFailed;
     bool _valid;
