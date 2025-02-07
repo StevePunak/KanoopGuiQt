@@ -73,6 +73,9 @@ private:
 
     void connectLineEditSignals();
     void connectComboBoxSignals();
+    void connectRadioButtonSignals();
+    void connectCheckBoxSignals();
+    void connectSpinBoxSignals();
     void connectButtonBoxSignals();
     void setButtonBoxButtons();
 

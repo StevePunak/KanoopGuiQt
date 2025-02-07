@@ -17,8 +17,11 @@
 #include <QShowEvent>
 #include <QTimer>
 
+#include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QRadioButton>
+#include <QSpinBox>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -62,6 +65,27 @@ void Dialog::connectComboBoxSignals()
 {
     for(QComboBox* widget : findChildren<QComboBox*>()) {
         connect(widget, &QComboBox::currentTextChanged, this, &Dialog::stringChanged);
+    }
+}
+
+void Dialog::connectRadioButtonSignals()
+{
+    for(QRadioButton* widget : findChildren<QRadioButton*>()) {
+        connect(widget, &QRadioButton::toggled, this, &Dialog::boolChanged);
+    }
+}
+
+void Dialog::connectCheckBoxSignals()
+{
+    for(QCheckBox* widget : findChildren<QCheckBox*>()) {
+        connect(widget, &QCheckBox::toggled, this, &Dialog::boolChanged);
+    }
+}
+
+void Dialog::connectSpinBoxSignals()
+{
+    for(QSpinBox* widget : findChildren<QSpinBox*>()) {
+        connect(widget, &QSpinBox::valueChanged, this, &Dialog::intChanged);
     }
 }
 
@@ -122,6 +146,9 @@ void Dialog::connectValidationSignals()
 {
     connectLineEditSignals();
     connectComboBoxSignals();
+    connectRadioButtonSignals();
+    connectCheckBoxSignals();
+    connectSpinBoxSignals();
 }
 
 void Dialog::moveEvent(QMoveEvent *event)
