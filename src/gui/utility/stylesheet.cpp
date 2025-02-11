@@ -1,7 +1,9 @@
 #include "utility/stylesheet.h"
 #include <QFrame>
 #include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
+#include <QStatusBar>
 #include <QTextEdit>
 
 
@@ -47,3 +49,5 @@ template class StyleSheet<QFrame>;
 template class StyleSheet<QLabel>;
 template class StyleSheet<QPushButton>;
 template class StyleSheet<QTextEdit>;
+template class StyleSheet<QLineEdit>;
+template class StyleSheet<QStatusBar>;

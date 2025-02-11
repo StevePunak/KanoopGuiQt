@@ -81,10 +81,14 @@ void MainWindowBase::showEvent(QShowEvent *event)
             }
 
             if(parentWidget() != nullptr) {
-                parentWidget()->setGeometry(geometryRect);
+                parentWidget()->resize(geometryRect.size());
+                parentWidget()->move(geometryRect.topLeft());
+                // parentWidget()->setGeometry(geometryRect);
             }
             else {
-                setGeometry(geometryRect);
+                resize(geometryRect.size());
+                move(geometryRect.topLeft());
+                // setGeometry(geometryRect);
             }
         }
         _formLoadComplete = true;
