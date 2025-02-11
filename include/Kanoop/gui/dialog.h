@@ -43,6 +43,7 @@ protected:
 
     void setApplyEnabled(bool value);
     void setOkEnabled(bool value);
+    void setStatusBarVisible(bool value);
 
     void connectValidationSignals();
 

@@ -2,10 +2,13 @@
 #define PIXMAPGRAPHICSITEM_H
 #include <QGraphicsPixmapItem>
 
-class PixmapGraphicsItem : public QGraphicsPixmapItem
+#include <Kanoop/utility/loggingbaseclass.h>
+
+class PixmapGraphicsItem : public QGraphicsPixmapItem,
+                           public LoggingBaseClass
 {
 public:
-    PixmapGraphicsItem(int type, QGraphicsItem* parent = nullptr);
+    explicit PixmapGraphicsItem(int type, QGraphicsItem* parent = nullptr);
 
     int type() const { return _type; }
 
