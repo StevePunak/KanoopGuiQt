@@ -4,6 +4,7 @@
 
 #include <QPainter>
 #include <QVBoxLayout>
+#include <guisettings.h>
 
 AccordionWidget::AccordionWidget(QWidget *parent) :
     QWidget(parent)
@@ -99,5 +100,17 @@ AccordionItem* AccordionWidget::findItemForWidget(QWidget* widget)
         }
     }
     return result;
+}
+
+void AccordionWidget::onPreferencesChanged()
+{
+    if(GuiSettings::globalInstance() == nullptr) {
+        return;
+    }
+
+    QFont newFont(font());
+    int pointSize = GuiSettings::globalInstance()->fontSize();
+    newFont.setPointSize(pointSize);
+    setFont(newFont);
 }
 

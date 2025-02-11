@@ -12,7 +12,21 @@ class GraphicsView : public QGraphicsView,
 public:
     explicit GraphicsView(QWidget *parent = nullptr);
 
+    bool isZoomEnabled() const { return _zoomEnabled; }
+    void setZoomEnabled(bool value) { _zoomEnabled = value; }
+
+    void setScaleFactor(double factor);
+    double currentScale() const;
+
+private:
+    virtual bool eventFilter(QObject *watched, QEvent *event) override;
+    bool processWheelEvent(QWheelEvent* event);
+
+    bool _zoomEnabled = true;
+    double _zoomFactor = 1.001;
+
 signals:
+    void scaleChanged(double scale);
 
 };
 
