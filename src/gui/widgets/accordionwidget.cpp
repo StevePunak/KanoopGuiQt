@@ -31,6 +31,13 @@ void AccordionWidget::insertItem(int index, const QString& title, QWidget* conte
     layout->insertWidget(index, item);
 }
 
+void AccordionWidget::removeItem(int index)
+{
+    QVBoxLayout* layout = static_cast<QVBoxLayout*>(AccordionWidget::layout());
+    QLayoutItem* item = layout->takeAt(index);
+    delete item->widget();
+}
+
 void AccordionWidget::clear()
 {
     QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
