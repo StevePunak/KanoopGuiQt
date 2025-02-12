@@ -29,8 +29,8 @@ public:
 private:
     AccordionItem* findItemForWidget(QWidget* widget);
 
-signals:
-
+public slots:
+    virtual void onPreferencesChanged();
 };
 
 #endif // ACCORDIONWIDGET_H

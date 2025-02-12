@@ -142,6 +142,11 @@ void Dialog::setOkEnabled(bool value)
     connectButtonBoxSignals();
 }
 
+void Dialog::setStatusBarVisible(bool value)
+{
+    _statusBar->setVisible(value);
+}
+
 void Dialog::connectValidationSignals()
 {
     connectLineEditSignals();
