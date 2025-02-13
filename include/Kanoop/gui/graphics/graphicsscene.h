@@ -3,9 +3,10 @@
 
 #include <QGraphicsScene>
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class GraphicsScene : public QGraphicsScene,
-                      public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT GraphicsScene : public QGraphicsScene,
+                                          public LoggingBaseClass
 {
     Q_OBJECT
 public:
