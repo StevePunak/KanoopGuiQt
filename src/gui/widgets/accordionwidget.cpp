@@ -19,7 +19,7 @@ void AccordionWidget::addItem(const QString& title, QWidget* content)
     QVBoxLayout* layout = static_cast<QVBoxLayout*>(AccordionWidget::layout());
     int count = layout->count();
     insertItem(count - 1, title, content);
-    itemCountModified();
+    emit itemCountModified();
 }
 
 void AccordionWidget::insertItem(int index, const QString& title, QWidget* content)
@@ -30,7 +30,7 @@ void AccordionWidget::insertItem(int index, const QString& title, QWidget* conte
 
     QVBoxLayout* layout = static_cast<QVBoxLayout*>(AccordionWidget::layout());
     layout->insertWidget(index, item);
-    itemCountModified();
+    emit itemCountModified();
 }
 
 void AccordionWidget::removeItem(int index)
@@ -38,14 +38,14 @@ void AccordionWidget::removeItem(int index)
     QVBoxLayout* layout = static_cast<QVBoxLayout*>(AccordionWidget::layout());
     QLayoutItem* item = layout->takeAt(index);
     delete item->widget();
-    itemCountModified();
+    emit itemCountModified();
 }
 
 void AccordionWidget::clear()
 {
     QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
     qDeleteAll(items);
-    itemCountModified();
+    emit itemCountModified();
 }
 
 void AccordionWidget::expandAll()
