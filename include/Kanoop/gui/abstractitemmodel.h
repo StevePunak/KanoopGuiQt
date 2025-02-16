@@ -65,6 +65,7 @@ public:
 protected:
     // Retrieve root items
     AbstractModelItem::List rootItems() const { return _rootItems; }
+    const AbstractModelItem::List rootItemsConst() const { return _rootItems; }
     int rootItemCount() const { return _rootItems.count(); }
 
     // Append new items

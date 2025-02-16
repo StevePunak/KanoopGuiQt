@@ -23,6 +23,8 @@
 #include <QRadioButton>
 #include <QSpinBox>
 
+#include <Kanoop/geometry/size.h>
+
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     LoggingBaseClass("dlg"),
@@ -166,6 +168,7 @@ void Dialog::moveEvent(QMoveEvent *event)
 
 void Dialog::resizeEvent(QResizeEvent *event)
 {
+    logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
     if(_formLoadComplete && isVisible()) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
@@ -176,8 +179,8 @@ void Dialog::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
     if(!_formLoadComplete) {
-        QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this);
-        QSize size = GuiSettings::globalInstance()->getLastWindowSize(this);
+        QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize);
+        QSize size = GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize);
         if(pos.isNull() == false && size.isNull() == false) {
             resize(size);
             move(pos);

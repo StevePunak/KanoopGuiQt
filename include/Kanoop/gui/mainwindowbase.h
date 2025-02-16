@@ -39,6 +39,10 @@ protected:
     bool formLoadFailed() const { return _formLoadFailed; }
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
+    QSize defaultSize() const { return _defaultSize; }
+    void setDefaultSize(const QSize& value) { _defaultSize = value; }
+    void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }
+
     QMdiArea* parentMdiArea();
 
     // QWidget interface
@@ -51,6 +55,7 @@ private:
     bool _formLoadFailed = false;
     bool _persistPosition = true;
     bool _persistSize = true;
+    QSize _defaultSize;
 
 signals:
 
