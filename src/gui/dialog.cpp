@@ -168,7 +168,7 @@ void Dialog::moveEvent(QMoveEvent *event)
 
 void Dialog::resizeEvent(QResizeEvent *event)
 {
-    logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
+    // logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
     if(_formLoadComplete && isVisible()) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }

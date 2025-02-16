@@ -62,7 +62,7 @@ void MainWindowBase::moveEvent(QMoveEvent *event)
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
-    logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
+    // logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
