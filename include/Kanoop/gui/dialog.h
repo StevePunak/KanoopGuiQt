@@ -47,6 +47,10 @@ protected:
 
     void connectValidationSignals();
 
+    QSize defaultSize() const { return _defaultSize; }
+    void setDefaultSize(const QSize& value) { _defaultSize = value; }
+    void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }
+
     QDialogButtonBox* buttonBox() const { return _buttonBox; }
     QStatusBar* statusBar() const { return _statusBar; }
 
@@ -89,6 +93,8 @@ private:
 
     bool _applyEnabled = true;
     bool _okEnabled = true;
+
+    QSize _defaultSize;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);

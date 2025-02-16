@@ -25,14 +25,10 @@ public:
 
     // Widget settings
     void setLastWindowPosition(const QWidget* widget, const QPoint& pos) { _settings.setValue(makeKey(KEY_LAST_WIDGET_POS, widget->objectName()), pos); }
-    QPoint getLastWindowPosition(const QWidget* widget) const;
+    QPoint getLastWindowPosition(const QWidget* widget, const QSize& defaultSize = QSize()) const;
 
     void setLastWindowSize(const QWidget* widget, const QSize& size) { _settings.setValue(makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName()), size); }
-    QSize getLastWindowSize(const QWidget* widget) const
-    {
-        QSize result = _settings.value(makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName())).toSize();
-        return result.isEmpty() ? QSize(500, 500) : result;
-    }
+    QSize getLastWindowSize(const QWidget* widget, const QSize& defaultSize = QSize()) const;
 
     void saveLastSplitterState(QSplitter* splitter);
     void restoreLastSplitterState(QSplitter* splitter);

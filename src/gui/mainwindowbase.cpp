@@ -18,6 +18,8 @@
 #include <QSplitter>
 #include <QTimer>
 
+#include <Kanoop/geometry/size.h>
+
 MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) :
     QMainWindow{parent},
     LoggingBaseClass(loggingCategory),
@@ -60,6 +62,7 @@ void MainWindowBase::moveEvent(QMoveEvent *event)
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
+    logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
@@ -74,10 +77,10 @@ void MainWindowBase::showEvent(QShowEvent *event)
             QRect geometryRect = parentWidget() != nullptr ? parentWidget()->geometry() : geometry();
 
             if(_persistPosition) {
-                geometryRect.setTopLeft(GuiSettings::globalInstance()->getLastWindowPosition(this));
+                geometryRect.setTopLeft(GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize));
             }
             if(_persistSize) {
-                geometryRect.setSize(GuiSettings::globalInstance()->getLastWindowSize(this));
+                geometryRect.setSize(GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize));
             }
 
             if(parentWidget() != nullptr) {

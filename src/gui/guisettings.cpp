@@ -21,6 +21,7 @@
 #include <QUuid>
 #include <Kanoop/log.h>
 #include <Kanoop/geometry/rectangle.h>
+#include <Kanoop/geometry/size.h>
 
 const QString GuiSettings::KEY_APP                          = "app";
 const QString GuiSettings::KEY_FONT_SIZE                    = "font_size";
@@ -43,7 +44,7 @@ GuiSettings::GuiSettings() :
 {
 }
 
-QPoint GuiSettings::getLastWindowPosition(const QWidget* widget) const
+QPoint GuiSettings::getLastWindowPosition(const QWidget* widget, const QSize &defaultSize) const
 {
     QPoint result;
     QString key = makeKey(KEY_LAST_WIDGET_POS, widget->objectName());
@@ -54,9 +55,18 @@ QPoint GuiSettings::getLastWindowPosition(const QWidget* widget) const
         // Center the widget on the primary screen
         QScreen* screen = QApplication::primaryScreen();
         Rectangle screenGeometry = screen->geometry();
-        Rectangle widgetGeometry = widget->geometry();
-        result = QPoint(screenGeometry.centerPoint().x() - (widgetGeometry.width() / 2),
-                        screenGeometry.centerPoint().y() - (widgetGeometry.height() / 2));
+        Size widgetSize = defaultSize.isEmpty() ? widget->geometry().size() : defaultSize;
+        result = QPoint(screenGeometry.centerPoint().x() - (widgetSize.width() / 2),
+                        screenGeometry.centerPoint().y() - (widgetSize.height() / 2));
+    }
+    return result;
+}
+
+QSize GuiSettings::getLastWindowSize(const QWidget *widget, const QSize &defaultSize) const
+{
+    QSize result = _settings.value(makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName())).toSize();
+    if(result.isEmpty()) {
+        result = defaultSize.isEmpty() ? QSize(500, 500) : defaultSize;
     }
     return result;
 }
