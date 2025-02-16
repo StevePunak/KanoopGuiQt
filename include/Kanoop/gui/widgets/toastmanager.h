@@ -47,6 +47,7 @@ public:
 
 private:
     void performLayout();
+    virtual bool eventFilter(QObject *watched, QEvent *event) override;
 
     QWidget* _parentWidget;
     TimeSpan _beginFadeTime;

@@ -27,6 +27,9 @@ public:
 
     int count() const;
 
+signals:
+    void itemCountModified();
+
 private:
     AccordionItem* findItemForWidget(QWidget* widget);
 

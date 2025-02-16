@@ -28,6 +28,7 @@ ToastManager::ToastManager(QWidget *parent) :
     _errorBackgroundColor(ToastWidget::DefaultErrorBackground),
     _errorForegroundColor(ToastWidget::DefaultErrorForeground)
 {
+    _parentWidget->installEventFilter(this);
 }
 
 void ToastManager::displayToast(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor)
@@ -57,6 +58,14 @@ void ToastManager::performLayout()
         Point pos(0, y);
         toast->move(pos.toPoint());
     }
+}
+
+bool ToastManager::eventFilter(QObject *watched, QEvent *event)
+{
+    if(watched == _parentWidget || event->type() == QEvent::Resize) {
+        performLayout();
+    }
+    return false;
 }
 
 void ToastManager::closeToast()
