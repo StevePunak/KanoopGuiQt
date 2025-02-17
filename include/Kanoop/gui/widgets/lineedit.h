@@ -2,8 +2,9 @@
 #define LINEEDIT_H
 
 #include <QLineEdit>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class LineEdit : public QLineEdit
+class LIBKANOOPGUI_EXPORT LineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
