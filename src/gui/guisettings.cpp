@@ -52,7 +52,7 @@ QPoint GuiSettings::getLastWindowPosition(const QWidget* widget, const QSize &de
         result = _settings.value(key).toPoint();
     }
     else {
-        // Center the widget on the primary screen
+        // There was no last size. Center the widget on the primary screen
         QScreen* screen = QApplication::primaryScreen();
         Rectangle screenGeometry = screen->geometry();
         Size widgetSize = defaultSize.isEmpty() ? widget->geometry().size() : defaultSize;
@@ -62,11 +62,16 @@ QPoint GuiSettings::getLastWindowPosition(const QWidget* widget, const QSize &de
     return result;
 }
 
-QSize GuiSettings::getLastWindowSize(const QWidget *widget, const QSize &defaultSize) const
+QSize GuiSettings::getLastWindowSize(const QWidget *widget, const QSize &defaultSize)
 {
-    QSize result = _settings.value(makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName())).toSize();
-    if(result.isEmpty()) {
+    QSize result;
+    QString key = makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName());
+    if(_settings.contains(key)) {
+        result = _settings.value(key).toSize();
+    }
+    else {
         result = defaultSize.isEmpty() ? QSize(500, 500) : defaultSize;
+        setLastWindowSize(widget, result);
     }
     return result;
 }
