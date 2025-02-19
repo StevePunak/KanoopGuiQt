@@ -41,6 +41,14 @@ void AccordionWidget::removeItem(int index)
     emit itemCountModified();
 }
 
+void AccordionWidget::setItemVisible(int index, bool visible)
+{
+    QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
+    if(items.count() > index) {
+        items[index]->setVisible(visible);
+    }
+}
+
 void AccordionWidget::clear()
 {
     QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
