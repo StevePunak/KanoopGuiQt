@@ -15,6 +15,7 @@ public:
     void addItem(const QString& title, QWidget* content);
     void insertItem(int index, const QString& title, QWidget* content);
     void removeItem(int index);
+    void setItemVisible(int index, bool visible);
     void clear();
 
     void expandAll();
