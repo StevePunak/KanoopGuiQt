@@ -17,6 +17,7 @@ class LIBKANOOPGUI_EXPORT ToastManager : public QObject
     Q_OBJECT
 public:
     explicit ToastManager(QWidget *parent);
+
     void message(const QString& text) { displayToast(text, _messageBackgroundColor, _messageForegroundColor); }
     void errorMessage(const QString& text) { displayToast(text, _errorBackgroundColor, _errorForegroundColor); }
     void displayToast(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor);

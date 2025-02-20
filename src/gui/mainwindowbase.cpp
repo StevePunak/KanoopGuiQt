@@ -18,6 +18,7 @@
 #include <QSplitter>
 #include <QTimer>
 
+#include <Kanoop/geometry/point.h>
 #include <Kanoop/geometry/size.h>
 
 MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) :
@@ -54,6 +55,7 @@ QMdiArea *MainWindowBase::parentMdiArea()
 
 void MainWindowBase::moveEvent(QMoveEvent *event)
 {
+    // logText(LVL_DEBUG, QString("%1 - move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
     }
@@ -86,12 +88,10 @@ void MainWindowBase::showEvent(QShowEvent *event)
             if(parentWidget() != nullptr) {
                 parentWidget()->resize(geometryRect.size());
                 parentWidget()->move(geometryRect.topLeft());
-                // parentWidget()->setGeometry(geometryRect);
             }
             else {
                 resize(geometryRect.size());
                 move(geometryRect.topLeft());
-                // setGeometry(geometryRect);
             }
         }
         _formLoadComplete = true;
