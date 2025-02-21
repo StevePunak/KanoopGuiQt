@@ -31,6 +31,16 @@ void AccordionItem::setExpanded(bool expanded)
     _button->setExpanded(expanded);
 }
 
+bool AccordionItem::isExpanded() const
+{
+    return _button->isChecked();
+}
+
+bool AccordionItem::isCollapsed() const
+{
+    return !_button->isChecked();
+}
+
 void AccordionItem::setTitle(const QString& title)
 {
     _button->setText(title);
