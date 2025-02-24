@@ -17,7 +17,9 @@
 #include <QResizeEvent>
 #include <QSplitter>
 #include <QTimer>
+#include <mdisubwindow.h>
 
+#include <Kanoop/geometry/point.h>
 #include <Kanoop/geometry/size.h>
 
 MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) :
@@ -54,6 +56,7 @@ QMdiArea *MainWindowBase::parentMdiArea()
 
 void MainWindowBase::moveEvent(QMoveEvent *event)
 {
+    logText(LVL_DEBUG, QString("%1 - move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
     }
@@ -62,7 +65,7 @@ void MainWindowBase::moveEvent(QMoveEvent *event)
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
-    // logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
+    logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
@@ -74,7 +77,9 @@ void MainWindowBase::showEvent(QShowEvent *event)
     Q_UNUSED(event)
     if(_formLoadComplete == false) {
         if(_persistPosition || _persistSize) {
-            QRect geometryRect = parentWidget() != nullptr ? parentWidget()->geometry() : geometry();
+            QWidget* parent = parentWidget();
+            bool isMdiSubWindow = qobject_cast<MdiSubWindow*>(parent) != nullptr;
+            QRect geometryRect = parent != nullptr ? parent->geometry() : geometry();
 
             if(_persistPosition) {
                 geometryRect.setTopLeft(GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize));
@@ -83,15 +88,16 @@ void MainWindowBase::showEvent(QShowEvent *event)
                 geometryRect.setSize(GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize));
             }
 
-            if(parentWidget() != nullptr) {
-                parentWidget()->resize(geometryRect.size());
-                parentWidget()->move(geometryRect.topLeft());
-                // parentWidget()->setGeometry(geometryRect);
-            }
-            else {
-                resize(geometryRect.size());
-                move(geometryRect.topLeft());
-                // setGeometry(geometryRect);
+            // MDI subwindows take care of themselves
+            if(isMdiSubWindow == false) {
+                if(parent != nullptr) {
+                    parent->resize(geometryRect.size());
+                    parent->move(geometryRect.topLeft());
+                }
+                else {
+                    resize(geometryRect.size());
+                    move(geometryRect.topLeft());
+                }
             }
         }
         _formLoadComplete = true;

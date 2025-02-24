@@ -24,6 +24,7 @@
 #include <QSpinBox>
 
 #include <Kanoop/geometry/size.h>
+#include <Kanoop/geometry/point.h>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -160,7 +161,8 @@ void Dialog::connectValidationSignals()
 
 void Dialog::moveEvent(QMoveEvent *event)
 {
-    if(_formLoadComplete) {
+    // logText(LVL_DEBUG, QString("%1 - move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
+    if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
     }
     QDialog::moveEvent(event);
@@ -169,7 +171,7 @@ void Dialog::moveEvent(QMoveEvent *event)
 void Dialog::resizeEvent(QResizeEvent *event)
 {
     // logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
-    if(_formLoadComplete && isVisible()) {
+    if(_formLoadComplete && isVisible() && _persistSize) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
     QDialog::resizeEvent(event);
@@ -182,8 +184,12 @@ void Dialog::showEvent(QShowEvent *event)
         QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize);
         QSize size = GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize);
         if(pos.isNull() == false && size.isNull() == false) {
-            resize(size);
-            move(pos);
+            if(_persistSize) {
+                resize(size);
+            }
+            if(_persistPosition) {
+                move(pos);
+            }
         }
         _formLoadComplete = true;
         if(_formLoadFailed) {

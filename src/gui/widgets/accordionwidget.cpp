@@ -80,6 +80,40 @@ void AccordionWidget::setExpanded(QWidget* widget, bool expanded)
     }
 }
 
+bool AccordionWidget::isExpanded(QWidget* widget) const
+{
+    bool result = false;
+    AccordionItem* item = findItemForWidget(widget);
+    if(item != nullptr) {
+        result = item->isExpanded();
+    }
+    return result;
+}
+
+bool AccordionWidget::areAllExpanded() const
+{
+    bool result = false;
+    QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
+    for(AccordionItem* item : items) {
+        if((result = item->isExpanded()) == false) {
+            break;
+        }
+    }
+    return result;
+}
+
+bool AccordionWidget::areAllCollapsed() const
+{
+    bool result = true;
+    QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
+    for(AccordionItem* item : items) {
+        if((result = item->isCollapsed()) == false) {
+            break;
+        }
+    }
+    return result;
+}
+
 void AccordionWidget::setTitle(QWidget* widget, const QString& title)
 {
     AccordionItem* item = findItemForWidget(widget);
@@ -109,7 +143,7 @@ int AccordionWidget::count() const
     return count;
 }
 
-AccordionItem* AccordionWidget::findItemForWidget(QWidget* widget)
+AccordionItem* AccordionWidget::findItemForWidget(QWidget* widget) const
 {
     AccordionItem* result = nullptr;
     for(AccordionItem* item : findChildren<AccordionItem*>()) {

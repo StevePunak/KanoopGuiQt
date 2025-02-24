@@ -21,6 +21,9 @@ public:
     void expandAll();
     void collapseAll();
     void setExpanded(QWidget* widget, bool expanded);
+    bool isExpanded(QWidget* widget) const;
+    bool areAllExpanded() const;
+    bool areAllCollapsed() const;
 
     void setTitle(QWidget* widget, const QString& title);
 
@@ -32,7 +35,7 @@ signals:
     void itemCountModified();
 
 private:
-    AccordionItem* findItemForWidget(QWidget* widget);
+    AccordionItem* findItemForWidget(QWidget* widget) const;
 
 public slots:
     virtual void onPreferencesChanged();

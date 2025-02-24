@@ -15,6 +15,8 @@ public:
     QWidget* centralWidget() const { return _centralWidget; }
     void setCentralWidget(QWidget* value) { _centralWidget = value; }
     void setExpanded(bool expanded);
+    bool isExpanded() const;
+    bool isCollapsed() const;
     void setTitle(const QString& title);
 
 private:

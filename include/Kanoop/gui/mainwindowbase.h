@@ -30,6 +30,13 @@ public:
     bool persistSize() const { return _persistSize; }
     void setPersistSize(bool value) { _persistSize = value; }
 
+    int type() const { return _type; }
+    void setType(int value) { _type = value; }
+
+    QSize defaultSize() const { return _defaultSize; }
+    void setDefaultSize(const QSize& value) { _defaultSize = value; }
+    void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }
+
 protected:
     void initializeBase();
 
@@ -39,10 +46,6 @@ protected:
     bool formLoadFailed() const { return _formLoadFailed; }
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
-    QSize defaultSize() const { return _defaultSize; }
-    void setDefaultSize(const QSize& value) { _defaultSize = value; }
-    void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }
-
     QMdiArea* parentMdiArea();
 
     // QWidget interface
@@ -51,6 +54,7 @@ protected:
     virtual void showEvent(QShowEvent *event) override;
 
 private:
+    int _type = 0;
     bool _formLoadComplete = false;
     bool _formLoadFailed = false;
     bool _persistPosition = true;
