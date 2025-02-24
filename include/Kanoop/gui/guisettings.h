@@ -25,7 +25,7 @@ public:
 
     // Widget settings
     void setLastWindowPosition(const QWidget* widget, const QPoint& pos) { _settings.setValue(makeKey(KEY_LAST_WIDGET_POS, widget->objectName()), pos); }
-    QPoint getLastWindowPosition(const QWidget* widget, const QSize& defaultSize = QSize()) const;
+    QPoint getLastWindowPosition(QWidget* widget, const QSize& defaultSize = QSize()) const;
 
     void setLastWindowSize(const QWidget* widget, const QSize& size) { _settings.setValue(makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName()), size); }
     QSize getLastWindowSize(const QWidget* widget, const QSize& defaultSize = QSize());

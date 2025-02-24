@@ -1,7 +1,10 @@
 #include "complexwidget.h"
 
+#include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QRadioButton>
+#include <QSpinBox>
 #include <QSplitter>
 #include <guisettings.h>
 
@@ -39,6 +42,9 @@ void ComplexWidget::connectValidationSignals()
 {
     connectLineEditSignals();
     connectComboBoxSignals();
+    connectRadioButtonSignals();
+    connectCheckBoxSignals();
+    connectSpinBoxSignals();
 }
 
 void ComplexWidget::connectLineEditSignals()
@@ -52,6 +58,27 @@ void ComplexWidget::connectComboBoxSignals()
 {
     for(QComboBox* widget : findChildren<QComboBox*>()) {
         connect(widget, &QComboBox::currentTextChanged, this, &ComplexWidget::stringChanged);
+    }
+}
+
+void ComplexWidget::connectRadioButtonSignals()
+{
+    for(QRadioButton* widget : findChildren<QRadioButton*>()) {
+        connect(widget, &QRadioButton::toggled, this, &ComplexWidget::boolChanged);
+    }
+}
+
+void ComplexWidget::connectCheckBoxSignals()
+{
+    for(QCheckBox* widget : findChildren<QCheckBox*>()) {
+        connect(widget, &QCheckBox::toggled, this, &ComplexWidget::boolChanged);
+    }
+}
+
+void ComplexWidget::connectSpinBoxSignals()
+{
+    for(QSpinBox* widget : findChildren<QSpinBox*>()) {
+        connect(widget, &QSpinBox::valueChanged, this, &ComplexWidget::intChanged);
     }
 }
 
@@ -72,7 +99,4 @@ void ComplexWidget::onSplitterMoved()
     GuiSettings::globalInstance()->saveLastSplitterState(static_cast<QSplitter*>(sender()));
 }
 
-void ComplexWidget::stringChanged(const QString&)
-{
-    validate();
-}
+

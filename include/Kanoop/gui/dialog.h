@@ -29,6 +29,12 @@ public:
     explicit Dialog(QWidget* parent = nullptr);
     explicit Dialog(const QString& loggingCategory, QWidget* parent = nullptr);
 
+    bool persistPosition() const { return _persistPosition; }
+    void setPersistPosition(bool value) { _persistPosition = value; }
+
+    bool persistSize() const { return _persistSize; }
+    void setPersistSize(bool value) { _persistSize = value; }
+
 protected:
     void performLayout();
 
@@ -86,15 +92,18 @@ private:
 
     QDialogButtonBox* _buttonBox = nullptr;
     QStatusBar* _statusBar = nullptr;
-    bool _formLoadComplete;
-    bool _formLoadFailed;
-    bool _valid;
-    bool _dirty;
+    bool _formLoadComplete = false;
+    bool _formLoadFailed = false;
+    bool _valid = false;
+    bool _dirty = false;
 
     bool _applyEnabled = true;
     bool _okEnabled = true;
 
     QSize _defaultSize;
+
+    bool _persistPosition = true;
+    bool _persistSize = true;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);
