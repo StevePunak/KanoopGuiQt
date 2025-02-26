@@ -26,6 +26,8 @@
 #include <Kanoop/geometry/size.h>
 #include <Kanoop/geometry/point.h>
 
+#include <Kanoop/logconsumer.h>
+
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     LoggingBaseClass("dlg"),
@@ -42,6 +44,13 @@ Dialog::Dialog(const QString &loggingCategory, QWidget *parent) :
     _valid(false), _dirty(false)
 {
     commonInit();
+}
+
+Dialog::~Dialog()
+{
+    if(_logConsumer != nullptr) {
+        closeLogConsumer();
+    }
 }
 
 void Dialog::commonInit()
@@ -121,6 +130,15 @@ void Dialog::setButtonBoxButtons()
     _buttonBox->setStandardButtons(buttons);
 }
 
+void Dialog::closeLogConsumer()
+{
+    if(_logConsumer != nullptr) {
+        Log::removeConsumer(_logConsumer);
+        delete _logConsumer;
+        _logConsumer = nullptr;
+    }
+}
+
 void Dialog::setValid(bool value)
 {
     _valid = value;
@@ -148,6 +166,19 @@ void Dialog::setOkEnabled(bool value)
 void Dialog::setStatusBarVisible(bool value)
 {
     _statusBar->setVisible(value);
+}
+
+void Dialog::setLogHookEnabled(bool enabled)
+{
+    if(enabled) {
+        closeLogConsumer();
+        _logConsumer = new LogConsumer;
+        connect(_logConsumer, &LogConsumer::logEntry, this, &Dialog::onLoggedItem);
+        Log::addConsumer(_logConsumer);
+    }
+    else {
+        closeLogConsumer();
+    }
 }
 
 void Dialog::connectValidationSignals()
@@ -253,6 +284,11 @@ void Dialog::boolChanged(bool)
 void Dialog::voidChanged()
 {
     enableAppropriateButtons();
+}
+
+void Dialog::onLoggedItem(const Log::LogEntry& entry)
+{
+    loggedItem(entry);
 }
 
 void Dialog::onOkClicked()

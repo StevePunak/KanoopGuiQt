@@ -28,6 +28,7 @@ class LIBKANOOPGUI_EXPORT Dialog : public QDialog,
 public:
     explicit Dialog(QWidget* parent = nullptr);
     explicit Dialog(const QString& loggingCategory, QWidget* parent = nullptr);
+    virtual ~Dialog();
 
     bool persistPosition() const { return _persistPosition; }
     void setPersistPosition(bool value) { _persistPosition = value; }
@@ -51,6 +52,8 @@ protected:
     void setOkEnabled(bool value);
     void setStatusBarVisible(bool value);
 
+    void setLogHookEnabled(bool enabled);
+
     void connectValidationSignals();
 
     QSize defaultSize() const { return _defaultSize; }
@@ -61,6 +64,8 @@ protected:
     QStatusBar* statusBar() const { return _statusBar; }
 
     virtual void validate() = 0;
+
+    virtual void loggedItem(const Log::LogEntry& entry) { Q_UNUSED(entry) }
 
     bool compare(const QString& a, const QString& b) { return a != b; }
     bool compare(const QUuid& a, const QUuid& b) { return a != b; }
@@ -90,6 +95,8 @@ private:
     void connectButtonBoxSignals();
     void setButtonBoxButtons();
 
+    void closeLogConsumer();
+
     QDialogButtonBox* _buttonBox = nullptr;
     QStatusBar* _statusBar = nullptr;
     bool _formLoadComplete = false;
@@ -104,6 +111,8 @@ private:
 
     bool _persistPosition = true;
     bool _persistSize = true;
+
+    LogConsumer* _logConsumer  = nullptr;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);
@@ -120,6 +129,7 @@ protected slots:
     virtual void voidChanged();
 
 private slots:
+    void onLoggedItem(const Log::LogEntry& entry);
     void onOkClicked();
     void onApplyClicked();
     void onCancelClicked();
