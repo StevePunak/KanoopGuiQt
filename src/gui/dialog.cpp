@@ -22,9 +22,11 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QWindow>
 
 #include <Kanoop/geometry/size.h>
 #include <Kanoop/geometry/point.h>
+#include <Kanoop/geometry/rectangle.h>
 
 #include <Kanoop/logconsumer.h>
 
@@ -214,12 +216,38 @@ void Dialog::showEvent(QShowEvent *event)
     if(!_formLoadComplete) {
         QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize);
         QSize size = GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize);
-        if(pos.isNull() == false && size.isNull() == false) {
+
+        QWidget* parentWidget = Dialog::parentWidget();
+        QPoint restorePos = pos;
+
+        // Ensure the point is not off the screen
+        QScreen* restorePosScreen = QGuiApplication::screenAt(restorePos);
+        if(restorePosScreen == nullptr) {
+            logText(LVL_DEBUG, QString("The restore point is off the screen - centering in parent"));
+            QRect parentRect = parentWidget != nullptr
+                                               ? parentWidget->rect()
+                                               : QGuiApplication::primaryScreen()->availableGeometry();
+            restorePos = parentRect.center();
+            restorePos.rx() -= (rect().width() / 2);
+            restorePos.ry() -= (rect().height() / 2);
+        }
+
+        if(parentWidget != nullptr && restorePosScreen != nullptr) {
+            QScreen* parentScreen = parentWidget->window()->windowHandle()->screen();
+            if(parentScreen != restorePosScreen) {
+                logText(LVL_DEBUG, QString("The restore point is on a different screen than parent - centering in parent"));
+                restorePos = parentWidget->mapToGlobal(parentWidget->rect().center());
+                restorePos.rx() -= (rect().width() / 2);
+                restorePos.ry() -= (rect().height() / 2);
+            }
+        }
+
+        if(restorePos.isNull() == false && size.isNull() == false) {
             if(_persistSize) {
                 resize(size);
             }
             if(_persistPosition) {
-                move(pos);
+                move(restorePos);
             }
         }
         _formLoadComplete = true;

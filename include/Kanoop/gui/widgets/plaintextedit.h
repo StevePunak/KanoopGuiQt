@@ -2,8 +2,9 @@
 #define PLAINTEXTEDIT_H
 
 #include <QPlainTextEdit>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class PlainTextEdit : public QPlainTextEdit
+class LIBKANOOPGUI_EXPORT PlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 public:

@@ -2,10 +2,11 @@
 #define PLAYPAUSEBUTTON_H
 
 #include <QWidget>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QLabel;
 class QPushButton;
-class PlayPauseButton : public QWidget
+class LIBKANOOPGUI_EXPORT PlayPauseButton : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool playing READ isPlaying WRITE setPlaying NOTIFY playingChanged)
