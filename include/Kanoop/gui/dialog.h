@@ -36,6 +36,9 @@ public:
     bool persistSize() const { return _persistSize; }
     void setPersistSize(bool value) { _persistSize = value; }
 
+    bool restoreToParentScreen() const { return _restoreToParentScreen; }
+    void setRestoreToParentScreen(bool value) { _restoreToParentScreen = value; }
+
 protected:
     void performLayout();
 
@@ -111,6 +114,7 @@ private:
 
     bool _persistPosition = true;
     bool _persistSize = true;
+    bool _restoreToParentScreen = true;
 
     LogConsumer* _logConsumer  = nullptr;
 

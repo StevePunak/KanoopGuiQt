@@ -232,7 +232,9 @@ void Dialog::showEvent(QShowEvent *event)
             restorePos.ry() -= (rect().height() / 2);
         }
 
-        if(parentWidget != nullptr && restorePosScreen != nullptr) {
+        // If the dialog restoring position to a different screen than
+        // the parent, center it in the parent.
+        if(_restoreToParentScreen == true && parentWidget != nullptr && restorePosScreen != nullptr) {
             QScreen* parentScreen = parentWidget->window()->windowHandle()->screen();
             if(parentScreen != restorePosScreen) {
                 logText(LVL_DEBUG, QString("The restore point is on a different screen than parent - centering in parent"));
