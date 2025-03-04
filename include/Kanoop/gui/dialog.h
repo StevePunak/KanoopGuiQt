@@ -86,10 +86,12 @@ protected slots:
 private:
     void commonInit();
 
+protected:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void showEvent(QShowEvent *event) override;
 
+private:
     void connectLineEditSignals();
     void connectComboBoxSignals();
     void connectRadioButtonSignals();
