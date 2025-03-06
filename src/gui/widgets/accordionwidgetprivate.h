@@ -33,7 +33,7 @@ class DropDownButton : public QPushButton
     Q_OBJECT
 public:
     explicit DropDownButton(const QString& text, QWidget* parent = nullptr);
-
+    bool isExpanded();
     void setExpanded(bool value);
 
 private:
