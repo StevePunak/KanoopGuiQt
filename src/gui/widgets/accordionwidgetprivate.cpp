@@ -33,12 +33,12 @@ void AccordionItem::setExpanded(bool expanded)
 
 bool AccordionItem::isExpanded() const
 {
-    return _button->isChecked();
+    return _button->isExpanded();
 }
 
 bool AccordionItem::isCollapsed() const
 {
-    return !_button->isChecked();
+    return !_button->isExpanded();
 }
 
 void AccordionItem::setTitle(const QString& title)
@@ -56,6 +56,11 @@ DropDownButton::DropDownButton(const QString& text, QWidget* parent) :
 {
     _up = Resources::getPixmap(Resources::DropDownUp);
     _down = Resources::getPixmap(Resources::DropDownDown);
+}
+
+bool DropDownButton::isExpanded()
+{
+    return _expanded;
 }
 
 void DropDownButton::setExpanded(bool value)

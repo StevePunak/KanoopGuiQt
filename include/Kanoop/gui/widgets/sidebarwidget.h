@@ -14,6 +14,8 @@ public:
     explicit SidebarWidget(QWidget *parent = nullptr);
 
     void addItem(int entityMetadataType, const QString& text, int imageResourceId = 0);
+    void removeItem(int entityMetadataType);
+    bool containsItem(int entityMetadataType) const;
     void clear();
     void selectItem(int entityMetadataType);
 

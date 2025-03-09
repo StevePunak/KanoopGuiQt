@@ -28,6 +28,10 @@ void MdiWindow::openSubWindow(MainWindowBase* window, int type)
 
     window->setType(type);
 
+    // load the existing of the same type
+    QList<MdiSubWindow*> existing = findMdiSubWindows(type);
+
+    // create the new window
     MdiSubWindow* mdiSubWindow = new MdiSubWindow;
     mdiSubWindow->setObjectName(QString("%1-mdiSub").arg(window->objectName()));
     mdiSubWindow->setWidget(window);
@@ -37,6 +41,11 @@ void MdiWindow::openSubWindow(MainWindowBase* window, int type)
 
     QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(mdiSubWindow, window->defaultSize());
     QSize size = GuiSettings::globalInstance()->getLastWindowSize(mdiSubWindow, window->defaultSize());
+    if(existing.count() > 0) {
+        // position down and to the right a bit from the last existing
+        static const int NewWindowOffset = 20;
+        pos = QPoint(existing.last()->pos().x() + NewWindowOffset, existing.last()->pos().y() + NewWindowOffset);
+    }
     mdiSubWindow->move(pos);
     mdiSubWindow->resize(size);
 

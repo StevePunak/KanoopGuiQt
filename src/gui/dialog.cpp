@@ -22,9 +22,13 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QWindow>
 
 #include <Kanoop/geometry/size.h>
 #include <Kanoop/geometry/point.h>
+#include <Kanoop/geometry/rectangle.h>
+
+#include <Kanoop/logconsumer.h>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -42,6 +46,13 @@ Dialog::Dialog(const QString &loggingCategory, QWidget *parent) :
     _valid(false), _dirty(false)
 {
     commonInit();
+}
+
+Dialog::~Dialog()
+{
+    if(_logConsumer != nullptr) {
+        closeLogConsumer();
+    }
 }
 
 void Dialog::commonInit()
@@ -121,6 +132,15 @@ void Dialog::setButtonBoxButtons()
     _buttonBox->setStandardButtons(buttons);
 }
 
+void Dialog::closeLogConsumer()
+{
+    if(_logConsumer != nullptr) {
+        Log::removeConsumer(_logConsumer);
+        delete _logConsumer;
+        _logConsumer = nullptr;
+    }
+}
+
 void Dialog::setValid(bool value)
 {
     _valid = value;
@@ -148,6 +168,19 @@ void Dialog::setOkEnabled(bool value)
 void Dialog::setStatusBarVisible(bool value)
 {
     _statusBar->setVisible(value);
+}
+
+void Dialog::setLogHookEnabled(bool enabled)
+{
+    if(enabled) {
+        closeLogConsumer();
+        _logConsumer = new LogConsumer;
+        connect(_logConsumer, &LogConsumer::logEntry, this, &Dialog::onLoggedItem);
+        Log::addConsumer(_logConsumer);
+    }
+    else {
+        closeLogConsumer();
+    }
 }
 
 void Dialog::connectValidationSignals()
@@ -183,12 +216,40 @@ void Dialog::showEvent(QShowEvent *event)
     if(!_formLoadComplete) {
         QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize);
         QSize size = GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize);
-        if(pos.isNull() == false && size.isNull() == false) {
+
+        QWidget* parentWidget = Dialog::parentWidget();
+        QPoint restorePos = pos;
+
+        // Ensure the point is not off the screen
+        QScreen* restorePosScreen = QGuiApplication::screenAt(restorePos);
+        if(restorePosScreen == nullptr) {
+            logText(LVL_DEBUG, QString("The restore point is off the screen - centering in parent"));
+            QRect parentRect = parentWidget != nullptr
+                                               ? parentWidget->rect()
+                                               : QGuiApplication::primaryScreen()->availableGeometry();
+            restorePos = parentRect.center();
+            restorePos.rx() -= (rect().width() / 2);
+            restorePos.ry() -= (rect().height() / 2);
+        }
+
+        // If the dialog restoring position to a different screen than
+        // the parent, center it in the parent.
+        if(_restoreToParentScreen == true && parentWidget != nullptr && restorePosScreen != nullptr) {
+            QScreen* parentScreen = parentWidget->window()->windowHandle()->screen();
+            if(parentScreen != restorePosScreen) {
+                logText(LVL_DEBUG, QString("The restore point is on a different screen than parent - centering in parent"));
+                restorePos = parentWidget->mapToGlobal(parentWidget->rect().center());
+                restorePos.rx() -= (rect().width() / 2);
+                restorePos.ry() -= (rect().height() / 2);
+            }
+        }
+
+        if(restorePos.isNull() == false && size.isNull() == false) {
             if(_persistSize) {
                 resize(size);
             }
             if(_persistPosition) {
-                move(pos);
+                move(restorePos);
             }
         }
         _formLoadComplete = true;
@@ -253,6 +314,11 @@ void Dialog::boolChanged(bool)
 void Dialog::voidChanged()
 {
     enableAppropriateButtons();
+}
+
+void Dialog::onLoggedItem(const Log::LogEntry& entry)
+{
+    loggedItem(entry);
 }
 
 void Dialog::onOkClicked()
