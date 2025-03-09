@@ -64,6 +64,7 @@ void Dialog::commonInit()
 
     _statusBar = new QStatusBar(this);
     _statusBar->setVisible(false);
+    _statusBar->setMaximumHeight(_statusBar->height());
 
     Dialog::onPreferencesChanged();
 }
