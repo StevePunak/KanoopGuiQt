@@ -11,11 +11,13 @@
 #include "guisettings.h"
 #include "mainwindowbase.h"
 
+#include <QHBoxLayout>
 #include <QMdiArea>
 #include <QMenu>
 #include <QMoveEvent>
 #include <QResizeEvent>
 #include <QSplitter>
+#include <QStatusBar>
 #include <QTimer>
 #include <mdisubwindow.h>
 
@@ -29,6 +31,26 @@ MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) 
 {
     MainWindowBase::setObjectName(MainWindowBase::metaObject()->className());
     setContextMenuPolicy(Qt::CustomContextMenu);
+}
+
+void MainWindowBase::showStatusBarMessage(const QString& text, const QColor& textColor, const TimeSpan& timeout)
+{
+    statusBar()->showStatusMessage(text, textColor, timeout);
+}
+
+void MainWindowBase::showStatusBarMessage(const QString& text, const TimeSpan& timeout)
+{
+    statusBar()->showStatusMessage(text, timeout.totalMilliseconds());
+}
+
+void MainWindowBase::showStatusBarAnimatedProgressMessage(const QString& text, const QColor& textColor)
+{
+    statusBar()->showAnimatedProgressMessage(text, textColor);
+}
+
+void MainWindowBase::stopStatusBarAnimation()
+{
+    statusBar()->stopAnimation();
 }
 
 void MainWindowBase::initializeBase()
@@ -52,6 +74,15 @@ QMdiArea *MainWindowBase::parentMdiArea()
         parentWidget = parentWidget->parent();
     }
     return result;
+}
+
+StatusBar* MainWindowBase::statusBar()
+{
+    if(_statusBar == nullptr) {
+        _statusBar = new StatusBar(this);
+        setStatusBar(_statusBar);
+    }
+    return _statusBar;
 }
 
 void MainWindowBase::moveEvent(QMoveEvent *event)
