@@ -13,8 +13,8 @@ public:
 
 protected:
     MainWindowBase* activeSubWindow();
-    void openSubWindow(MainWindowBase* window, int type);
-    void closeSubWindows(int type);
+    virtual void openSubWindow(MainWindowBase* window, int type);
+    virtual void closeSubWindows(int type);
 
     MdiSubWindow* findFirstMdiSubWindow(int type) const;
     QList<MdiSubWindow*> findMdiSubWindows(int type) const;
