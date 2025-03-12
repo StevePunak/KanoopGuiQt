@@ -19,7 +19,6 @@ void StatusBar::showStatusMessage(const QString& text, const QColor& textColor, 
 
 void StatusBar::showAnimatedProgressMessage(const QString& text, const QColor& textColor)
 {
-Log::logText(LVL_DEBUG, QString("%1 [%2]").arg(__FUNCTION__).arg(text));
     _progressMessage = text;
     showStatusMessage(text, textColor);
     _dotTimer.start(250);
@@ -27,7 +26,6 @@ Log::logText(LVL_DEBUG, QString("%1 [%2]").arg(__FUNCTION__).arg(text));
 
 void StatusBar::stopAnimation()
 {
-Log::logText(LVL_DEBUG, __FUNCTION__);
     _dotTimer.stop();
 }
 
@@ -47,7 +45,6 @@ void StatusBar::reset()
 
 void StatusBar::onDotTimerExpired()
 {
-Log::logText(LVL_DEBUG, "Dot timer...");
     QString text = QString("%1%2").arg(_progressMessage).arg(QString().leftJustified(++_dots, '.'));
     QStatusBar::showMessage(text);
 
