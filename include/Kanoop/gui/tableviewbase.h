@@ -36,8 +36,11 @@ public:
 
     AbstractItemModel* sourceModel() const { return _sourceModel; }
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
+
     virtual void deleteRow(const QModelIndex& index);
     virtual void addRow(const EntityMetadata& metadata) { emit addItem(metadata); }
+    int rowCount() const;
+
     void restoreHeaderStates();
     void restoreHorizontalHeaderState();
     void restoreVerticalHeaderState();

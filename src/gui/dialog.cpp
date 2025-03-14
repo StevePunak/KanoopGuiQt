@@ -110,7 +110,6 @@ void Dialog::connectButtonBoxSignals()
         disconnect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
         connect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
     }
-
     if(_buttonBox->button(QDialogButtonBox::Apply) != nullptr) {
         disconnect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
         connect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
@@ -123,9 +122,12 @@ void Dialog::connectButtonBoxSignals()
 
 void Dialog::setButtonBoxButtons()
 {
-    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Cancel;
+    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::NoButton;
     if(_applyEnabled) {
         buttons |= QDialogButtonBox::Apply;
+    }
+    if(_cancelEnabled) {
+        buttons |= QDialogButtonBox::Cancel;
     }
     if(_okEnabled) {
         buttons |= QDialogButtonBox::Ok;
@@ -155,6 +157,13 @@ void Dialog::setDirty(bool value)
 void Dialog::setApplyEnabled(bool value)
 {
     _applyEnabled = value;
+    setButtonBoxButtons();
+    connectButtonBoxSignals();
+}
+
+void Dialog::setCancelEnabled(bool value)
+{
+    _cancelEnabled = value;
     setButtonBoxButtons();
     connectButtonBoxSignals();
 }

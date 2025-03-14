@@ -52,6 +52,7 @@ protected:
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
     void setApplyEnabled(bool value);
+    void setCancelEnabled(bool value);
     void setOkEnabled(bool value);
     void setStatusBarVisible(bool value);
 
@@ -110,6 +111,7 @@ private:
     bool _dirty = false;
 
     bool _applyEnabled = true;
+    bool _cancelEnabled = true;
     bool _okEnabled = true;
 
     QSize _defaultSize;
