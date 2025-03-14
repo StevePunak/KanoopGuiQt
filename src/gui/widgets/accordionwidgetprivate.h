@@ -15,6 +15,8 @@ public:
     QWidget* centralWidget() const { return _centralWidget; }
     void setCentralWidget(QWidget* value) { _centralWidget = value; }
     void setExpanded(bool expanded);
+    bool isExpanded() const;
+    bool isCollapsed() const;
     void setTitle(const QString& title);
 
 private:
@@ -31,7 +33,7 @@ class DropDownButton : public QPushButton
     Q_OBJECT
 public:
     explicit DropDownButton(const QString& text, QWidget* parent = nullptr);
-
+    bool isExpanded();
     void setExpanded(bool value);
 
 private:

@@ -36,7 +36,24 @@ void SidebarWidget::addItem(int entityMetadataType, const QString &text, int ima
     SidebarItem* item = new SidebarItem(entityMetadataType, text, icon);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     item->setData(entityMetadataType, KANOOP::EntityTypeRole);
-    static_cast<QStandardItemModel *>(model())->appendRow(item);
+    static_cast<QStandardItemModel*>(model())->appendRow(item);
+}
+
+void SidebarWidget::removeItem(int entityMetadataType)
+{
+    QStandardItemModel* model = static_cast<QStandardItemModel*>(SidebarWidget::model());
+    QModelIndexList matches = model->match(model->index(0, 0, QModelIndex()), KANOOP::EntityTypeRole, entityMetadataType, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    while(matches.count() > 0) {
+        QModelIndex index = matches.takeFirst();
+        model->removeRow(index.row());
+    }
+}
+
+bool SidebarWidget::containsItem(int entityMetadataType) const
+{
+    QStandardItemModel* model = static_cast<QStandardItemModel*>(SidebarWidget::model());
+    QModelIndexList matches = model->match(model->index(0, 0, QModelIndex()), KANOOP::EntityTypeRole, entityMetadataType, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    return matches.count() > 0;
 }
 
 void SidebarWidget::clear()

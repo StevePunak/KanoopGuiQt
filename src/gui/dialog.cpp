@@ -22,6 +22,13 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QWindow>
+
+#include <Kanoop/geometry/size.h>
+#include <Kanoop/geometry/point.h>
+#include <Kanoop/geometry/rectangle.h>
+
+#include <Kanoop/logconsumer.h>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -41,6 +48,13 @@ Dialog::Dialog(const QString &loggingCategory, QWidget *parent) :
     commonInit();
 }
 
+Dialog::~Dialog()
+{
+    if(_logConsumer != nullptr) {
+        closeLogConsumer();
+    }
+}
+
 void Dialog::commonInit()
 {
     Dialog::setObjectName(Dialog::metaObject()->className());
@@ -50,6 +64,7 @@ void Dialog::commonInit()
 
     _statusBar = new QStatusBar(this);
     _statusBar->setVisible(false);
+    _statusBar->setMaximumHeight(_statusBar->height());
 
     Dialog::onPreferencesChanged();
 }
@@ -95,7 +110,6 @@ void Dialog::connectButtonBoxSignals()
         disconnect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
         connect(_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Dialog::onOkClicked);
     }
-
     if(_buttonBox->button(QDialogButtonBox::Apply) != nullptr) {
         disconnect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
         connect(_buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &Dialog::onApplyClicked);
@@ -108,14 +122,26 @@ void Dialog::connectButtonBoxSignals()
 
 void Dialog::setButtonBoxButtons()
 {
-    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Cancel;
+    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::NoButton;
     if(_applyEnabled) {
         buttons |= QDialogButtonBox::Apply;
+    }
+    if(_cancelEnabled) {
+        buttons |= QDialogButtonBox::Cancel;
     }
     if(_okEnabled) {
         buttons |= QDialogButtonBox::Ok;
     }
     _buttonBox->setStandardButtons(buttons);
+}
+
+void Dialog::closeLogConsumer()
+{
+    if(_logConsumer != nullptr) {
+        Log::removeConsumer(_logConsumer);
+        delete _logConsumer;
+        _logConsumer = nullptr;
+    }
 }
 
 void Dialog::setValid(bool value)
@@ -135,6 +161,13 @@ void Dialog::setApplyEnabled(bool value)
     connectButtonBoxSignals();
 }
 
+void Dialog::setCancelEnabled(bool value)
+{
+    _cancelEnabled = value;
+    setButtonBoxButtons();
+    connectButtonBoxSignals();
+}
+
 void Dialog::setOkEnabled(bool value)
 {
     _okEnabled = value;
@@ -145,6 +178,19 @@ void Dialog::setOkEnabled(bool value)
 void Dialog::setStatusBarVisible(bool value)
 {
     _statusBar->setVisible(value);
+}
+
+void Dialog::setLogHookEnabled(bool enabled)
+{
+    if(enabled) {
+        closeLogConsumer();
+        _logConsumer = new LogConsumer;
+        connect(_logConsumer, &LogConsumer::logEntry, this, &Dialog::onLoggedItem);
+        Log::addConsumer(_logConsumer);
+    }
+    else {
+        closeLogConsumer();
+    }
 }
 
 void Dialog::connectValidationSignals()
@@ -158,7 +204,8 @@ void Dialog::connectValidationSignals()
 
 void Dialog::moveEvent(QMoveEvent *event)
 {
-    if(_formLoadComplete) {
+    // logText(LVL_DEBUG, QString("%1 - move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
+    if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
     }
     QDialog::moveEvent(event);
@@ -166,7 +213,8 @@ void Dialog::moveEvent(QMoveEvent *event)
 
 void Dialog::resizeEvent(QResizeEvent *event)
 {
-    if(_formLoadComplete && isVisible()) {
+    // logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
+    if(_formLoadComplete && isVisible() && _persistSize) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
     QDialog::resizeEvent(event);
@@ -176,11 +224,43 @@ void Dialog::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
     if(!_formLoadComplete) {
-        QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this);
-        QSize size = GuiSettings::globalInstance()->getLastWindowSize(this);
-        if(pos.isNull() == false && size.isNull() == false) {
-            resize(size);
-            move(pos);
+        QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize);
+        QSize size = GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize);
+
+        QWidget* parentWidget = Dialog::parentWidget();
+        QPoint restorePos = pos;
+
+        // Ensure the point is not off the screen
+        QScreen* restorePosScreen = QGuiApplication::screenAt(restorePos);
+        if(restorePosScreen == nullptr) {
+            logText(LVL_DEBUG, QString("The restore point is off the screen - centering in parent"));
+            QRect parentRect = parentWidget != nullptr
+                                               ? parentWidget->rect()
+                                               : QGuiApplication::primaryScreen()->availableGeometry();
+            restorePos = parentRect.center();
+            restorePos.rx() -= (rect().width() / 2);
+            restorePos.ry() -= (rect().height() / 2);
+        }
+
+        // If the dialog restoring position to a different screen than
+        // the parent, center it in the parent.
+        if(_restoreToParentScreen == true && parentWidget != nullptr && restorePosScreen != nullptr) {
+            QScreen* parentScreen = parentWidget->window()->windowHandle()->screen();
+            if(parentScreen != restorePosScreen) {
+                logText(LVL_DEBUG, QString("The restore point is on a different screen than parent - centering in parent"));
+                restorePos = parentWidget->mapToGlobal(parentWidget->rect().center());
+                restorePos.rx() -= (rect().width() / 2);
+                restorePos.ry() -= (rect().height() / 2);
+            }
+        }
+
+        if(restorePos.isNull() == false && size.isNull() == false) {
+            if(_persistSize) {
+                resize(size);
+            }
+            if(_persistPosition) {
+                move(restorePos);
+            }
         }
         _formLoadComplete = true;
         if(_formLoadFailed) {
@@ -244,6 +324,11 @@ void Dialog::boolChanged(bool)
 void Dialog::voidChanged()
 {
     enableAppropriateButtons();
+}
+
+void Dialog::onLoggedItem(const Log::LogEntry& entry)
+{
+    loggedItem(entry);
 }
 
 void Dialog::onOkClicked()

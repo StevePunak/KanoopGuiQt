@@ -118,6 +118,14 @@ void TableViewBase::deleteRow(const QModelIndex &index)
     }
 }
 
+int TableViewBase::rowCount() const
+{
+    if(sourceModel() != nullptr) {
+        return sourceModel()->rowCount();
+    }
+    return 0;
+}
+
 void TableViewBase::restoreHeaderStates()
 {
     restoreHorizontalHeaderState();

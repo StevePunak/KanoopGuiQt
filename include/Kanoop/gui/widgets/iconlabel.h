@@ -2,9 +2,10 @@
 #define ICONLABEL_H
 
 #include <QWidget>
+#include <Kanoop/gui/libkanoopgui.h>
 
 class QLabel;
-class IconLabel : public QWidget
+class LIBKANOOPGUI_EXPORT IconLabel : public QWidget
 {
     Q_OBJECT
 public:

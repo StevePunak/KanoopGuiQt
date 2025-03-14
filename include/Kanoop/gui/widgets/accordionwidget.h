@@ -14,11 +14,16 @@ public:
 
     void addItem(const QString& title, QWidget* content);
     void insertItem(int index, const QString& title, QWidget* content);
+    void removeItem(int index);
+    void setItemVisible(int index, bool visible);
     void clear();
 
     void expandAll();
     void collapseAll();
     void setExpanded(QWidget* widget, bool expanded);
+    bool isExpanded(QWidget* widget) const;
+    bool areAllExpanded() const;
+    bool areAllCollapsed() const;
 
     void setTitle(QWidget* widget, const QString& title);
 
@@ -26,8 +31,11 @@ public:
 
     int count() const;
 
+signals:
+    void itemCountModified();
+
 private:
-    AccordionItem* findItemForWidget(QWidget* widget);
+    AccordionItem* findItemForWidget(QWidget* widget) const;
 
 public slots:
     virtual void onPreferencesChanged();

@@ -11,12 +11,18 @@
 #include "guisettings.h"
 #include "mainwindowbase.h"
 
+#include <QHBoxLayout>
 #include <QMdiArea>
 #include <QMenu>
 #include <QMoveEvent>
 #include <QResizeEvent>
 #include <QSplitter>
+#include <QStatusBar>
 #include <QTimer>
+#include <mdisubwindow.h>
+
+#include <Kanoop/geometry/point.h>
+#include <Kanoop/geometry/size.h>
 
 MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) :
     QMainWindow{parent},
@@ -25,6 +31,26 @@ MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) 
 {
     MainWindowBase::setObjectName(MainWindowBase::metaObject()->className());
     setContextMenuPolicy(Qt::CustomContextMenu);
+}
+
+void MainWindowBase::showStatusBarMessage(const QString& text, const QColor& textColor, const TimeSpan& timeout)
+{
+    statusBar()->showStatusMessage(text, textColor, timeout);
+}
+
+void MainWindowBase::showStatusBarMessage(const QString& text, const TimeSpan& timeout)
+{
+    statusBar()->showStatusMessage(text, timeout.totalMilliseconds());
+}
+
+void MainWindowBase::showStatusBarAnimatedProgressMessage(const QString& text, const QColor& textColor)
+{
+    statusBar()->showAnimatedProgressMessage(text, textColor);
+}
+
+void MainWindowBase::stopStatusBarAnimation()
+{
+    statusBar()->stopAnimation();
 }
 
 void MainWindowBase::initializeBase()
@@ -50,8 +76,18 @@ QMdiArea *MainWindowBase::parentMdiArea()
     return result;
 }
 
+StatusBar* MainWindowBase::statusBar()
+{
+    if(_statusBar == nullptr) {
+        _statusBar = new StatusBar(this);
+        setStatusBar(_statusBar);
+    }
+    return _statusBar;
+}
+
 void MainWindowBase::moveEvent(QMoveEvent *event)
 {
+    // logText(LVL_DEBUG, QString("%1 - move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
     }
@@ -60,6 +96,7 @@ void MainWindowBase::moveEvent(QMoveEvent *event)
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
+    // logText(LVL_DEBUG, QString("%1 - resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
     if(_formLoadComplete && _persistPosition) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
     }
@@ -71,24 +108,27 @@ void MainWindowBase::showEvent(QShowEvent *event)
     Q_UNUSED(event)
     if(_formLoadComplete == false) {
         if(_persistPosition || _persistSize) {
-            QRect geometryRect = parentWidget() != nullptr ? parentWidget()->geometry() : geometry();
+            QWidget* parent = parentWidget();
+            bool isMdiSubWindow = qobject_cast<MdiSubWindow*>(parent) != nullptr;
+            QRect geometryRect = parent != nullptr ? parent->geometry() : geometry();
 
             if(_persistPosition) {
-                geometryRect.setTopLeft(GuiSettings::globalInstance()->getLastWindowPosition(this));
+                geometryRect.setTopLeft(GuiSettings::globalInstance()->getLastWindowPosition(this, _defaultSize));
             }
             if(_persistSize) {
-                geometryRect.setSize(GuiSettings::globalInstance()->getLastWindowSize(this));
+                geometryRect.setSize(GuiSettings::globalInstance()->getLastWindowSize(this, _defaultSize));
             }
 
-            if(parentWidget() != nullptr) {
-                parentWidget()->resize(geometryRect.size());
-                parentWidget()->move(geometryRect.topLeft());
-                // parentWidget()->setGeometry(geometryRect);
-            }
-            else {
-                resize(geometryRect.size());
-                move(geometryRect.topLeft());
-                // setGeometry(geometryRect);
+            // MDI subwindows take care of themselves
+            if(isMdiSubWindow == false) {
+                if(parent != nullptr) {
+                    parent->resize(geometryRect.size());
+                    parent->move(geometryRect.topLeft());
+                }
+                else {
+                    resize(geometryRect.size());
+                    move(geometryRect.topLeft());
+                }
             }
         }
         _formLoadComplete = true;

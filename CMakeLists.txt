@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 include(GNUInstallDirs)
 
-set(PROJ KanoopQtGui)
+set(PROJ KanoopGuiQt)
 project(${PROJ})
 
 find_package(Qt6 REQUIRED COMPONENTS Network Designer)
@@ -13,7 +13,7 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(KANOOP_QTGUI_VERSION "1.1.9")
+set(KANOOP_QTGUI_VERSION "1.2.3")
 
 file(GLOB_RECURSE PROJ_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
@@ -39,7 +39,13 @@ get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 target_include_directories(${PROJ} PRIVATE ${PARENT_DIR}/KanoopCommon/include)
 
 find_package(Qt6 REQUIRED COMPONENTS Gui Widgets Network)
-target_link_libraries(${PROJ} PRIVATE PRIVATE Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Designer KanoopCommon)
+target_link_libraries(${PROJ} PRIVATE
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Network
+    Qt6::Designer
+    KanoopCommonQt
+)
 
 add_compile_definitions(KANOOP_QTGUI_LIBRARY)
 add_compile_definitions(QT_DEPRECATED_WARNINGS)

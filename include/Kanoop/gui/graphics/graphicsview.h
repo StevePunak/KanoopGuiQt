@@ -4,9 +4,10 @@
 #include <QGraphicsView>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class GraphicsView : public QGraphicsView,
-                     public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT GraphicsView : public QGraphicsView,
+                                         public LoggingBaseClass
 {
     Q_OBJECT
 public:

@@ -3,14 +3,15 @@
 #include <QGraphicsRectItem>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class RectangleGraphicsItem : public QGraphicsRectItem,
-                              public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT RectangleGraphicsItem : public QGraphicsRectItem,
+                                                  public LoggingBaseClass
 {
 public:
     explicit RectangleGraphicsItem(int type, QGraphicsItem* parent = nullptr);
 
-    int type() const { return _type; }
+    virtual int type() const override { return _type; }
 
 protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;

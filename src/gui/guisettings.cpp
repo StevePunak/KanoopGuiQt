@@ -15,12 +15,14 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QHeaderView>
+#include <QMdiSubWindow>
 #include <QMutex>
 #include <QScreen>
 #include <QSplitter>
 #include <QUuid>
 #include <Kanoop/log.h>
 #include <Kanoop/geometry/rectangle.h>
+#include <Kanoop/geometry/size.h>
 
 const QString GuiSettings::KEY_APP                          = "app";
 const QString GuiSettings::KEY_FONT_SIZE                    = "font_size";
@@ -43,7 +45,7 @@ GuiSettings::GuiSettings() :
 {
 }
 
-QPoint GuiSettings::getLastWindowPosition(const QWidget* widget) const
+QPoint GuiSettings::getLastWindowPosition(QWidget* widget, const QSize &defaultSize) const
 {
     QPoint result;
     QString key = makeKey(KEY_LAST_WIDGET_POS, widget->objectName());
@@ -51,12 +53,31 @@ QPoint GuiSettings::getLastWindowPosition(const QWidget* widget) const
         result = _settings.value(key).toPoint();
     }
     else {
-        // Center the widget on the primary screen
-        QScreen* screen = QApplication::primaryScreen();
-        Rectangle screenGeometry = screen->geometry();
-        Rectangle widgetGeometry = widget->geometry();
-        result = QPoint(screenGeometry.centerPoint().x() - (widgetGeometry.width() / 2),
-                        screenGeometry.centerPoint().y() - (widgetGeometry.height() / 2));
+        QWidget* parent = widget->parentWidget();
+
+        bool isMdiSubWindow = qobject_cast<QMdiSubWindow*>(parent) != nullptr || qobject_cast<QMdiSubWindow*>(widget) != nullptr;
+        if(isMdiSubWindow == false) {
+            // There was no last size. Center the widget on the primary screen
+            QScreen* screen = QApplication::primaryScreen();
+            Rectangle screenGeometry = screen->geometry();
+            Size widgetSize = defaultSize.isEmpty() ? widget->geometry().size() : defaultSize;
+            result = QPoint(screenGeometry.centerPoint().x() - (widgetSize.width() / 2),
+                            screenGeometry.centerPoint().y() - (widgetSize.height() / 2));
+        }
+    }
+    return result;
+}
+
+QSize GuiSettings::getLastWindowSize(const QWidget *widget, const QSize &defaultSize)
+{
+    QSize result;
+    QString key = makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName());
+    if(_settings.contains(key)) {
+        result = _settings.value(key).toSize();
+    }
+    else {
+        result = defaultSize.isEmpty() ? QSize(500, 500) : defaultSize;
+        setLastWindowSize(widget, result);
     }
     return result;
 }

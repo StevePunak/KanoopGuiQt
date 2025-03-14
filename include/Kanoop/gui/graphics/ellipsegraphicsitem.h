@@ -2,14 +2,15 @@
 #define ELLIPSEGRAPHICSITEM_H
 #include <QGraphicsEllipseItem>
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class EllipseGraphicsItem : public QGraphicsEllipseItem,
-                            public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT EllipseGraphicsItem : public QGraphicsEllipseItem,
+                                                public LoggingBaseClass
 {
 public:
     EllipseGraphicsItem(int type, QGraphicsItem* parent = nullptr);
 
-    int type() const { return _type; }
+    virtual int type() const override { return _type; }
 
     void setWidth(double width);
     void setColor(const QColor& color);
