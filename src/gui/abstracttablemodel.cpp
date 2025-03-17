@@ -25,9 +25,7 @@ void AbstractTableModel::deleteRowAtIndex(const QModelIndex &index)
 {
     AbstractModelItem* item = static_cast<AbstractModelItem*>(index.internalPointer());
     if(rootItems().contains(item)) {
-        beginRemoveRows(index, index.row(), 1);
         deleteRootItem(item);
-        endRemoveRows();
     }
 }
 
