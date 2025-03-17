@@ -83,6 +83,7 @@ int AbstractItemModel::rowCount(const QModelIndex &parent) const
     else {
         result = _rootItems.count();
     }
+    logText(LVL_DEBUG, LVL2(), QString("%1  returns %2").arg(__FUNCTION__).arg(result));
     return result;
 }
 
@@ -312,7 +313,7 @@ void AbstractItemModel::deleteRootItem(AbstractModelItem *item)
     if(_rootItems.contains(item) == true) {
         int row = _rootItems.indexOf(item);
         QModelIndex index = createIndex(row, 0, item);
-        beginRemoveRows(index, row, row);
+        beginRemoveRows(index.parent(), row, row);
         _rootItems.removeAll(item);
         endRemoveRows();
     }
