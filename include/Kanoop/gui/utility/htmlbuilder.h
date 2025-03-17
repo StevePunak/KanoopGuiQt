@@ -21,6 +21,12 @@ public:
 
     void startParagraph(const QColor& color = QColor(), const QColor& backgroundColor = QColor());
     void endParagraph();
+
+    void startBold();
+    void endBold();
+    void startStrong();
+    void endStrong();
+
     void appendText(const QString& text);
 
     QString toString() const { return _result; }
