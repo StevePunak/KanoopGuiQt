@@ -23,3 +23,23 @@ QString HtmlUtil::endParagraph()
 {
     return "</p>";
 }
+
+QString HtmlUtil::startBold()
+{
+    return "<b>";
+}
+
+QString HtmlUtil::endBold()
+{
+    return "</b>";
+}
+
+QString HtmlUtil::startStrong()
+{
+    return "<strong>";
+}
+
+QString HtmlUtil::endStrong()
+{
+    return "</strong>";
+}

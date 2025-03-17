@@ -60,6 +60,8 @@ protected:
 
     void connectValidationSignals();
 
+    QColor defaultTextColor() const { return palette().color(QPalette::Text); }
+
     QSize defaultSize() const { return _defaultSize; }
     void setDefaultSize(const QSize& value) { _defaultSize = value; }
     void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }

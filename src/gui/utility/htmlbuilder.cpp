@@ -16,6 +16,26 @@ void HtmlBuilder::endParagraph()
     _output << HtmlUtil::endParagraph();
 }
 
+void HtmlBuilder::startBold()
+{
+    _output << HtmlUtil::startBold();
+}
+
+void HtmlBuilder::endBold()
+{
+    _output << HtmlUtil::endBold();
+}
+
+void HtmlBuilder::startStrong()
+{
+    _output << HtmlUtil::startStrong();
+}
+
+void HtmlBuilder::endStrong()
+{
+    _output << HtmlUtil::endStrong();
+}
+
 void HtmlBuilder::appendText(const QString& text)
 {
     _output << text;
