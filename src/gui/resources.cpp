@@ -54,7 +54,7 @@ QPixmap Resources::getPixmap(int id)
         }
     }
     else {
-        Log::logText(LVL_DEBUG, QString("No resource Pixmap from %1").arg(resourcePath));
+        Log::logText(LVL_DEBUG, QString("No resource Pixmap for id %1 from path %2").arg(id).arg(resourcePath));
     }
     return result;
 }
