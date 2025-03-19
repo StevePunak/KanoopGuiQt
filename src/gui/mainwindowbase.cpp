@@ -121,6 +121,14 @@ void MainWindowBase::showEvent(QShowEvent *event)
 
             // MDI subwindows take care of themselves
             if(isMdiSubWindow == false) {
+                // make sure top-left is not off the screen
+                if(geometryRect.top() < 0) {
+                    geometryRect.setTop(10);
+                }
+                if(geometryRect.left() < 0) {
+                    geometryRect.setLeft(10);
+                }
+
                 if(parent != nullptr) {
                     parent->resize(geometryRect.size());
                     parent->move(geometryRect.topLeft());
