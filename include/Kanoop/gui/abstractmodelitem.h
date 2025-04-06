@@ -26,6 +26,7 @@ public:
     AbstractModelItem();
     AbstractModelItem(AbstractItemModel* model);
     AbstractModelItem(const EntityMetadata& entityMetadata, AbstractItemModel* model, const QUuid& uuid = QUuid());
+    AbstractModelItem(const EntityMetadata& entityMetadata, const QUuid& uuid, AbstractItemModel* model);
 
     virtual ~AbstractModelItem() {
         qDeleteAll(_children);
@@ -56,6 +57,9 @@ public:
     void deleteChild(AbstractModelItem* child);
 
     AbstractItemModel* model() const { return _model; }
+
+protected:
+    void setIcon(const QIcon& value) { _icon = value; }
 
 private:
     EntityMetadata _entityMetadata;

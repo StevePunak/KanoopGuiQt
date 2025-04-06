@@ -30,6 +30,14 @@ AbstractModelItem::AbstractModelItem(const EntityMetadata &entityMetadata, Abstr
     }
 }
 
+AbstractModelItem::AbstractModelItem(const EntityMetadata& entityMetadata, const QUuid& uuid, AbstractItemModel* model) :
+    _entityMetadata(entityMetadata), _model(model), _uuid(uuid), _parent(nullptr)
+{
+    if(entityMetadata.iconId() != 0) {
+        _icon = Resources::getIcon(entityMetadata.iconId());
+    }
+}
+
 QVariant AbstractModelItem::data(const QModelIndex &index, int role) const
 {
     Q_UNUSED(index)

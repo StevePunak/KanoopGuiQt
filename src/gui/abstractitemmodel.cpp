@@ -35,7 +35,7 @@ void AbstractItemModel::commonInit()
 
 QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  row: %2  col: %3  parent: [%4]").arg(__FUNCTION__).arg(row).arg(column).arg(toString(parent)));
+    logText(LVL_DEBUG, LVL3(), QString("%1  row: %2  col: %3  parent: [%4]").arg(__FUNCTION__).arg(row).arg(column).arg(toString(parent)));
     QModelIndex result;
     if(hasIndex(row, column, parent)) {
         if(parent.isValid() == false) {
@@ -61,7 +61,7 @@ QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &par
 
 QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  child: [%2]").arg(__FUNCTION__).arg(toString(child)));
+    logText(LVL_DEBUG, LVL3(), QString("func: %1  child: [%2]").arg(__FUNCTION__).arg(toString(child)));
     QModelIndex result;
     if(child.isValid()) {
         AbstractModelItem* childItem = static_cast<AbstractModelItem*>(child.internalPointer());
@@ -70,12 +70,16 @@ QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
             result = createIndex(childItem->row(), 0, parentItem);
         }
     }
+    logText(LVL_DEBUG, LVL2(), QString("func: %1 for [%2] returns parent: [%3]")
+            .arg(__FUNCTION__)
+            .arg(toString(child))
+            .arg(toString(result)));
     return result;
 }
 
 int AbstractItemModel::rowCount(const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+    logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
     int result = 0;
     if(parent.isValid()) {
         result = static_cast<AbstractModelItem*>(parent.internalPointer())->children().count();
@@ -83,13 +87,13 @@ int AbstractItemModel::rowCount(const QModelIndex &parent) const
     else {
         result = _rootItems.count();
     }
-    logText(LVL_DEBUG, LVL2(), QString("%1  returns %2").arg(__FUNCTION__).arg(result));
+    logText(LVL_DEBUG, LVL3(), QString("%1  returns %2").arg(__FUNCTION__).arg(result));
     return result;
 }
 
 int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+    logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
     return _columnHeadersIntMap.count() ? _columnHeadersIntMap.count() : 1;
 //    int result = 1;
@@ -102,7 +106,7 @@ int AbstractItemModel::columnCount(const QModelIndex &parent) const
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  index: [%2]  role: %3").arg(__FUNCTION__).arg(toString(index)).arg(role));
+    logText(LVL_DEBUG, LVL3(), QString("%1  index: [%2]  role: %3").arg(__FUNCTION__).arg(toString(index)).arg(role));
 
     QVariant result;
 
@@ -368,7 +372,11 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
 
 QString AbstractItemModel::toString(const QModelIndex &value)
 {
-    return QString("row: %1  col: %2  ptr: 0x%3").arg(value.row()).arg(value.column()).arg((qint64)value.constInternalPointer(), 0, 16);
+    return QString("row: %1  col: %2  ptr: 0x%3   [%4]")
+            .arg(value.row())
+            .arg(value.column())
+            .arg((qint64)value.constInternalPointer(), 0, 16)
+            .arg(value.data(Qt::DisplayRole).toString());
 }
 
 
