@@ -41,5 +41,6 @@ void PlayPauseButton::setText(const QString& value)
 void PlayPauseButton::onPlayPauseClicked()
 {
     setPlaying(!_playing);
+    emit clicked();
 }
 

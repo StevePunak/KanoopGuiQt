@@ -67,7 +67,7 @@ QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
         AbstractModelItem* childItem = static_cast<AbstractModelItem*>(child.internalPointer());
         if(childItem != nullptr && _rootItems.contains(childItem) == false) {
             AbstractModelItem* parentItem = childItem->parent();
-            result = createIndex(childItem->row(), 0, parentItem);
+            result = createIndex(parentItem->row(), 0, parentItem);
         }
     }
     logText(LVL_DEBUG, LVL2(), QString("func: %1 for [%2] returns parent: [%3]")
@@ -96,12 +96,6 @@ int AbstractItemModel::columnCount(const QModelIndex &parent) const
     logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
     return _columnHeadersIntMap.count() ? _columnHeadersIntMap.count() : 1;
-//    int result = 1;
-//    if(parent.isValid()) {
-//        AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parent.internalPointer());
-//        result = parentItem->siblings().count() + 1;
-//    }
-//    return result;
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const

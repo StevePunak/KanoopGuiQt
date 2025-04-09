@@ -47,6 +47,7 @@ public:
 
 protected:
     EntityMetadata findCurrentParent(int entityMetadataType) const;
+    EntityMetadata findFirstParent(const QModelIndex& index, int entityMetadataType) const;
     QModelIndexList findParents(const QModelIndex& index) const;
 
 private:

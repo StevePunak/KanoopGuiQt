@@ -170,16 +170,21 @@ void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 
 EntityMetadata TreeViewBase::findCurrentParent(int entityMetadataType) const
 {
+    return findFirstParent(currentIndex(), entityMetadataType);
+}
+
+EntityMetadata TreeViewBase::findFirstParent(const QModelIndex& index, int entityMetadataType) const
+{
     EntityMetadata result;
-    QModelIndex index = currentIndex().parent();
-    while(index.isValid()) {
+    QModelIndex parentIndex = index.parent();
+    while(parentIndex.isValid()) {
         EntityMetadata metadata;
-        if((metadata = index.data(KANOOP::EntityMetadataRole).value<EntityMetadata>()).isValid() &&
+        if((metadata = parentIndex.data(KANOOP::EntityMetadataRole).value<EntityMetadata>()).isValid() &&
             metadata.type() == entityMetadataType) {
             result = metadata;
             break;
         }
-        index = index.parent();
+        parentIndex = parentIndex.parent();
     }
     return result;
 }
