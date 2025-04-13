@@ -61,6 +61,7 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const override;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     virtual bool removeRows(int row, int count, const QModelIndex& parentIndex) override;
+    virtual bool hasChildren(const QModelIndex& parent) const override;
 
 protected:
     // Retrieve root items
@@ -106,6 +107,8 @@ private:
     TableHeader::StringMap _columnHeadersStringMap;
     TableHeader::IntMap _rowHeadersIntMap;
     TableHeader::StringMap _rowHeadersStringMap;
+
+    friend class AbstractModelItem;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);

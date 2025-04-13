@@ -13,6 +13,7 @@
 #include "guitypes.h"
 
 #include <QModelIndex>
+#include <abstractitemmodel.h>
 
 
 AbstractModelItem::AbstractModelItem() :
@@ -89,6 +90,9 @@ int AbstractModelItem::row() const
     int result = 0;
     if(_parent != nullptr) {
         result = _parent->_children.indexOf(this);
+    }
+    else if(_model != nullptr) {
+        result = _model->_rootItems.indexOf(this);
     }
     return result;
 }

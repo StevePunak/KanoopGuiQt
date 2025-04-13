@@ -81,8 +81,11 @@ int AbstractItemModel::rowCount(const QModelIndex &parent) const
 {
     logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
     int result = 0;
+    // We don't support children other than column 0
     if(parent.isValid()) {
-        result = static_cast<AbstractModelItem*>(parent.internalPointer())->children().count();
+        if(parent.column() == 0) {
+            result = static_cast<AbstractModelItem*>(parent.internalPointer())->children().count();
+        }
     }
     else {
         result = _rootItems.count();
@@ -163,6 +166,21 @@ bool AbstractItemModel::removeRows(int row, int count, const QModelIndex& parent
         endRemoveRows();
         qDeleteAll(deleteItems);
         result = true;
+    }
+    return result;
+}
+
+bool AbstractItemModel::hasChildren(const QModelIndex& parent) const
+{
+    bool result = false;
+    logText(LVL_DEBUG, LVL3(), QString("%1  index: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+
+    if(parent.isValid() && parent.internalPointer() != nullptr) {
+        AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parent.internalPointer());
+        result = parentItem->childrenRef().count() > 0;
+    }
+    else if(parent.isValid() == false) {
+        result = _rootItems.count() > 0;
     }
     return result;
 }

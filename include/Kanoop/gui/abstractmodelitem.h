@@ -53,6 +53,8 @@ public:
     List& childrenRef() { return _children; }
     List siblings() const { return _siblings; }
 
+    int childCount() const { return _children.count(); }
+
     AbstractModelItem* appendChild(AbstractModelItem* child);
     void deleteChild(AbstractModelItem* child);
 
