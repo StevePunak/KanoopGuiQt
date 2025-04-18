@@ -28,6 +28,9 @@ public:
     QColor columnTextColor() const { return _columnTextColor; }
     void setColumnTextColor(const QColor& value) { _columnTextColor = value; }
 
+    bool isVisible() const { return _visible; }
+    void setVisible(bool value) { _visible = value; }
+
     bool isValid() const { return _type != 0; }
 
     class IntMap : public QMap<int, TableHeader>
@@ -41,30 +44,35 @@ public:
                 header.setColumnTextColor(color);
             }
         }
-    };
-
-    class StringMap : public QMap<QString, TableHeader>
-    {
-    public:
-        void setTextColorForType(int type, const QColor& color)
+        void setHeaderVisible(int type, bool visible)
         {
-            for(TableHeader& header : *this) {
-                if(header.type() == type) {
-                    header.setColumnTextColor(color);
-                }
+            auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
+            if(it != end()) {
+                (*it).setVisible(visible);
             }
         }
     };
 
-    class List : public QList<TableHeader> {};
+    class List : public QList<TableHeader>
+    {
+    public:
+        void setHeaderVisible(int type, bool visible)
+        {
+            auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
+            if(it != end()) {
+                (*it).setVisible(visible);
+            }
+        }
+    };
 
     static QString typeToString(int type) { return _TableHeaderTypeToStringMap.value(type); }
 
 private:
-    int _type;
+    int _type = 0;
     QString _text;
     Qt::Orientation _orientation;
     QColor _columnTextColor;
+    bool _visible = true;
 
     class TableHeaderTypeToStringMap : public QMap<int, QString>
     {};

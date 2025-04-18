@@ -98,7 +98,7 @@ int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
     logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
-    return _columnHeadersIntMap.count() ? _columnHeadersIntMap.count() : 1;
+    return _columnHeaders.count() ? _columnHeaders.count() : 1;
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
@@ -137,7 +137,7 @@ QVariant AbstractItemModel::headerData(int section, Qt::Orientation orientation,
     QVariant result;
     switch(role) {
     case Qt::DisplayRole:
-        result = orientation == Qt::Horizontal ? _columnHeadersIntMap.value(section).text() : _rowHeadersIntMap.value(section).text();
+        result = orientation == Qt::Horizontal ? _columnHeaders.value(section).text() : _rowHeaders.value(section).text();
         break;
     default:
         break;
@@ -260,9 +260,9 @@ QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, i
 TableHeader::List AbstractItemModel::columnHeaders() const
 {
     TableHeader::List result;
-    QList<int> keys = _columnHeadersIntMap.keys();
+    QList<int> keys = _columnHeaders.keys();
     for(int key : keys) {
-        result.append(_columnHeadersIntMap.value(key));
+        result.append(_columnHeaders.value(key));
     }
     return result;
 }
@@ -282,15 +282,13 @@ void AbstractItemModel::appendColumnHeader(int type, const QString &text)
     QString headerText = text.isEmpty() ? TableHeader::typeToString(type) : text;
 
     TableHeader header(type, headerText, Qt::Horizontal);
-    _columnHeadersIntMap.insert(_columnHeadersIntMap.count(), header);
-    _columnHeadersStringMap.insert(header.text(), header);
+    _columnHeaders.insert(_columnHeaders.count(), header);
 }
 
 void AbstractItemModel::appendColumnHeader(int type, const QColor &columnTextColor, const QString &text)
 {
     appendColumnHeader(type, text);
-    _columnHeadersIntMap.setTextColorForType(type, columnTextColor);
-    _columnHeadersIntMap.setTextColorForType(type, columnTextColor);
+    _columnHeaders.setTextColorForType(type, columnTextColor);
 }
 
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
@@ -298,15 +296,19 @@ void AbstractItemModel::appendRowHeader(int type, const QString &value)
     QString text = value.isEmpty() ? TableHeader::typeToString(type) : value;
 
     TableHeader header(type, text, Qt::Vertical);
-    _rowHeadersIntMap.insert(_columnHeadersIntMap.count(), header);
-    _rowHeadersStringMap.insert(header.text(), header);
+    _rowHeaders.insert(_columnHeaders.count(), header);
+}
+
+void AbstractItemModel::setColumnHeaderVisible(int type, bool visible)
+{
+    _columnHeaders.setHeaderVisible(type, visible);
 }
 
 int AbstractItemModel::columnForHeader(int type) const
 {
     int result = -1;
-    for(int col = 0;col < _columnHeadersIntMap.count();col++) {
-        if(_columnHeadersIntMap.value(col).type() == type) {
+    for(int col = 0;col < _columnHeaders.count();col++) {
+        if(_columnHeaders.value(col).type() == type) {
             result = col;
             break;
         }

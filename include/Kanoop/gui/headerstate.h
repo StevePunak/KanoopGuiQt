@@ -20,8 +20,8 @@ public:
     public:
         SectionState() :
             _section(0), _size(100) {}
-        SectionState(int section, const QString& text, int size) :
-            _section(section), _text(text), _size(size)  {}
+        SectionState(int section, const QString& text, int size, bool visible) :
+            _section(section), _text(text), _size(size), _visible(visible)  {}
         virtual ~SectionState() {}
 
         virtual QJsonObject serializeToJsonObject() const override;
@@ -30,6 +30,7 @@ public:
         int section() const { return _section; }
         QString text() const { return _text; }
         int size() const { return _size; }
+        bool isVisible() const { return _visible; }
 
         bool isValid() const { return _text.isEmpty() == false; }
 
@@ -48,12 +49,13 @@ public:
         };
 
     private:
-        int _section;
+        int _section = 0;
         QString _text;
-        int _size;
+        int _size = 100;
+        bool _visible = true;
     };
 
-    void addSection(int section, const QString& text, int size);
+    void addSection(int section, const QString& text, int size, bool visible);
     SectionState getSection(int section) { return _sections.findForSection(section); }
 
 private:

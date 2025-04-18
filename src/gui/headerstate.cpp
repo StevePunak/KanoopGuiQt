@@ -20,9 +20,9 @@ void HeaderState::deserializeFromJson(const QByteArray &json)
     _sections.deserializeFromJsonArray(doc["sections"].toArray());
 }
 
-void HeaderState::addSection(int section, const QString &text, int size)
+void HeaderState::addSection(int section, const QString &text, int size, bool visible)
 {
-    _sections.append(SectionState(section, text, size));
+    _sections.append(SectionState(section, text, size, visible));
 }
 
 QJsonObject HeaderState::SectionState::serializeToJsonObject() const
@@ -31,6 +31,7 @@ QJsonObject HeaderState::SectionState::serializeToJsonObject() const
     result["section"] = _section;
     result["text"] = _text;
     result["size"] = _size;
+    result["visible"] = _visible;
     return result;
 }
 
@@ -39,4 +40,5 @@ void HeaderState::SectionState::deserializeFromJsonObject(const QJsonObject &jso
     _section = jsonObject["section"].toInt();
     _text = jsonObject["text"].toString();
     _size = jsonObject["size"].toInt();
+    _visible = jsonObject["visible"].toBool();
 }

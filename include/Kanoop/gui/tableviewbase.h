@@ -52,6 +52,10 @@ private:
     QSortFilterProxyModel* _proxyModel;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
+    QAction* _actionColSettings = nullptr;
+    QAction* _actionHideCol = nullptr;
+    QAction* _actionAutoResizeCols = nullptr;
+
 signals:
     void horizontalHeaderChanged();
     void verticalHeaderChanged();
@@ -70,6 +74,11 @@ signals:
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
     virtual void onVerticalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
+
+    void onHeaderContextMenuRequested();
+    void onColumnSettingsClicked();
+    void onHideColumnClicked();
+    void onAutoResizeColumnsClicked();
 };
 
 #endif // TABLEVIEWBASE_H

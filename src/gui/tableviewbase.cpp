@@ -10,9 +10,11 @@
 ******************************************************************************************/
 #include "abstractitemmodel.h"
 #include "abstracttablemodel.h"
+#include "columnsettingsdialog.h"
 #include "guisettings.h"
 #include "tableviewbase.h"
 #include <QHeaderView>
+#include <QMenu>
 #include <QSortFilterProxyModel>
 #include <QStyledItemDelegate>
 
@@ -38,8 +40,20 @@ TableViewBase::TableViewBase(QWidget *parent) :
     horizontalHeader()->setStretchLastSection(true);
 
     // Wire up signals for saving header state
+    connect(horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TableViewBase::onHeaderContextMenuRequested);
     connect(horizontalHeader(), &QHeaderView::sectionResized, this, &TableViewBase::onHorizontalHeaderResized);
     connect(verticalHeader(), &QHeaderView::sectionResized, this, &TableViewBase::onVerticalHeaderResized);
+
+    // Enable context menu on header
+    horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // Create header actions
+    _actionColSettings = new QAction("Column Settings", this);
+    _actionHideCol = new QAction("Hide Column", this);
+    _actionAutoResizeCols = new QAction("Auto-Resize Columns", this);
+    connect(_actionColSettings, &QAction::triggered, this, &TableViewBase::onColumnSettingsClicked);
+    connect(_actionHideCol, &QAction::triggered, this, &TableViewBase::onHideColumnClicked);
+    connect(_actionAutoResizeCols, &QAction::triggered, this, &TableViewBase::onAutoResizeColumnsClicked);
 
     // Custom context menu is the default
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -178,5 +192,53 @@ void TableViewBase::onVerticalHeaderResized(int, int, int)
         GuiSettings::globalInstance()->saveLastHeaderState(verticalHeader(), itemModel);
     }
     emit verticalHeaderChanged();
+}
+
+void TableViewBase::onHeaderContextMenuRequested()
+{
+    QMenu menu;
+    menu.addAction(_actionColSettings);
+    menu.addAction(_actionHideCol);
+    menu.addAction(_actionAutoResizeCols);
+
+    menu.exec(QCursor::pos());
+}
+
+void TableViewBase::onColumnSettingsClicked()
+{
+    if(sourceModel() == nullptr) {
+        return;
+    }
+
+    ColumnSettingsDialog dlg(sourceModel()->columnHeaders(), parentWidget());
+    if(dlg.exec() == QDialog::Accepted) {
+        for(const TableHeader& header : dlg.headers()) {
+            sourceModel()->setColumnHeaderVisible(header.type(), header.isVisible());
+            int column = sourceModel()->columnForHeader(header.type());
+            setColumnHidden(column, header.isVisible() == false);
+        }
+        GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), sourceModel());
+    }
+}
+
+void TableViewBase::onHideColumnClicked()
+{
+    int section = horizontalHeader()->logicalIndexAt(QCursor::pos());
+    if(section < 0 || sourceModel() == nullptr) {
+        return;
+    }
+    TableHeader header = sourceModel()->columnHeader(section);
+    if(header.isValid() == false) {
+        return;
+    }
+
+    sourceModel()->setColumnHeaderVisible(header.type(), false);
+    setColumnHidden(section, true);
+    GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), sourceModel());
+}
+
+void TableViewBase::onAutoResizeColumnsClicked()
+{
+    horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }
 

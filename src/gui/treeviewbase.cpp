@@ -62,6 +62,16 @@ EntityMetadata TreeViewBase::metadataAtPos(const QPoint &pos) const
     return metadata;
 }
 
+QModelIndex TreeViewBase::firstIndexOfEntityUuid(const QUuid& uuid) const
+{
+    QModelIndex result;
+    QModelIndexList indexes = model()->match(model()->index(0, 0, QModelIndex()), KANOOP::UUidRole, uuid, 1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    if(indexes.count() > 0) {
+        result = indexes.first();
+    }
+    return result;
+}
+
 void TreeViewBase::setCurrentUuid(const QUuid &uuid)
 {
     AbstractItemModel* itemModel = dynamic_cast<AbstractItemModel*>(model());
