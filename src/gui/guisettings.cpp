@@ -19,6 +19,7 @@
 #include <QMutex>
 #include <QScreen>
 #include <QSplitter>
+#include <QTableView>
 #include <QUuid>
 #include <Kanoop/log.h>
 #include <Kanoop/geometry/rectangle.h>
@@ -153,7 +154,7 @@ void GuiSettings::saveLastHeaderState(QHeaderView *header, AbstractItemModel *mo
     HeaderState headerState;
     for(int section = 0;section < headers.count();section++) {
         TableHeader tableHeader = headers.at(section);
-        headerState.addSection(section, tableHeader.text(), header->sectionSize(section));
+        headerState.addSection(section, tableHeader.text(), header->sectionSize(section), tableHeader.isVisible());
     }
     QByteArray jsonHeaderState = headerState.serializeToJson();
     if(header->orientation() == Qt::Vertical) {
@@ -181,6 +182,13 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
         HeaderState::SectionState sectionState = headerState.getSection(section);
         if(sectionState.isValid() && sectionState.text() == sectionText) {
             header->resizeSection(section, sectionState.size());
+            QTableView* view = qobject_cast<QTableView*>(header->parent());
+            if(view != nullptr) {
+                if(sectionState.isVisible() == false) {
+                    Log::logText(LVL_DEBUG, QString("Section %1 of %2 not visible").arg(section).arg(view->objectName()));
+                }
+                view->setColumnHidden(section, sectionState.isVisible() == false);
+            }
         }
     }
 }

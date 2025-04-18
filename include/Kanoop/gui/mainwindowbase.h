@@ -39,11 +39,13 @@ public:
     void setDefaultSize(const QSize& value) { _defaultSize = value; }
     void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }
 
+public slots:
     void showStatusBarMessage(const QString &text, const QColor& textColor, const TimeSpan& timeout = TimeSpan());
     void showStatusBarMessage(const QString& text, const TimeSpan& timeout = TimeSpan());
     void showStatusBarAnimatedProgressMessage(const QString &text, const QColor& textColor = QColor());
     void stopStatusBarAnimation();
 
+public:
     QMdiArea* parentMdiArea();
     StatusBar* statusBar();
 

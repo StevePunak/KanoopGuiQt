@@ -30,6 +30,8 @@ public:
     int entityTypeAtPos(const QPoint& pos);
     EntityMetadata currentMetadata() const;
     EntityMetadata metadataAtPos(const QPoint& pos) const;
+
+    QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
     void setCurrentUuid(const QUuid& uuid);
 
     QByteArray saveState() const;
