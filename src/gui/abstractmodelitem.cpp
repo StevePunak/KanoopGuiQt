@@ -13,6 +13,7 @@
 #include "guitypes.h"
 
 #include <QModelIndex>
+#include <abstractitemmodel.h>
 
 
 AbstractModelItem::AbstractModelItem() :
@@ -23,6 +24,14 @@ AbstractModelItem::AbstractModelItem(AbstractItemModel* model) :
     _model(model), _parent(nullptr) {}
 
 AbstractModelItem::AbstractModelItem(const EntityMetadata &entityMetadata, AbstractItemModel *model, const QUuid& uuid) :
+    _entityMetadata(entityMetadata), _model(model), _uuid(uuid), _parent(nullptr)
+{
+    if(entityMetadata.iconId() != 0) {
+        _icon = Resources::getIcon(entityMetadata.iconId());
+    }
+}
+
+AbstractModelItem::AbstractModelItem(const EntityMetadata& entityMetadata, const QUuid& uuid, AbstractItemModel* model) :
     _entityMetadata(entityMetadata), _model(model), _uuid(uuid), _parent(nullptr)
 {
     if(entityMetadata.iconId() != 0) {
@@ -81,6 +90,9 @@ int AbstractModelItem::row() const
     int result = 0;
     if(_parent != nullptr) {
         result = _parent->_children.indexOf(this);
+    }
+    else if(_model != nullptr) {
+        result = _model->_rootItems.indexOf(this);
     }
     return result;
 }

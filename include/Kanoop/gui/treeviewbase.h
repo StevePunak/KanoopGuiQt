@@ -30,6 +30,8 @@ public:
     int entityTypeAtPos(const QPoint& pos);
     EntityMetadata currentMetadata() const;
     EntityMetadata metadataAtPos(const QPoint& pos) const;
+
+    QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
     void setCurrentUuid(const QUuid& uuid);
 
     QByteArray saveState() const;
@@ -39,6 +41,7 @@ public:
 
     virtual void setModel(QAbstractItemModel* model) override;
     AbstractItemModel* sourceModel() const { return _sourceModel; }
+    QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
 
     void refreshVisible();
 
@@ -46,6 +49,7 @@ public:
 
 protected:
     EntityMetadata findCurrentParent(int entityMetadataType) const;
+    EntityMetadata findFirstParent(const QModelIndex& index, int entityMetadataType) const;
     QModelIndexList findParents(const QModelIndex& index) const;
 
 private:

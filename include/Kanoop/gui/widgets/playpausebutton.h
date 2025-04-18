@@ -30,6 +30,7 @@ private:
     QString _text;
 
 signals:
+    void clicked();
     void playingChanged(bool playing);
     void textChanged(bool playing);
 

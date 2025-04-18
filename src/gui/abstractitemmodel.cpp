@@ -35,7 +35,7 @@ void AbstractItemModel::commonInit()
 
 QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  row: %2  col: %3  parent: [%4]").arg(__FUNCTION__).arg(row).arg(column).arg(toString(parent)));
+    logText(LVL_DEBUG, LVL3(), QString("%1  row: %2  col: %3  parent: [%4]").arg(__FUNCTION__).arg(row).arg(column).arg(toString(parent)));
     QModelIndex result;
     if(hasIndex(row, column, parent)) {
         if(parent.isValid() == false) {
@@ -61,48 +61,49 @@ QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &par
 
 QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  child: [%2]").arg(__FUNCTION__).arg(toString(child)));
+    logText(LVL_DEBUG, LVL3(), QString("func: %1  child: [%2]").arg(__FUNCTION__).arg(toString(child)));
     QModelIndex result;
     if(child.isValid()) {
         AbstractModelItem* childItem = static_cast<AbstractModelItem*>(child.internalPointer());
         if(childItem != nullptr && _rootItems.contains(childItem) == false) {
             AbstractModelItem* parentItem = childItem->parent();
-            result = createIndex(childItem->row(), 0, parentItem);
+            result = createIndex(parentItem->row(), 0, parentItem);
         }
     }
+    logText(LVL_DEBUG, LVL2(), QString("func: %1 for [%2] returns parent: [%3]")
+            .arg(__FUNCTION__)
+            .arg(toString(child))
+            .arg(toString(result)));
     return result;
 }
 
 int AbstractItemModel::rowCount(const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+    logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
     int result = 0;
+    // We don't support children other than column 0
     if(parent.isValid()) {
-        result = static_cast<AbstractModelItem*>(parent.internalPointer())->children().count();
+        if(parent.column() == 0) {
+            result = static_cast<AbstractModelItem*>(parent.internalPointer())->children().count();
+        }
     }
     else {
         result = _rootItems.count();
     }
-    logText(LVL_DEBUG, LVL2(), QString("%1  returns %2").arg(__FUNCTION__).arg(result));
+    logText(LVL_DEBUG, LVL3(), QString("%1  returns %2").arg(__FUNCTION__).arg(result));
     return result;
 }
 
 int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+    logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
-    return _columnHeadersIntMap.count() ? _columnHeadersIntMap.count() : 1;
-//    int result = 1;
-//    if(parent.isValid()) {
-//        AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parent.internalPointer());
-//        result = parentItem->siblings().count() + 1;
-//    }
-//    return result;
+    return _columnHeaders.count() ? _columnHeaders.count() : 1;
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
 {
-    logText(LVL_DEBUG, LVL2(), QString("%1  index: [%2]  role: %3").arg(__FUNCTION__).arg(toString(index)).arg(role));
+    logText(LVL_DEBUG, LVL3(), QString("%1  index: [%2]  role: %3").arg(__FUNCTION__).arg(toString(index)).arg(role));
 
     QVariant result;
 
@@ -136,7 +137,7 @@ QVariant AbstractItemModel::headerData(int section, Qt::Orientation orientation,
     QVariant result;
     switch(role) {
     case Qt::DisplayRole:
-        result = orientation == Qt::Horizontal ? _columnHeadersIntMap.value(section).text() : _rowHeadersIntMap.value(section).text();
+        result = orientation == Qt::Horizontal ? _columnHeaders.value(section).text() : _rowHeaders.value(section).text();
         break;
     default:
         break;
@@ -165,6 +166,21 @@ bool AbstractItemModel::removeRows(int row, int count, const QModelIndex& parent
         endRemoveRows();
         qDeleteAll(deleteItems);
         result = true;
+    }
+    return result;
+}
+
+bool AbstractItemModel::hasChildren(const QModelIndex& parent) const
+{
+    bool result = false;
+    logText(LVL_DEBUG, LVL3(), QString("%1  index: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+
+    if(parent.isValid() && parent.internalPointer() != nullptr) {
+        AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parent.internalPointer());
+        result = parentItem->childrenRef().count() > 0;
+    }
+    else if(parent.isValid() == false) {
+        result = _rootItems.count() > 0;
     }
     return result;
 }
@@ -244,9 +260,9 @@ QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, i
 TableHeader::List AbstractItemModel::columnHeaders() const
 {
     TableHeader::List result;
-    QList<int> keys = _columnHeadersIntMap.keys();
+    QList<int> keys = _columnHeaders.keys();
     for(int key : keys) {
-        result.append(_columnHeadersIntMap.value(key));
+        result.append(_columnHeaders.value(key));
     }
     return result;
 }
@@ -266,15 +282,13 @@ void AbstractItemModel::appendColumnHeader(int type, const QString &text)
     QString headerText = text.isEmpty() ? TableHeader::typeToString(type) : text;
 
     TableHeader header(type, headerText, Qt::Horizontal);
-    _columnHeadersIntMap.insert(_columnHeadersIntMap.count(), header);
-    _columnHeadersStringMap.insert(header.text(), header);
+    _columnHeaders.insert(_columnHeaders.count(), header);
 }
 
 void AbstractItemModel::appendColumnHeader(int type, const QColor &columnTextColor, const QString &text)
 {
     appendColumnHeader(type, text);
-    _columnHeadersIntMap.setTextColorForType(type, columnTextColor);
-    _columnHeadersIntMap.setTextColorForType(type, columnTextColor);
+    _columnHeaders.setTextColorForType(type, columnTextColor);
 }
 
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
@@ -282,15 +296,19 @@ void AbstractItemModel::appendRowHeader(int type, const QString &value)
     QString text = value.isEmpty() ? TableHeader::typeToString(type) : value;
 
     TableHeader header(type, text, Qt::Vertical);
-    _rowHeadersIntMap.insert(_columnHeadersIntMap.count(), header);
-    _rowHeadersStringMap.insert(header.text(), header);
+    _rowHeaders.insert(_columnHeaders.count(), header);
+}
+
+void AbstractItemModel::setColumnHeaderVisible(int type, bool visible)
+{
+    _columnHeaders.setHeaderVisible(type, visible);
 }
 
 int AbstractItemModel::columnForHeader(int type) const
 {
     int result = -1;
-    for(int col = 0;col < _columnHeadersIntMap.count();col++) {
-        if(_columnHeadersIntMap.value(col).type() == type) {
+    for(int col = 0;col < _columnHeaders.count();col++) {
+        if(_columnHeaders.value(col).type() == type) {
             result = col;
             break;
         }
@@ -368,7 +386,11 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
 
 QString AbstractItemModel::toString(const QModelIndex &value)
 {
-    return QString("row: %1  col: %2  ptr: 0x%3").arg(value.row()).arg(value.column()).arg((qint64)value.constInternalPointer(), 0, 16);
+    return QString("row: %1  col: %2  ptr: 0x%3   [%4]")
+            .arg(value.row())
+            .arg(value.column())
+            .arg((qint64)value.constInternalPointer(), 0, 16)
+            .arg(value.data(Qt::DisplayRole).toString());
 }
 
 

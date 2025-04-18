@@ -62,6 +62,16 @@ EntityMetadata TreeViewBase::metadataAtPos(const QPoint &pos) const
     return metadata;
 }
 
+QModelIndex TreeViewBase::firstIndexOfEntityUuid(const QUuid& uuid) const
+{
+    QModelIndex result;
+    QModelIndexList indexes = model()->match(model()->index(0, 0, QModelIndex()), KANOOP::UUidRole, uuid, 1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    if(indexes.count() > 0) {
+        result = indexes.first();
+    }
+    return result;
+}
+
 void TreeViewBase::setCurrentUuid(const QUuid &uuid)
 {
     AbstractItemModel* itemModel = dynamic_cast<AbstractItemModel*>(model());
@@ -170,16 +180,21 @@ void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 
 EntityMetadata TreeViewBase::findCurrentParent(int entityMetadataType) const
 {
+    return findFirstParent(currentIndex(), entityMetadataType);
+}
+
+EntityMetadata TreeViewBase::findFirstParent(const QModelIndex& index, int entityMetadataType) const
+{
     EntityMetadata result;
-    QModelIndex index = currentIndex().parent();
-    while(index.isValid()) {
+    QModelIndex parentIndex = index.parent();
+    while(parentIndex.isValid()) {
         EntityMetadata metadata;
-        if((metadata = index.data(KANOOP::EntityMetadataRole).value<EntityMetadata>()).isValid() &&
+        if((metadata = parentIndex.data(KANOOP::EntityMetadataRole).value<EntityMetadata>()).isValid() &&
             metadata.type() == entityMetadataType) {
             result = metadata;
             break;
         }
-        index = index.parent();
+        parentIndex = parentIndex.parent();
     }
     return result;
 }

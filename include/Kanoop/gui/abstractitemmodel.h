@@ -45,8 +45,8 @@ public:
     QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
 
     TableHeader::List columnHeaders() const;
-    TableHeader columnHeader(int column) const { return _columnHeadersIntMap.value(column); }
-    TableHeader rowHeader(int row) const { return _rowHeadersIntMap.value(row); }
+    TableHeader columnHeader(int column) const { return _columnHeaders.value(column); }
+    TableHeader rowHeader(int row) const { return _rowHeaders.value(row); }
     int columnForHeader(int type) const;
 
     QModelIndexList getPersistentIndexes() const;
@@ -61,6 +61,9 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const override;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     virtual bool removeRows(int row, int count, const QModelIndex& parentIndex) override;
+    virtual bool hasChildren(const QModelIndex& parent) const override;
+
+    void setColumnHeaderVisible(int type, bool visible);
 
 protected:
     // Retrieve root items
@@ -90,8 +93,8 @@ protected:
     void updateItemAtIndex(const QModelIndex& itemIndex, const EntityMetadata &metadata);
     void updateItemsAtIndexes(const QModelIndexList& indexes, const EntityMetadata &metadata);
 
-    TableHeader::IntMap columnHeadersIntMap() const { return _columnHeadersIntMap; }
-    TableHeader::IntMap rowHeadersIntMap() const { return _rowHeadersIntMap; }
+    TableHeader::IntMap columnHeadersIntMap() const { return _columnHeaders; }
+    TableHeader::IntMap rowHeadersIntMap() const { return _rowHeaders; }
 
     void emitRowChanged(const QModelIndex &rowIndex);
 
@@ -102,10 +105,12 @@ private:
 
     AbstractModelItem::List _rootItems;
 
-    TableHeader::IntMap _columnHeadersIntMap;
-    TableHeader::StringMap _columnHeadersStringMap;
-    TableHeader::IntMap _rowHeadersIntMap;
-    TableHeader::StringMap _rowHeadersStringMap;
+    // class Headers : public QMap<
+
+    TableHeader::IntMap _columnHeaders;
+    TableHeader::IntMap _rowHeaders;
+
+    friend class AbstractModelItem;
 
 signals:
     void itemAdded(const EntityMetadata& metadata);

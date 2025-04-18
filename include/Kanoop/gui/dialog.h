@@ -51,6 +51,8 @@ protected:
     bool formLoadFailed() const { return _formLoadFailed; }
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
+    bool formLoadComplete() const { return _formLoadComplete; }
+
     void setApplyEnabled(bool value);
     void setCancelEnabled(bool value);
     void setOkEnabled(bool value);
