@@ -45,6 +45,8 @@ public:
 
     void refreshVisible();
 
+    void collapseRecursively(const QModelIndex& index, int depth = -1);
+
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
 protected:

@@ -4,7 +4,9 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStatusBar>
+#include <QTableView>
 #include <QTextEdit>
+#include <QTreeView>
 
 
 template<typename T>
@@ -48,6 +50,8 @@ template class StyleSheet<QWidget>;
 template class StyleSheet<QFrame>;
 template class StyleSheet<QLabel>;
 template class StyleSheet<QPushButton>;
+template class StyleSheet<QTreeView>;
+template class StyleSheet<QTableView>;
 template class StyleSheet<QTextEdit>;
 template class StyleSheet<QLineEdit>;
 template class StyleSheet<QStatusBar>;

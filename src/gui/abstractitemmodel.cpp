@@ -98,7 +98,7 @@ int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
     logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
-    return _columnHeaders.count() ? _columnHeaders.count() : 1;
+    return qMax(1, columnHeadersIntMap().count());
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
@@ -116,8 +116,18 @@ QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
                 result = item->data(index, role);
                 break;
             case Qt::DecorationRole:
-                result = item->icon();
+                if(index.column() == 0) {
+                    result = item->icon();
+                }
                 break;
+            case Qt::ForegroundRole:
+            {
+                TableHeader header = columnHeader(index.column());
+                if(header.columnTextColor().isValid()) {
+                    result = header.columnTextColor();
+                }
+                break;
+            }
             case KANOOP::EntityTypeRole:
                 result = item->entityType();
                 break;
@@ -384,13 +394,12 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
     emit dataChanged(firstColIndex, lastColIndex);
 }
 
-QString AbstractItemModel::toString(const QModelIndex &value)
+QString AbstractItemModel::toString(const QModelIndex &index)
 {
-    return QString("row: %1  col: %2  ptr: 0x%3   [%4]")
-            .arg(value.row())
-            .arg(value.column())
-            .arg((qint64)value.constInternalPointer(), 0, 16)
-            .arg(value.data(Qt::DisplayRole).toString());
+    return QString("row: %1  col: %2  ptr: 0x%3")
+            .arg(index.row())
+            .arg(index.column())
+            .arg((quint64)index.constInternalPointer(), 0, 16);
 }
 
 

@@ -98,7 +98,7 @@ protected:
 
     void emitRowChanged(const QModelIndex &rowIndex);
 
-    static QString toString(const QModelIndex& value);
+    static QString toString(const QModelIndex& index);
 
 private:
     void commonInit();

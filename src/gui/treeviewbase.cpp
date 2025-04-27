@@ -164,6 +164,18 @@ void TreeViewBase::refreshVisible()
     _sourceModel->refresh(topLeft, bottomRight);
 }
 
+void TreeViewBase::collapseRecursively(const QModelIndex& index, int depth)
+{
+    collapse(index);
+    int rows = model()->rowCount(index);
+    if(depth != 0) {
+        for(int row = 0;row < rows;row++) {
+            QModelIndex child = model()->index(row, 0, index);
+            collapseRecursively(child, depth < 0 ? -1 : depth - 1);
+        }
+    }
+}
+
 void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 {
     QStyledItemDelegate* existing = _columnDelegates.value(type);
