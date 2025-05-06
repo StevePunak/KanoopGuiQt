@@ -42,7 +42,9 @@ public:
     QModelIndex firstIndexOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
     QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
     QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
+    QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const;
     QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
+    QModelIndexList childIndexes(const QModelIndex& parent, int type) const;
 
     TableHeader::List columnHeaders() const;
     TableHeader columnHeader(int column) const { return _columnHeaders.value(column); }
@@ -51,7 +53,7 @@ public:
 
     QModelIndexList getPersistentIndexes() const;
 
-    void refresh(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void refresh(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
     // QAbstractItemModel interface
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
@@ -68,6 +70,7 @@ public:
 protected:
     // Retrieve root items
     AbstractModelItem::List rootItems() const { return _rootItems; }
+    AbstractModelItem::List& rootItemsRef() { return _rootItems; }
     const AbstractModelItem::List rootItemsConst() const { return _rootItems; }
     int rootItemCount() const { return _rootItems.count(); }
 
@@ -118,6 +121,7 @@ signals:
     void itemUpdated(const EntityMetadata& metadata);
 
 public slots:
+    virtual void clear();
     virtual void addItem(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
     virtual void deleteItem(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
     virtual void updateItem(const EntityMetadata& metadata) { Q_UNUSED(metadata) }

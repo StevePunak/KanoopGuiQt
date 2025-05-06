@@ -51,9 +51,11 @@ TableViewBase::TableViewBase(QWidget *parent) :
     _actionColSettings = new QAction("Column Settings", this);
     _actionHideCol = new QAction("Hide Column", this);
     _actionAutoResizeCols = new QAction("Auto-Resize Columns", this);
+    _actionResetCols = new QAction("Reset Columns", this);
     connect(_actionColSettings, &QAction::triggered, this, &TableViewBase::onColumnSettingsClicked);
     connect(_actionHideCol, &QAction::triggered, this, &TableViewBase::onHideColumnClicked);
     connect(_actionAutoResizeCols, &QAction::triggered, this, &TableViewBase::onAutoResizeColumnsClicked);
+    connect(_actionResetCols, &QAction::triggered, this, &TableViewBase::onResetColumnsClicked);
 
     // Custom context menu is the default
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -176,6 +178,13 @@ void TableViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
     }
 }
 
+void TableViewBase::clear()
+{
+    if(_sourceModel != nullptr) {
+        _sourceModel->clear();
+    }
+}
+
 void TableViewBase::onHorizontalHeaderResized(int, int, int)
 {
     if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
@@ -200,6 +209,8 @@ void TableViewBase::onHeaderContextMenuRequested()
     menu.addAction(_actionColSettings);
     menu.addAction(_actionHideCol);
     menu.addAction(_actionAutoResizeCols);
+    menu.addSeparator();
+    menu.addAction(_actionResetCols);
 
     menu.exec(QCursor::pos());
 }
@@ -240,5 +251,13 @@ void TableViewBase::onHideColumnClicked()
 void TableViewBase::onAutoResizeColumnsClicked()
 {
     horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+}
+
+void TableViewBase::onResetColumnsClicked()
+{
+    for(int section = 0;section < horizontalHeader()->count();section++) {
+        horizontalHeader()->resizeSection(section, 120);
+    }
+    GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), sourceModel());
 }
 

@@ -26,7 +26,7 @@ void AbstractTreeModel::columnChangedAtRowIndex(const QModelIndex &rowIndex, int
 {
     int column = columnForHeader(columnHeader);
     if(column >= 0) {
-        QModelIndex columntIndex = index(rowIndex.row(), column, rowIndex.parent());
-        emit dataChanged(columntIndex, columntIndex);
+        QModelIndex columnIndex = index(rowIndex.row(), column, rowIndex.parent());
+        emit dataChanged(columnIndex, columnIndex);
     }
 }

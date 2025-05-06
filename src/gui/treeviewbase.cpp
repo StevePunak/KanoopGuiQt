@@ -155,13 +155,15 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
         _sourceModel = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
         QTreeView::setModel(_proxyModel);
     }
+    connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &TreeViewBase::currentSelectionChanged);
 }
 
 void TreeViewBase::refreshVisible()
 {
     QModelIndex topLeft = indexAt(rect().topLeft());
-    QModelIndex bottomRight = indexAt(rect().topLeft());
+    QModelIndex bottomRight = indexAt(rect().bottomRight());
     _sourceModel->refresh(topLeft, bottomRight);
+    update();
 }
 
 void TreeViewBase::collapseRecursively(const QModelIndex& index, int depth)
@@ -187,6 +189,43 @@ void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
     if(column != -1) {
         _columnDelegates.insert(type, delegate);
         setItemDelegateForColumn(column, delegate);
+    }
+}
+
+void TreeViewBase::refreshVisibleIndexes(const QModelIndexList& indexes)
+{
+    QRect visibleRect = viewport()->rect();
+    QModelIndexList update;
+    for(const QModelIndex& index : indexes) {
+        if(proxyModel() != nullptr) {
+            QModelIndex proxyIndex = proxyModel()->mapFromSource(index);
+            QRect rect = visualRect(proxyIndex);
+            if(rect.isValid() && visibleRect.contains(rect)) {
+                update.append(proxyModel()->mapToSource(proxyIndex));
+            }
+        }
+        else {
+            QRect rect = visualRect(index);
+            if(rect.isValid() && visibleRect.contains(rect)) {
+                update.append(index);
+            }
+        }
+    }
+
+    for(const QModelIndex& index : update) {
+        refreshIndex(index);
+    }
+}
+
+void TreeViewBase::refreshIndex(const QModelIndex& sourceIndex)
+{
+    sourceModel()->refresh(sourceIndex, sourceIndex);
+}
+
+void TreeViewBase::clear()
+{
+    if(_sourceModel != nullptr) {
+        _sourceModel->clear();
     }
 }
 
@@ -229,5 +268,15 @@ void TreeViewBase::onHorizontalHeaderResized(int, int, int)
         GuiSettings::globalInstance()->saveLastHeaderState(header(), itemModel);
     }
     emit headerChanged();
+}
+
+QModelIndexList TreeViewBase::indexesOfUuid(const QUuid& uuid) const
+{
+    QModelIndexList result;
+    if(model() != nullptr) {
+        result = model()->match(model()->index(0, 0, QModelIndex()), KANOOP::UUidRole, uuid, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+        return result;
+    }
+    return result;
 }
 

@@ -32,6 +32,7 @@ public:
     EntityMetadata metadataAtPos(const QPoint& pos) const;
 
     QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
+    QModelIndexList indexesOfUuid(const QUuid& uuid) const;
     void setCurrentUuid(const QUuid& uuid);
 
     QByteArray saveState() const;
@@ -43,11 +44,15 @@ public:
     AbstractItemModel* sourceModel() const { return _sourceModel; }
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
 
-    void refreshVisible();
-
     void collapseRecursively(const QModelIndex& index, int depth = -1);
 
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
+
+public slots:
+    void refreshVisibleIndexes(const QModelIndexList& indexes);
+    void refreshIndex(const QModelIndex& sourceIndex);
+    void refreshVisible();
+    void clear();
 
 protected:
     EntityMetadata findCurrentParent(int entityMetadataType) const;
@@ -62,6 +67,7 @@ private:
 signals:
     void itemProgramaticallySelected(const QModelIndex& index);
     void headerChanged();
+    void currentSelectionChanged();
 
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
