@@ -2,6 +2,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QLineEdit>
+#include <QListView>
 #include <QPushButton>
 #include <QStatusBar>
 #include <QTableView>
@@ -32,7 +33,14 @@ QString StyleSheet<T>::toString() const
 {
     QString result;
     QTextStream output(&result);
-    output << QString("%1 {").arg(_typeName);
+    output << _typeName;
+    if(_subControl.isEmpty() == false) {
+        output << "::" << _subControl;
+    }
+    if(_pseudoState != PS_Invalid) {
+        output << ':' << StyleSheetStrings::getPseudoStateString(_pseudoState);
+    }
+    output << " {";
     QList<StyleSheetProperty> keys = _properties.keys();
     for(int i = 0; i < keys.count();i++) {
         StyleSheetProperty p = keys.at(i);
@@ -50,6 +58,7 @@ template class StyleSheet<QWidget>;
 template class StyleSheet<QFrame>;
 template class StyleSheet<QLabel>;
 template class StyleSheet<QPushButton>;
+template class StyleSheet<QListView>;
 template class StyleSheet<QTreeView>;
 template class StyleSheet<QTableView>;
 template class StyleSheet<QTextEdit>;
