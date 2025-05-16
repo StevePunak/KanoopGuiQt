@@ -105,6 +105,8 @@ enum StyleSheetProperty {
 };
 
 enum StyleSheetPseudoState {
+    PS_Invalid = 0,
+
     PS_Active,                  // This state is set when the widget resides in an active window.
     PS_AdjoinsItem,             // This state is set when the ::branch of a QTreeView is adjacent to an item.
     PS_Alternate,               // This state is set for every alternate row whe painting the row of a QAbstractItemView when QAbstractItemView::alternatingRowColors() is set to true.
@@ -268,50 +270,50 @@ private:
     public:
         PseudoStateToStringMap()
         {
-            insert(PS_Active,               ":active");
-            insert(PS_AdjoinsItem,          ":adjoins-item");
-            insert(PS_Alternate,            ":alternate");
-            insert(PS_Bottom,               ":bottom");
-            insert(PS_Checked,              ":checked");
-            insert(PS_Closable,             ":closable");
-            insert(PS_Closed,               ":closed");
-            insert(PS_Default,              ":default");
-            insert(PS_Disabled,             ":disabled");
-            insert(PS_Editable,             ":editable");
-            insert(PS_EditFocus,            ":edit-focus");
-            insert(PS_Enabled,              ":enabled");
-            insert(PS_Exclusive,            ":exclusive");
-            insert(PS_First,                ":first");
-            insert(PS_Flat,                 ":flat");
-            insert(PS_Floatable,            ":floatable");
-            insert(PS_Focus,                ":focus");
-            insert(PS_HasChildren,          ":has-children");
-            insert(PS_HasSiblings,          ":has-siblings");
-            insert(PS_Horizontal,           ":horizontal");
-            insert(PS_Hover,                ":hover");
-            insert(PS_Indeterminate,        ":indeterminate");
-            insert(PS_Last,                 ":last");
-            insert(PS_Left,                 ":left");
-            insert(PS_Maximized,            ":maximized");
-            insert(PS_Middle,               ":middle");
-            insert(PS_Minimized,            ":minimized");
-            insert(PS_Movable,              ":movable");
-            insert(PS_NoFrame,              ":no-frame");
-            insert(PS_NonExclusive,         ":non-exclusive");
-            insert(PS_Off,                  ":off");
-            insert(PS_On,                   ":on");
-            insert(PS_OnlyOne,              ":only-one");
-            insert(PS_Open,                 ":open");
-            insert(PS_NextSelected,         ":next-selected");
-            insert(PS_Pressed,              ":pressed");
-            insert(PS_PreviousSelected,     ":previous-selected");
-            insert(PS_ReadOnly,             ":read-only");
-            insert(PS_Right,                ":right");
-            insert(PS_Selected,             ":selected");
-            insert(PS_Top,                  ":top");
-            insert(PS_Unchecked,            ":unchecked");
-            insert(PS_Vertical,             ":vertical");
-            insert(PS_Window,               ":window");
+            insert(PS_Active,               "active");
+            insert(PS_AdjoinsItem,          "adjoins-item");
+            insert(PS_Alternate,            "alternate");
+            insert(PS_Bottom,               "bottom");
+            insert(PS_Checked,              "checked");
+            insert(PS_Closable,             "closable");
+            insert(PS_Closed,               "closed");
+            insert(PS_Default,              "default");
+            insert(PS_Disabled,             "disabled");
+            insert(PS_Editable,             "editable");
+            insert(PS_EditFocus,            "edit-focus");
+            insert(PS_Enabled,              "enabled");
+            insert(PS_Exclusive,            "exclusive");
+            insert(PS_First,                "first");
+            insert(PS_Flat,                 "flat");
+            insert(PS_Floatable,            "floatable");
+            insert(PS_Focus,                "focus");
+            insert(PS_HasChildren,          "has-children");
+            insert(PS_HasSiblings,          "has-siblings");
+            insert(PS_Horizontal,           "horizontal");
+            insert(PS_Hover,                "hover");
+            insert(PS_Indeterminate,        "indeterminate");
+            insert(PS_Last,                 "last");
+            insert(PS_Left,                 "left");
+            insert(PS_Maximized,            "maximized");
+            insert(PS_Middle,               "middle");
+            insert(PS_Minimized,            "minimized");
+            insert(PS_Movable,              "movable");
+            insert(PS_NoFrame,              "no-frame");
+            insert(PS_NonExclusive,         "non-exclusive");
+            insert(PS_Off,                  "off");
+            insert(PS_On,                   "on");
+            insert(PS_OnlyOne,              "only-one");
+            insert(PS_Open,                 "open");
+            insert(PS_NextSelected,         "next-selected");
+            insert(PS_Pressed,              "pressed");
+            insert(PS_PreviousSelected,     "previous-selected");
+            insert(PS_ReadOnly,             "read-only");
+            insert(PS_Right,                "right");
+            insert(PS_Selected,             "selected");
+            insert(PS_Top,                  "top");
+            insert(PS_Unchecked,            "unchecked");
+            insert(PS_Vertical,             "vertical");
+            insert(PS_Window,               "window");
         }
     };
 

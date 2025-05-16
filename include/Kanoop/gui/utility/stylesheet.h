@@ -23,12 +23,18 @@ public:
     void setProperty(StyleSheetProperty property, const QString& value);
     void setProperty(StyleSheetProperty property, const QColor& value);
     void setPropertyPixels(StyleSheetProperty property, int value);
+
+    void setPseudoState(StyleSheetPseudoState value) { _pseudoState = value; }
+    void setSubControl(const QString& value) { _subControl = value; }
+
     QString toString() const;
 
 
     QString _typeName;
 
     QMap<StyleSheetProperty, QString> _properties;
+    StyleSheetPseudoState _pseudoState = PS_Invalid;
+    QString _subControl;
 };
 
 #endif // STYLESHEET_H

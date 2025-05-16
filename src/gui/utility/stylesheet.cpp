@@ -2,9 +2,20 @@
 #include <QFrame>
 #include <QLabel>
 #include <QLineEdit>
+#include <QListView>
 #include <QPushButton>
 #include <QStatusBar>
+#include <QTableView>
 #include <QTextEdit>
+#include <QTreeView>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPlainTextEdit>
+#include <QRadioButton>
+#include <QScrollBar>
+#include <QToolBar>
 
 
 template<typename T>
@@ -30,7 +41,14 @@ QString StyleSheet<T>::toString() const
 {
     QString result;
     QTextStream output(&result);
-    output << QString("%1 {").arg(_typeName);
+    output << _typeName;
+    if(_subControl.isEmpty() == false) {
+        output << "::" << _subControl;
+    }
+    if(_pseudoState != PS_Invalid) {
+        output << ':' << StyleSheetStrings::getPseudoStateString(_pseudoState);
+    }
+    output << " {";
     QList<StyleSheetProperty> keys = _properties.keys();
     for(int i = 0; i < keys.count();i++) {
         StyleSheetProperty p = keys.at(i);
@@ -48,6 +66,20 @@ template class StyleSheet<QWidget>;
 template class StyleSheet<QFrame>;
 template class StyleSheet<QLabel>;
 template class StyleSheet<QPushButton>;
+template class StyleSheet<QListView>;
+template class StyleSheet<QTreeView>;
+template class StyleSheet<QTableView>;
 template class StyleSheet<QTextEdit>;
 template class StyleSheet<QLineEdit>;
 template class StyleSheet<QStatusBar>;
+template class StyleSheet<QToolBar>;
+template class StyleSheet<QMenu>;
+template class StyleSheet<QRadioButton>;
+template class StyleSheet<QPlainTextEdit>;
+template class StyleSheet<QMenuBar>;
+template class StyleSheet<QCheckBox>;
+template class StyleSheet<QComboBox>;
+template class StyleSheet<QTabWidget>;
+template class StyleSheet<QScrollBar>;
+template class StyleSheet<QTabBar>;
+

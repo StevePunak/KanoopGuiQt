@@ -23,8 +23,6 @@ public:
 
 protected:
     // AbstractItemModel interface
-    virtual int columnCount(const QModelIndex &parent) const override;
-    virtual QVariant data(const QModelIndex &index, int role) const override;
     virtual void columnChangedAtRowIndex(const QModelIndex& rowIndex, int columnHeader);
 };
 
