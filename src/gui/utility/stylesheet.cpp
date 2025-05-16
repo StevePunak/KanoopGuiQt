@@ -8,14 +8,14 @@
 #include <QTableView>
 #include <QTextEdit>
 #include <QTreeView>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qmenu.h>
-#include <qmenubar.h>
-#include <qplaintextedit.h>
-#include <qradiobutton.h>
-#include <qscrollbar.h>
-#include <qtoolbar.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPlainTextEdit>
+#include <QRadioButton>
+#include <QScrollBar>
+#include <QToolBar>
 
 
 template<typename T>
