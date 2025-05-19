@@ -64,6 +64,11 @@ private:
     QSortFilterProxyModel* _proxyModel;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
+    QAction* _actionColSettings = nullptr;
+    QAction* _actionHideCol = nullptr;
+    QAction* _actionAutoResizeCols = nullptr;
+    QAction* _actionResetCols = nullptr;
+
 signals:
     void itemProgramaticallySelected(const QModelIndex& index);
     void headerChanged();
@@ -71,6 +76,12 @@ signals:
 
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
+
+    void onHeaderContextMenuRequested();
+    void onColumnSettingsClicked();
+    void onHideColumnClicked();
+    void onAutoResizeColumnsClicked();
+    void onResetColumnsClicked();
 };
 
 #endif // TREEVIEWBASE_H

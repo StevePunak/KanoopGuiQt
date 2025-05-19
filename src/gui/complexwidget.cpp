@@ -24,6 +24,7 @@ ComplexWidget::ComplexWidget(const QString& loggingCategory, QWidget* parent) :
 
 void ComplexWidget::commonInit()
 {
+    connect(this, &ComplexWidget::objectNameChanged, this, &ComplexWidget::onObjectNameChanged);
 }
 
 void ComplexWidget::initializeBase()
@@ -45,6 +46,15 @@ void ComplexWidget::connectValidationSignals()
     connectRadioButtonSignals();
     connectCheckBoxSignals();
     connectSpinBoxSignals();
+}
+
+void ComplexWidget::restorePersistedSettings()
+{
+    if(GuiSettings::globalInstance() != nullptr) {
+        for(QSplitter* splitter : findChildren<QSplitter*>()) {
+            GuiSettings::globalInstance()->restoreLastSplitterState(splitter);
+        }
+    }
 }
 
 void ComplexWidget::connectLineEditSignals()
@@ -92,6 +102,11 @@ void ComplexWidget::onPreferencesChanged()
     int pointSize = GuiSettings::globalInstance()->fontSize();
     newFont.setPointSize(pointSize);
     setFont(newFont);
+}
+
+void ComplexWidget::onObjectNameChanged()
+{
+    restorePersistedSettings();
 }
 
 void ComplexWidget::onSplitterMoved()

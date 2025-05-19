@@ -3,6 +3,7 @@
 #include <QPainter>
 
 #include <Kanoop/geometry/rectangle.h>
+#include <Kanoop/log.h>
 
 void SidebarPaintDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {

@@ -85,24 +85,21 @@ QSize GuiSettings::getLastWindowSize(const QWidget *widget, const QSize &default
 
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
 {
-    if(splitter->orientation() == Qt::Vertical) {
-        _settings.setValue(makeCompoundObjectKey(KEY_SPLITTER_STATE_VERT, splitter), splitter->saveState());
-    }
-    else {
-        _settings.setValue(makeCompoundObjectKey(KEY_SPLITTER_STATE_HORIZ, splitter), splitter->saveState());
-    }
+    QString key = makeCompoundObjectKey(splitter->orientation() == Qt::Vertical
+                                        ? KEY_SPLITTER_STATE_VERT
+                                        : KEY_SPLITTER_STATE_HORIZ, splitter);
+    _settings.setValue(key, splitter->saveState());
 }
 
 void GuiSettings::restoreLastSplitterState(QSplitter *splitter)
 {
+    QString key = makeCompoundObjectKey(splitter->orientation() == Qt::Vertical
+                                        ? KEY_SPLITTER_STATE_VERT
+                                        : KEY_SPLITTER_STATE_HORIZ, splitter);
+
     QByteArray savedState = splitter->saveState();
-    QByteArray splitterState;
-    if(splitter->orientation() == Qt::Vertical) {
-        splitterState = _settings.value(makeCompoundObjectKey(KEY_SPLITTER_STATE_VERT, splitter)).toByteArray();
-    }
-    else {
-        splitterState = _settings.value(makeCompoundObjectKey(KEY_SPLITTER_STATE_HORIZ, splitter)).toByteArray();
-    }
+    QVariant value = _settings.value(key);
+    QByteArray splitterState = value.toByteArray();
     if(splitterState.isEmpty() == false) {
         // if the count has changed, we should not restore the state
         int tempCount = splitter->count();
@@ -239,8 +236,8 @@ QString GuiSettings::makeFileTypeKey(const QString& key, int fileType)
 
 QString GuiSettings::makeCompoundObjectKey(const QString &key, const QObject *object)
 {
-    QString result = makeKey(key, makeObjectKey(object));
-    return result;
+    QString objectKey = makeKey(key, makeObjectKey(object));
+    return objectKey;
 }
 
 void GuiSettings::ensureValidDefaults()
