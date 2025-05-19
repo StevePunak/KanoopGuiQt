@@ -8,6 +8,9 @@
 ** Created: Sun Oct 22 17:41:53 2023
 **
 ******************************************************************************************/
+#include "columnsettingsdialog.h"
+
+#include <QMenu>
 #include <QSortFilterProxyModel>
 #include <abstractitemmodel.h>
 #include <guisettings.h>
@@ -27,6 +30,20 @@ TreeViewBase::TreeViewBase(QWidget *parent) :
 
     // Wire up signals for saving header state
     connect(header(), &QHeaderView::sectionResized, this, &TreeViewBase::onHorizontalHeaderResized);
+    connect(header(), &QHeaderView::customContextMenuRequested, this, &TreeViewBase::onHeaderContextMenuRequested);
+
+    // Enable context menu on header
+    header()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // Create header actions
+    _actionColSettings = new QAction("Column Settings", this);
+    _actionHideCol = new QAction("Hide Column", this);
+    _actionAutoResizeCols = new QAction("Auto-Resize Columns", this);
+    _actionResetCols = new QAction("Reset Columns", this);
+    connect(_actionColSettings, &QAction::triggered, this, &TreeViewBase::onColumnSettingsClicked);
+    connect(_actionHideCol, &QAction::triggered, this, &TreeViewBase::onHideColumnClicked);
+    connect(_actionAutoResizeCols, &QAction::triggered, this, &TreeViewBase::onAutoResizeColumnsClicked);
+    connect(_actionResetCols, &QAction::triggered, this, &TreeViewBase::onResetColumnsClicked);
 }
 
 int TreeViewBase::entityTypeAtPos(const QPoint &pos)
@@ -268,6 +285,64 @@ void TreeViewBase::onHorizontalHeaderResized(int, int, int)
         GuiSettings::globalInstance()->saveLastHeaderState(header(), itemModel);
     }
     emit headerChanged();
+}
+
+void TreeViewBase::onHeaderContextMenuRequested()
+{
+    QMenu menu;
+    menu.addAction(_actionColSettings);
+    menu.addAction(_actionHideCol);
+    menu.addAction(_actionAutoResizeCols);
+    menu.addSeparator();
+    menu.addAction(_actionResetCols);
+
+    menu.exec(QCursor::pos());
+}
+
+void TreeViewBase::onColumnSettingsClicked()
+{
+    if(sourceModel() == nullptr) {
+        return;
+    }
+
+    ColumnSettingsDialog dlg(sourceModel()->columnHeaders(), parentWidget());
+    if(dlg.exec() == QDialog::Accepted) {
+        for(const TableHeader& columnHeader : dlg.headers()) {
+            sourceModel()->setColumnHeaderVisible(columnHeader.type(), columnHeader.isVisible());
+            int column = sourceModel()->columnForHeader(columnHeader.type());
+            setColumnHidden(column, columnHeader.isVisible() == false);
+        }
+        GuiSettings::globalInstance()->saveLastHeaderState(header(), sourceModel());
+    }
+}
+
+void TreeViewBase::onHideColumnClicked()
+{
+    int section = header()->logicalIndexAt(QCursor::pos());
+    if(section < 0 || sourceModel() == nullptr) {
+        return;
+    }
+    TableHeader columnHeader = sourceModel()->columnHeader(section);
+    if(columnHeader.isValid() == false) {
+        return;
+    }
+
+    sourceModel()->setColumnHeaderVisible(columnHeader.type(), false);
+    setColumnHidden(section, true);
+    GuiSettings::globalInstance()->saveLastHeaderState(header(), sourceModel());
+}
+
+void TreeViewBase::onAutoResizeColumnsClicked()
+{
+    header()->resizeSections(QHeaderView::ResizeToContents);
+}
+
+void TreeViewBase::onResetColumnsClicked()
+{
+    for(int section = 0;section < header()->count();section++) {
+        header()->resizeSection(section, 120);
+    }
+    GuiSettings::globalInstance()->saveLastHeaderState(header(), sourceModel());
 }
 
 QModelIndexList TreeViewBase::indexesOfUuid(const QUuid& uuid) const

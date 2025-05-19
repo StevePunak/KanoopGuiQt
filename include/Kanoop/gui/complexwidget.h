@@ -24,6 +24,7 @@ protected:
     virtual void validate() {}
 
 private:
+    void restorePersistedSettings();
     void connectLineEditSignals();
     void connectComboBoxSignals();
     void connectRadioButtonSignals();
@@ -34,12 +35,12 @@ public slots:
     virtual void onPreferencesChanged();
 
 private slots:
+    void onObjectNameChanged();
     virtual void onSplitterMoved();
     virtual void stringChanged(const QString&) { validate(); }
     virtual void intChanged(int) { validate(); }
     virtual void boolChanged(bool) { validate(); }
     virtual void voidChanged() { validate(); }
-
 signals:
 
 };
