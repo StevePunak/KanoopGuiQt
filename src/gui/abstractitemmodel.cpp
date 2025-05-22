@@ -33,6 +33,14 @@ void AbstractItemModel::commonInit()
     Log::setCategoryLevel(LVL3().name(), Log::Info);
 }
 
+void AbstractItemModel::clear()
+{
+    beginResetModel();
+    qDeleteAll(_rootItems);
+    _rootItems.clear();
+    endResetModel();
+}
+
 QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &parent) const
 {
     logText(LVL_DEBUG, LVL3(), QString("%1  row: %2  col: %3  parent: [%4]").arg(__FUNCTION__).arg(row).arg(column).arg(toString(parent)));
@@ -98,7 +106,7 @@ int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
     logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
-    return _columnHeaders.count() ? _columnHeaders.count() : 1;
+    return qMax(1, columnHeadersIntMap().count());
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
@@ -116,8 +124,18 @@ QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
                 result = item->data(index, role);
                 break;
             case Qt::DecorationRole:
-                result = item->icon();
+                if(index.column() == 0) {
+                    result = item->icon();
+                }
                 break;
+            case Qt::ForegroundRole:
+            {
+                TableHeader header = columnHeader(index.column());
+                if(header.columnTextColor().isValid()) {
+                    result = header.columnTextColor();
+                }
+                break;
+            }
             case KANOOP::EntityTypeRole:
                 result = item->entityType();
                 break;
@@ -247,6 +265,13 @@ QModelIndex AbstractItemModel::firstIndexOfChildEntityType(const QModelIndex &pa
     return result;
 }
 
+QModelIndex AbstractItemModel::firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const
+{
+    QModelIndexList matches = match(parent, KANOOP::UUidRole, uuid, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    QModelIndex result = matches.count() > 0 ? matches.first() : QModelIndex();
+    return result;
+}
+
 QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags) const
 {
     QModelIndex result;
@@ -254,6 +279,24 @@ QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, i
     if(found.count() > 0) {
         result = found.first();
     }
+    return result;
+}
+
+QModelIndexList AbstractItemModel::childIndexes(const QModelIndex& parent, int type) const
+{
+    QModelIndexList result;
+
+    AbstractModelItem* item = static_cast<AbstractModelItem*>(parent.internalPointer());
+    for(int row = 0;row < item->childCount();row++) {
+        AbstractModelItem* child = item->child(row);
+        QModelIndex index = createIndex(row, 0, child);
+        if(child->entityType() == type) {
+            result.append(index);
+        }
+        QModelIndexList indexes = childIndexes(index, type);
+        result.append(indexes);
+    }
+
     return result;
 }
 
@@ -384,13 +427,12 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
     emit dataChanged(firstColIndex, lastColIndex);
 }
 
-QString AbstractItemModel::toString(const QModelIndex &value)
+QString AbstractItemModel::toString(const QModelIndex &index)
 {
-    return QString("row: %1  col: %2  ptr: 0x%3   [%4]")
-            .arg(value.row())
-            .arg(value.column())
-            .arg((qint64)value.constInternalPointer(), 0, 16)
-            .arg(value.data(Qt::DisplayRole).toString());
+    return QString("row: %1  col: %2  ptr: 0x%3")
+            .arg(index.row())
+            .arg(index.column())
+            .arg((quint64)index.constInternalPointer(), 0, 16);
 }
 
 

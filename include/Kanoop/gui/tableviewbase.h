@@ -47,6 +47,9 @@ public:
 
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
+public slots:
+    void clear();
+
 private:
     AbstractItemModel* _sourceModel;
     QSortFilterProxyModel* _proxyModel;
@@ -55,6 +58,7 @@ private:
     QAction* _actionColSettings = nullptr;
     QAction* _actionHideCol = nullptr;
     QAction* _actionAutoResizeCols = nullptr;
+    QAction* _actionResetCols = nullptr;
 
 signals:
     void horizontalHeaderChanged();
@@ -79,6 +83,7 @@ private slots:
     void onColumnSettingsClicked();
     void onHideColumnClicked();
     void onAutoResizeColumnsClicked();
+    void onResetColumnsClicked();
 };
 
 #endif // TABLEVIEWBASE_H
