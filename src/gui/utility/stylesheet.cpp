@@ -8,6 +8,14 @@
 #include <QTableView>
 #include <QTextEdit>
 #include <QTreeView>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPlainTextEdit>
+#include <QRadioButton>
+#include <QScrollBar>
+#include <QToolBar>
 
 
 template<typename T>
@@ -64,3 +72,14 @@ template class StyleSheet<QTableView>;
 template class StyleSheet<QTextEdit>;
 template class StyleSheet<QLineEdit>;
 template class StyleSheet<QStatusBar>;
+template class StyleSheet<QToolBar>;
+template class StyleSheet<QMenu>;
+template class StyleSheet<QRadioButton>;
+template class StyleSheet<QPlainTextEdit>;
+template class StyleSheet<QMenuBar>;
+template class StyleSheet<QCheckBox>;
+template class StyleSheet<QComboBox>;
+template class StyleSheet<QTabWidget>;
+template class StyleSheet<QScrollBar>;
+template class StyleSheet<QTabBar>;
+
