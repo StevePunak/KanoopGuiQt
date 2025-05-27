@@ -342,6 +342,16 @@ void AbstractItemModel::appendRowHeader(int type, const QString &value)
     _rowHeaders.insert(_columnHeaders.count(), header);
 }
 
+void AbstractItemModel::setColumnHeaderEntityMetadata(int type, const EntityMetadata& metadata)
+{
+    _columnHeaders.setEntityMetadataForType(type, metadata);
+}
+
+EntityMetadata AbstractItemModel::columnEntityMetadata(int type) const
+{
+    return _columnHeaders[type].entityMetadata();
+}
+
 void AbstractItemModel::setColumnHeaderVisible(int type, bool visible)
 {
     _columnHeaders.setHeaderVisible(type, visible);

@@ -13,6 +13,7 @@
 #include <QColor>
 #include <QMap>
 #include <Kanoop/gui/libkanoopgui.h>
+#include <Kanoop/entitymetadata.h>
 
 class LIBKANOOPGUI_EXPORT TableHeader
 {
@@ -31,6 +32,9 @@ public:
     bool isVisible() const { return _visible; }
     void setVisible(bool value) { _visible = value; }
 
+    EntityMetadata entityMetadata() const { return _entityMetadata; }
+    void setEntityMetadata(const EntityMetadata& value) { _entityMetadata = value; }
+
     bool isValid() const { return _type != 0; }
 
     class IntMap : public QMap<int, TableHeader>
@@ -38,7 +42,7 @@ public:
     public:
         void setTextColorForType(int type, const QColor& color)
         {
-            auto it = find(type);
+            auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
             if(it != end()) {
                 TableHeader& header = *it;
                 header.setColumnTextColor(color);
@@ -49,6 +53,14 @@ public:
             auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
             if(it != end()) {
                 (*it).setVisible(visible);
+            }
+        }
+        void setEntityMetadataForType(int type, const EntityMetadata& metadata)
+        {
+            auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
+            if(it != end()) {
+                TableHeader& header = *it;
+                header.setEntityMetadata(metadata);
             }
         }
     };
@@ -73,6 +85,7 @@ private:
     Qt::Orientation _orientation;
     QColor _columnTextColor;
     bool _visible = true;
+    EntityMetadata _entityMetadata;
 
     class TableHeaderTypeToStringMap : public QMap<int, QString>
     {};

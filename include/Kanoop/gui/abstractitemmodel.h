@@ -47,7 +47,7 @@ public:
     QModelIndexList childIndexes(const QModelIndex& parent, int type) const;
 
     TableHeader::List columnHeaders() const;
-    TableHeader columnHeader(int column) const { return _columnHeaders.value(column); }
+    TableHeader columnHeader(int section) const { return _columnHeaders.value(section); }
     TableHeader rowHeader(int row) const { return _rowHeaders.value(row); }
     int columnForHeader(int type) const;
 
@@ -83,6 +83,8 @@ protected:
     void appendAdHocColumnHeader(int type, const QString& value) { appendColumnHeader(type, value); }
     void appendRowHeader(int type, const QString& value = QString());
     void appendAdHocRowHeader(int type, const QString& value) { appendRowHeader(type, value); }
+    void setColumnHeaderEntityMetadata(int type, const EntityMetadata& metadata);
+    EntityMetadata columnEntityMetadata(int type) const;
 
     // Colors
     void setColumnTextColor(int type, const QColor& color);

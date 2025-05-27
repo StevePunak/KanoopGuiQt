@@ -177,6 +177,8 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
 
 void TreeViewBase::refreshVisible()
 {
+    // NOTE: This doesn't work as intended in a treeview since
+    //       it doesn't take into account children
     QModelIndex topLeft = indexAt(rect().topLeft());
     QModelIndex bottomRight = indexAt(rect().bottomRight());
     _sourceModel->refresh(topLeft, bottomRight);
