@@ -4,9 +4,10 @@
 #include <QFrame>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class Frame : public QFrame,
-              public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT Frame : public QFrame,
+                                  public LoggingBaseClass
 {
     Q_OBJECT
 public:
