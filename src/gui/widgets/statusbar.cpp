@@ -10,6 +10,17 @@ StatusBar::StatusBar(QWidget *parent) :
     connect(&_dotTimer, &QTimer::timeout, this, &StatusBar::onDotTimerExpired);
 }
 
+void StatusBar::showStatusMessage(const QString& text, const TimeSpan& timeout)
+{
+    stopAnimation();
+    QStatusBar::showMessage(text, timeout.totalMilliseconds());
+}
+
+void StatusBar::showStatusMessage(const QString& text, const QColor& textColor)
+{
+    showStatusMessage(text, textColor, TimeSpan());
+}
+
 void StatusBar::showStatusMessage(const QString& text, const QColor& textColor, const TimeSpan& timeout)
 {
     stopAnimation();

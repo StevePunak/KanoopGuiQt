@@ -12,7 +12,9 @@ class LIBKANOOPGUI_EXPORT StatusBar : public QStatusBar
 public:
     explicit StatusBar(QWidget *parent = nullptr);
 
-    void showStatusMessage(const QString &text, const QColor& textColor, const TimeSpan& timeout = TimeSpan());
+    void showStatusMessage(const QString &text, const TimeSpan& timeout);
+    void showStatusMessage(const QString &text, const QColor& textColor);
+    void showStatusMessage(const QString &text, const QColor& textColor, const TimeSpan& timeout);
     void showAnimatedProgressMessage(const QString &text, const QColor& textColor = QColor());
     void stopAnimation();
     void setForegroundColor(const QColor& color);

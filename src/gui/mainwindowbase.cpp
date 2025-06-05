@@ -40,7 +40,7 @@ void MainWindowBase::showStatusBarMessage(const QString& text, const QColor& tex
 
 void MainWindowBase::showStatusBarMessage(const QString& text, const TimeSpan& timeout)
 {
-    statusBar()->showStatusMessage(text, timeout.totalMilliseconds());
+    statusBar()->showStatusMessage(text, timeout);
 }
 
 void MainWindowBase::showStatusBarAnimatedProgressMessage(const QString& text, const QColor& textColor)
