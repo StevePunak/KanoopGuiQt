@@ -54,6 +54,7 @@ public:
     List siblings() const { return _siblings; }
 
     int childCount() const { return _children.count(); }
+    int childCountRecursive() const;
 
     AbstractModelItem* appendChild(AbstractModelItem* child);
     void deleteChild(AbstractModelItem* child);

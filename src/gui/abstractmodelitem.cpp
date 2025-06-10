@@ -115,3 +115,12 @@ AbstractModelItem *AbstractModelItem::child(int row)
     AbstractModelItem* result = row < _children.count() ? _children.at(row) : nullptr;
     return result;
 }
+
+int AbstractModelItem::childCountRecursive() const
+{
+    int count = childCount();
+    for(const AbstractModelItem* child : _children) {
+        count += child->childCountRecursive();
+    }
+    return count;
+}

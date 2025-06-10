@@ -51,7 +51,6 @@ public:
 public slots:
     void refreshVisibleIndexes(const QModelIndexList& indexes);
     void refreshIndex(const QModelIndex& sourceIndex);
-    void refreshVisible();
     void clear();
 
 protected:
