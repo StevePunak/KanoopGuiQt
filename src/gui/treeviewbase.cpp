@@ -203,7 +203,6 @@ void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 
 void TreeViewBase::refreshVisibleIndexes(const QModelIndexList& indexes)
 {
-    logText(LVL_DEBUG, QString("Refresh visible from %1 indexes").arg(indexes.count()));
     QRect visibleRect = viewport()->rect();
     QModelIndexList update;
     for(const QModelIndex& index : indexes) {
@@ -222,11 +221,9 @@ void TreeViewBase::refreshVisibleIndexes(const QModelIndexList& indexes)
         }
     }
 
-    logText(LVL_DEBUG, QString("There are %1 indexes visible").arg(update.count()));
     for(const QModelIndex& index : update) {
         refreshIndex(index);
     }
-    logText(LVL_DEBUG, QString("Done with %1 indexes visible").arg(update.count()));
 }
 
 void TreeViewBase::refreshIndex(const QModelIndex& sourceIndex)
