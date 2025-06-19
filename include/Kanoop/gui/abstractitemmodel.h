@@ -76,6 +76,7 @@ protected:
 
     // Append new items
     AbstractModelItem* appendRootItem(AbstractModelItem* item);
+    void appendRootItems(QList<AbstractModelItem*> items);
 
     // Headers
     void appendColumnHeader(int type, const QString& text);
@@ -109,8 +110,6 @@ private:
     void commonInit();
 
     AbstractModelItem::List _rootItems;
-
-    // class Headers : public QMap<
 
     TableHeader::IntMap _columnHeaders;
     TableHeader::IntMap _rowHeaders;

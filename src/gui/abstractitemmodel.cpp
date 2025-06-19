@@ -314,10 +314,27 @@ AbstractModelItem *AbstractItemModel::appendRootItem(AbstractModelItem *item)
 {
     int row = rowCount(QModelIndex());
     QModelIndex insertIndex = index(row, 0, QModelIndex());
+
     beginInsertRows(insertIndex, row, row);
     _rootItems.append(item);
     endInsertRows();
+
     return item;
+}
+
+void AbstractItemModel::appendRootItems(QList<AbstractModelItem*> items)
+{
+    if(items.count() == 0) {
+        return;
+    }
+
+    int firstRow = rowCount(QModelIndex());
+    int lastRow = firstRow + items.count() - 1;
+    QModelIndex insertIndex = index(firstRow, lastRow, QModelIndex());
+
+    beginInsertRows(insertIndex, firstRow, lastRow);
+    _rootItems.append(items);
+    endInsertRows();
 }
 
 void AbstractItemModel::appendColumnHeader(int type, const QString &text)
