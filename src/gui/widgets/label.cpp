@@ -50,6 +50,18 @@ void Label::setBackgroundColor(const QColor &color)
     makeStyleSheet();
 }
 
+void Label::setDefaultForegroundColor()
+{
+    _foregroundColor = palette().color(QPalette::Text);
+    makeStyleSheet();
+}
+
+void Label::setDefaultBackgroundColor()
+{
+    _backgroundColor = palette().color(QPalette::Window);
+    makeStyleSheet();
+}
+
 void Label::makeStyleSheet()
 {
     StyleSheet<QLabel> ss;

@@ -46,8 +46,13 @@ void MdiWindow::openSubWindow(MainWindowBase* window, int type)
         static const int NewWindowOffset = 20;
         pos = QPoint(existing.last()->pos().x() + NewWindowOffset, existing.last()->pos().y() + NewWindowOffset);
     }
-    mdiSubWindow->move(pos);
-    mdiSubWindow->resize(size);
+    if(window->persistPosition()) {
+        mdiSubWindow->move(pos);
+    }
+
+    if(window->persistSize()) {
+        mdiSubWindow->resize(size);
+    }
 
     mdiSubWindow->show();
     window->show();

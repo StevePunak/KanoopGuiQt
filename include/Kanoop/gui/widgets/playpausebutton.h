@@ -10,6 +10,7 @@ class LIBKANOOPGUI_EXPORT PlayPauseButton : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool playing READ isPlaying WRITE setPlaying NOTIFY playingChanged)
+    Q_PROPERTY(bool textVisible READ isTextVisible WRITE setTextVisible)                  // clazy:exclude=qproperty-without-notify
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 
 public:
@@ -17,10 +18,12 @@ public:
 
     bool isPlaying() const { return _playing; }
     QString text() const { return _text; }
+    bool isTextVisible() const;
 
 public slots:
     void setPlaying(bool value);
     void setText(const QString& value);
+    void setTextVisible(bool value);
 
 private:
     QPushButton* _button;

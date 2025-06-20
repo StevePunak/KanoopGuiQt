@@ -25,6 +25,11 @@ PlayPauseButton::PlayPauseButton(QWidget *parent) :
     connect(_button, &QPushButton::clicked, this, &PlayPauseButton::onPlayPauseClicked);
 }
 
+bool PlayPauseButton::isTextVisible() const
+{
+    return _textLabel->isVisible();
+}
+
 void PlayPauseButton::setPlaying(bool value)
 {
     _playing = value;
@@ -36,6 +41,11 @@ void PlayPauseButton::setText(const QString& value)
 {
     _text = value;
     _textLabel->setText(value);
+}
+
+void PlayPauseButton::setTextVisible(bool value)
+{
+    _textLabel->setVisible(value);
 }
 
 void PlayPauseButton::onPlayPauseClicked()

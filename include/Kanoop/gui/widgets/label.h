@@ -15,6 +15,8 @@ public:
     void setFontPixelSize(int size);
     void setForegroundColor(const QColor& color);
     void setBackgroundColor(const QColor& color);
+    void setDefaultForegroundColor();
+    void setDefaultBackgroundColor();
 
 private:
     void commonInit();
