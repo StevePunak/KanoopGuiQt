@@ -13,8 +13,13 @@ public:
     void setBold(bool bold);
     void setRowBold(int row, bool bold);
 
-signals:
+private:
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void focusOutEvent(QFocusEvent* event) override;
 
+signals:
+    void accept();
+    void lostFocus();
 };
 
 #endif // COMBOBOX_H
