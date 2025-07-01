@@ -116,11 +116,23 @@ AbstractModelItem *AbstractModelItem::child(int row)
     return result;
 }
 
-int AbstractModelItem::childCountRecursive() const
+int AbstractModelItem::childCount(int entityType) const
 {
-    int count = childCount();
+    int count = 0;
+    if(entityType == 0) {
+        count = _children.count();
+    }
+    else {
+        count = std::count_if(_children.constBegin(), _children.constEnd(), [entityType](AbstractModelItem* a) { return a->entityType() == entityType; });
+    }
+    return count;
+}
+
+int AbstractModelItem::childCountRecursive(int entityType) const
+{
+    int count = childCount(entityType);
     for(const AbstractModelItem* child : _children) {
-        count += child->childCountRecursive();
+        count += child->childCountRecursive(entityType);
     }
     return count;
 }

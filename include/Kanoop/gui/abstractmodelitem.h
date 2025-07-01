@@ -53,8 +53,8 @@ public:
     List& childrenRef() { return _children; }
     List siblings() const { return _siblings; }
 
-    int childCount() const { return _children.count(); }
-    int childCountRecursive() const;
+    int childCount(int entityType = 0) const;
+    int childCountRecursive(int entityType = 0) const;
 
     AbstractModelItem* appendChild(AbstractModelItem* child);
     void deleteChild(AbstractModelItem* child);
