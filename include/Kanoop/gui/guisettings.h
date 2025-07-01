@@ -77,7 +77,18 @@ protected:
 
     QSettings _settings;
 
+    static const QString KEY_APP;
+    static const QString KEY_FONT_SIZE;
+    static const QString KEY_HEADER_STATE_HORIZ;
+    static const QString KEY_HEADER_STATE_VERT;
     static const QString KEY_LAST_DIRECTORY;
+    static const QString KEY_LAST_WIDGET_POS;
+    static const QString KEY_LAST_WIDGET_SIZE;
+    static const QString KEY_MODEL_HEADER_STATE_HORIZ;
+    static const QString KEY_MODEL_HEADER_STATE_VERT;
+    static const QString KEY_SPLITTER_STATE_HORIZ;
+    static const QString KEY_SPLITTER_STATE_VERT;
+    static const QString KEY_TREEVIEW_STATE;
 
 private:
     static QStringList uuidListToStringList(const QList<QUuid>& uuids);
@@ -86,18 +97,6 @@ private:
     int _maxRecentFiles;
 
     static GuiSettings* _globalInstance;
-
-    static const QString KEY_APP;
-    static const QString KEY_FONT_SIZE;
-    static const QString KEY_HEADER_STATE_HORIZ;
-    static const QString KEY_HEADER_STATE_VERT;
-    static const QString KEY_LAST_WIDGET_POS;
-    static const QString KEY_LAST_WIDGET_SIZE;
-    static const QString KEY_MODEL_HEADER_STATE_HORIZ;
-    static const QString KEY_MODEL_HEADER_STATE_VERT;
-    static const QString KEY_SPLITTER_STATE_HORIZ;
-    static const QString KEY_SPLITTER_STATE_VERT;
-    static const QString KEY_TREEVIEW_STATE;
 };
 
 #endif // GUISETTINGS_H
