@@ -4,9 +4,10 @@
 #include <QGroupBox>
 
 #include <Kanoop/utility/loggingbaseclass.h>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class GroupBox : public QGroupBox,
-                 public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT GroupBox : public QGroupBox,
+                                     public LoggingBaseClass
 {
     Q_OBJECT
 public:
