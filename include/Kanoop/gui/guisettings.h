@@ -56,8 +56,8 @@ public:
 
     QString lastDirectory(const QString& extension) const { return _settings.value(makeFileTypeKey(KEY_LAST_DIRECTORY, extension)).toString(); }
     QString lastDirectory(int fileType) const { return _settings.value(makeFileTypeKey(KEY_LAST_DIRECTORY, fileType)).toString(); }
-    void saveLastDirectory(const QString& extension, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, extension), value); }
-    void saveLastDirectory(int fileType, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, fileType), value); }
+    virtual void saveLastDirectory(const QString& extension, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, extension), value); }
+    virtual void saveLastDirectory(int fileType, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, fileType), value); }
 
     int fontSize() const { return _settings.value(makeStandardKey(KEY_FONT_SIZE)).toInt(); }
     void setFontSize(int value) { _settings.setValue(makeStandardKey(KEY_FONT_SIZE), value); }
@@ -77,6 +77,8 @@ protected:
 
     QSettings _settings;
 
+    static const QString KEY_LAST_DIRECTORY;
+
 private:
     static QStringList uuidListToStringList(const QList<QUuid>& uuids);
     static QList<QUuid> stringListToUuidList(const QStringList& values);
@@ -89,7 +91,6 @@ private:
     static const QString KEY_FONT_SIZE;
     static const QString KEY_HEADER_STATE_HORIZ;
     static const QString KEY_HEADER_STATE_VERT;
-    static const QString KEY_LAST_DIRECTORY;
     static const QString KEY_LAST_WIDGET_POS;
     static const QString KEY_LAST_WIDGET_SIZE;
     static const QString KEY_MODEL_HEADER_STATE_HORIZ;
