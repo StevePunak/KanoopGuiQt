@@ -142,6 +142,18 @@ int TableViewBase::rowCount() const
     return 0;
 }
 
+QModelIndex TableViewBase::findFirstMatch(const QVariant& needle, int role) const
+{
+    QModelIndex result;
+    if(sourceModel() != nullptr) {
+        QModelIndexList matches = sourceModel()->match(sourceModel()->index(0, 0, QModelIndex()), role, needle, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+        if(matches.count() > 0) {
+            result = matches.at(0);
+        }
+    }
+    return result;
+}
+
 void TableViewBase::restoreHeaderStates()
 {
     restoreHorizontalHeaderState();
