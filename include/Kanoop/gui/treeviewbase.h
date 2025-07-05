@@ -49,9 +49,10 @@ public:
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
 public slots:
-    void refreshVisibleIndexes(const QModelIndexList& indexes);
-    void refreshIndex(const QModelIndex& sourceIndex);
-    void clear();
+    virtual void refreshVisibleColumns(const QList<int>& columns);
+    virtual void refreshVisibleIndexes(const QModelIndexList& indexes);
+    virtual void refreshIndex(const QModelIndex& sourceIndex);
+    virtual void clear();
 
 protected:
     EntityMetadata findCurrentParent(int entityMetadataType) const;

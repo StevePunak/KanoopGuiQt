@@ -201,6 +201,71 @@ void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
     }
 }
 
+void TreeViewBase::refreshVisibleColumns(const QList<int>& columns)
+{
+    QRect visibleRect = viewport()->rect();
+
+    QModelIndexList update;
+
+    // first get all the column widths
+    QMap<int, int> colWidths;
+    QMap<int, int> colXValues;
+    QList<int> visibleColumns;
+    int x = visibleRect.left();
+    while(x < visibleRect.right()) {
+        int col = columnAt(x);
+        if(col < 0) {
+            break;
+        }
+        int width = columnWidth(col);
+        colWidths.insert(col, width);
+        colXValues.insert(col, x);
+        visibleColumns.append(col);
+        x += width;
+    }
+
+    // now get row heights in the visible rect
+    QList<int> rowHeights;
+    for(int y = 0, x = 0;y < visibleRect.height();) {
+        QPoint point(x, y);
+        QModelIndex index = indexAt(point);
+        if(index.isValid()) {
+            int height = rowHeight(index);
+            rowHeights.append(height);
+            y += height;
+        }
+        else {
+            break;
+        }
+    }
+
+    for(int row = 0, y = 0;row < rowHeights.count();row++) {
+        for(int visibleColumnIndex = 0, x = 0;visibleColumnIndex < colWidths.count();visibleColumnIndex++) {
+            x = colXValues[visibleColumnIndex];
+            int col = visibleColumns[visibleColumnIndex];
+            QModelIndex index = indexAt(QPoint(x, y));
+            if(proxyModel() != nullptr) {
+                index = proxyModel()->mapToSource(index);
+            }
+            if(columns.contains(col) && index.isValid() && update.contains(index) == false) {
+                QVariant data = index.data(Qt::DisplayRole);
+                if(data.isValid()) {
+                    update.append(index);
+                }
+            }
+        }
+        y += rowHeights.at(row);
+    }
+
+    for(const QModelIndex& index : update) {
+        refreshIndex(index);
+    }
+}
+
+/**
+ * NOTE: This can get very expensive in a large model.
+ *       Prefer refreshVisibleColumns()
+ */
 void TreeViewBase::refreshVisibleIndexes(const QModelIndexList& indexes)
 {
     QRect visibleRect = viewport()->rect();
