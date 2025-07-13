@@ -2,11 +2,9 @@
 #define PIXMAPGRAPHICSITEM_H
 #include <QGraphicsPixmapItem>
 
-#include <Kanoop/utility/loggingbaseclass.h>
 #include <Kanoop/gui/libkanoopgui.h>
 
-class LIBKANOOPGUI_EXPORT PixmapGraphicsItem : public QGraphicsPixmapItem,
-                                               public LoggingBaseClass
+class LIBKANOOPGUI_EXPORT PixmapGraphicsItem : public QGraphicsPixmapItem
 {
 public:
     explicit PixmapGraphicsItem(int type, QGraphicsItem* parent = nullptr);

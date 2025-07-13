@@ -8,6 +8,12 @@ RectangleGraphicsItem::RectangleGraphicsItem(int type, QGraphicsItem *parent) :
 {
 }
 
+RectangleGraphicsItem::RectangleGraphicsItem(const Rectangle& rect, int type, QGraphicsItem* parent) :
+    QGraphicsRectItem(rect, parent),
+    _type(type)
+{
+}
+
 Point RectangleGraphicsItem::centerPoint() const
 {
     Point result = rect().center();
