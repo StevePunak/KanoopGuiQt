@@ -1,5 +1,6 @@
 #include "widgets/combobox.h"
 
+#include <QKeyEvent>
 #include <QStandardItemModel>
 
 ComboBox::ComboBox(QWidget *parent) :
@@ -27,3 +28,18 @@ void ComboBox::setRowBold(int row, bool bold)
         item->setFont(font);
     }
 }
+
+void ComboBox::keyPressEvent(QKeyEvent* event)
+{
+    QComboBox::keyPressEvent(event);
+    if(event->key() == Qt::Key_Return) {
+        emit accept();
+    }
+}
+
+void ComboBox::focusOutEvent(QFocusEvent* event)
+{
+    QComboBox::focusOutEvent(event);
+    emit lostFocus();
+}
+

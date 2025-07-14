@@ -41,6 +41,8 @@ public:
     virtual void addRow(const EntityMetadata& metadata) { emit addItem(metadata); }
     int rowCount() const;
 
+    QModelIndex findFirstMatch(const QVariant& needle, int role) const;
+
     void restoreHeaderStates();
     void restoreHorizontalHeaderState();
     void restoreVerticalHeaderState();
