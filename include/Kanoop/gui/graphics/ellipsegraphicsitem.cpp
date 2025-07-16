@@ -4,7 +4,6 @@
 
 EllipseGraphicsItem::EllipseGraphicsItem(int type, QGraphicsItem* parent) :
     QGraphicsEllipseItem(parent),
-    LoggingBaseClass("line"),
     _type(type)
 {
 }
