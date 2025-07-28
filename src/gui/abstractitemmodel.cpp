@@ -75,7 +75,9 @@ QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
         AbstractModelItem* childItem = static_cast<AbstractModelItem*>(child.internalPointer());
         if(childItem != nullptr && _rootItems.contains(childItem) == false) {
             AbstractModelItem* parentItem = childItem->parent();
-            result = createIndex(parentItem->row(), 0, parentItem);
+            if(parentItem != nullptr) {
+                result = createIndex(parentItem->row(), 0, parentItem);
+            }
         }
     }
     logText(LVL_DEBUG, LVL2(), QString("func: %1 for [%2] returns parent: [%3]")
