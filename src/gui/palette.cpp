@@ -3,6 +3,9 @@
 #include <QMetaEnum>
 #include <Kanoop/log.h>
 
+const Palette::ColorGroupToStringMap Palette::_ColorGroupToStringMap;
+const Palette::ColorRoleToStringMap Palette::_ColorRoleToStringMap;
+
 Palette Palette::fusionLight()
 {
     const QColor windowTextColor = Qt::black;
