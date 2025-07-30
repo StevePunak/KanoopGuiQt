@@ -142,6 +142,7 @@ protected slots:
 
 private slots:
     void onLoggedItem(const Log::LogEntry& entry);
+    void onSplitterMoved();
     void onOkClicked();
     void onApplyClicked();
     void onCancelClicked();

@@ -22,6 +22,7 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QSplitter>
 #include <QWindow>
 
 #include <Kanoop/geometry/size.h>
@@ -278,6 +279,13 @@ void Dialog::performLayout()
         myLayout->addWidget(_buttonBox);
         myLayout->addWidget(_statusBar);
     }
+
+    if(GuiSettings::globalInstance() != nullptr) {
+        for(QSplitter* splitter : findChildren<QSplitter*>()) {
+            GuiSettings::globalInstance()->restoreLastSplitterState(splitter);
+            connect(splitter, &QSplitter::splitterMoved, this, &Dialog::onSplitterMoved);
+        }
+    }
 }
 
 void Dialog::enableAppropriateButtons()
@@ -329,6 +337,13 @@ void Dialog::voidChanged()
 void Dialog::onLoggedItem(const Log::LogEntry& entry)
 {
     loggedItem(entry);
+}
+
+void Dialog::onSplitterMoved()
+{
+    if(GuiSettings::globalInstance() != nullptr) {
+        GuiSettings::globalInstance()->saveLastSplitterState(static_cast<QSplitter*>(sender()));
+    }
 }
 
 void Dialog::onOkClicked()
