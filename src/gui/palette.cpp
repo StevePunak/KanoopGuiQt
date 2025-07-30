@@ -62,7 +62,7 @@ Palette Palette::fusionDark()
     const QColor lightColor = backGroundColor.lighter(150);
     const QColor midColor = (backGroundColor.darker(130));
     const QColor midLightColor = midColor.lighter(110);
-    const QColor baseColor = backGroundColor.darker(140);
+    const QColor baseColor = backGroundColor.darker(50);
     const QColor disabledBaseColor = backGroundColor;
     const QColor darkColor = backGroundColor.darker(150);
     const QColor darkDisabledColor = QColor(209, 209, 209).darker(110);
