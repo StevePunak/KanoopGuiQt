@@ -146,7 +146,7 @@ QModelIndex TableViewBase::findFirstMatch(const QVariant& needle, int role) cons
 {
     QModelIndex result;
     if(sourceModel() != nullptr) {
-        QModelIndexList matches = sourceModel()->match(sourceModel()->index(0, 0, QModelIndex()), role, needle, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+        QModelIndexList matches = model()->match(model()->index(0, 0, QModelIndex()), role, needle, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
         if(matches.count() > 0) {
             result = matches.at(0);
         }

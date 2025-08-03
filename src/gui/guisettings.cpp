@@ -66,6 +66,8 @@ QPoint GuiSettings::getLastWindowPosition(QWidget* widget, const QSize &defaultS
                             screenGeometry.centerPoint().y() - (widgetSize.height() / 2));
         }
     }
+    result.setX(std::max(result.x(), 0));
+    result.setY(std::max(result.y(), 0));
     return result;
 }
 
