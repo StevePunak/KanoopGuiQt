@@ -35,11 +35,13 @@ public:
     // Overridable Properties
     virtual EntityMetadata entityMetadata() const { return _entityMetadata; }
     virtual EntityMetadata& entityMetadataRef() { return _entityMetadata; }
+    virtual void setEntityMetadata(const EntityMetadata& metadata) { _entityMetadata = metadata; }
     virtual int entityType() const { return _entityMetadata.type(); }
     virtual QUuid uuid() const { return _uuid; }
     virtual QIcon icon() const { return _icon; }
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual void updateFromMetadata(const EntityMetadata& metadata);
+    virtual void updateFromVariant(int headerType, const QVariant& value) { Q_UNUSED(headerType) Q_UNUSED(value) }
 
     // List
     class List : public QList<AbstractModelItem*>{};

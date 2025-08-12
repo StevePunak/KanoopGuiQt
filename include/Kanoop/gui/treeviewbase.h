@@ -74,6 +74,10 @@ signals:
     void headerChanged();
     void currentSelectionChanged();
 
+    void entityAdded(const EntityMetadata& metadata);
+    void entityDeleted(const EntityMetadata& metadata);
+    void entityUpdated(const EntityMetadata& metadata);
+
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
 

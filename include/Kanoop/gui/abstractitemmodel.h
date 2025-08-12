@@ -117,15 +117,15 @@ private:
     friend class AbstractModelItem;
 
 signals:
-    void itemAdded(const EntityMetadata& metadata);
-    void itemDeleted(const EntityMetadata& metadata);
-    void itemUpdated(const EntityMetadata& metadata);
+    void entityAdded(const EntityMetadata& metadata);
+    void entityDeleted(const EntityMetadata& metadata);
+    void entityUpdated(const EntityMetadata& metadata);
 
 public slots:
     virtual void clear();
-    virtual void addItem(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
-    virtual void deleteItem(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
-    virtual void updateItem(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
+    virtual void addEntity(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
+    virtual void deleteEntity(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
+    virtual void updateEntity(const EntityMetadata& metadata) { Q_UNUSED(metadata) }
 };
 
 #endif // ABSTRACTITEMMODEL_H

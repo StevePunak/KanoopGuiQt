@@ -38,7 +38,7 @@ public:
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
 
     virtual void deleteRow(const QModelIndex& index);
-    virtual void addRow(const EntityMetadata& metadata) { emit addItem(metadata); }
+    virtual void addRow(const EntityMetadata& metadata) { emit entityAdded(metadata); }
     int rowCount() const;
 
     QModelIndex findFirstMatch(const QVariant& needle, int role) const;
@@ -68,14 +68,9 @@ signals:
 
     void currentSelectionChanged();
 
-    // Model updates
-    void itemAdded(const EntityMetadata& metadata);
-    void itemDeleted(const EntityMetadata& metadata);
-    void itemUpdated(const EntityMetadata& metadata);
-
-    void addItem(const EntityMetadata& metadata);
-    void deleteItem(const EntityMetadata& metadata);
-    void updateItem(const EntityMetadata& metadata);
+    void entityAdded(const EntityMetadata& metadata);
+    void entityDeleted(const EntityMetadata& metadata);
+    void entityUpdated(const EntityMetadata& metadata);
 
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);

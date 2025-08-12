@@ -179,7 +179,7 @@ bool AbstractItemModel::removeRows(int row, int count, const QModelIndex& parent
             result = true;
         }
     }
-    else if(parentIndex.column() == 0 && _rootItems.count() >= row + count) {
+    else if(_rootItems.count() >= row + count) {
         QList<AbstractModelItem*> deleteItems = _rootItems.mid(row, count);
         beginRemoveRows(parentIndex, row, (row + count) - 1);
         _rootItems.remove(row, count);
