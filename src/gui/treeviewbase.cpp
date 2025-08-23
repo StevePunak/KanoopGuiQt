@@ -91,12 +91,11 @@ QModelIndex TreeViewBase::firstIndexOfEntityUuid(const QUuid& uuid) const
 
 void TreeViewBase::setCurrentUuid(const QUuid &uuid)
 {
-    AbstractItemModel* itemModel = dynamic_cast<AbstractItemModel*>(model());
-    if(itemModel == nullptr) {
+    if(model() == nullptr) {
         return;
     }
 
-    QModelIndexList indexes = itemModel->indexesOfEntityUuid(uuid);
+    QModelIndexList indexes = model()->match(model()->index(0, 0, QModelIndex()), KANOOP::UUidRole, uuid, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
     for(const QModelIndex& index : indexes) {
         QModelIndexList parents = findParents(index);
         for(const QModelIndex& parentIndex : parents) {
