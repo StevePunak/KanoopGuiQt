@@ -81,6 +81,7 @@ protected:
     // Headers
     void appendColumnHeader(int type, const QString& text);
     void appendColumnHeader(int type, const QColor& columnTextColor, const QString& text);
+    void insertColumnHeader(int type, int index, const QString& text);
     void appendAdHocColumnHeader(int type, const QString& value) { appendColumnHeader(type, value); }
     void appendRowHeader(int type, const QString& value = QString());
     void appendAdHocRowHeader(int type, const QString& value) { appendRowHeader(type, value); }

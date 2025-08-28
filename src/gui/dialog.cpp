@@ -20,9 +20,11 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QPlainTextEdit>
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QSplitter>
+#include <QTextEdit>
 #include <QWindow>
 
 #include <Kanoop/geometry/size.h>
@@ -74,6 +76,16 @@ void Dialog::connectLineEditSignals()
 {
     for(QLineEdit* widget : findChildren<QLineEdit*>()) {
         connect(widget, &QLineEdit::textChanged, this, &Dialog::stringChanged);
+    }
+}
+
+void Dialog::connectTextEditSignals()
+{
+    for(QTextEdit* widget : findChildren<QTextEdit*>()) {
+        connect(widget, &QTextEdit::textChanged, this, &Dialog::voidChanged);
+    }
+    for(QPlainTextEdit* widget : findChildren<QPlainTextEdit*>()) {
+        connect(widget, &QPlainTextEdit::textChanged, this, &Dialog::voidChanged);
     }
 }
 
@@ -197,6 +209,7 @@ void Dialog::setLogHookEnabled(bool enabled)
 void Dialog::connectValidationSignals()
 {
     connectLineEditSignals();
+    connectTextEditSignals();
     connectComboBoxSignals();
     connectRadioButtonSignals();
     connectCheckBoxSignals();

@@ -98,6 +98,7 @@ protected:
 
 private:
     void connectLineEditSignals();
+    void connectTextEditSignals();
     void connectComboBoxSignals();
     void connectRadioButtonSignals();
     void connectCheckBoxSignals();

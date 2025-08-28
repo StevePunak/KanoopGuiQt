@@ -273,13 +273,13 @@ void TreeViewBase::refreshVisibleIndexes(const QModelIndexList& indexes)
         if(proxyModel() != nullptr) {
             QModelIndex proxyIndex = proxyModel()->mapFromSource(index);
             QRect rect = visualRect(proxyIndex);
-            if(rect.isValid() && visibleRect.contains(rect)) {
+            if(rect.isValid() && visibleRect.intersects(rect)) {
                 update.append(proxyModel()->mapToSource(proxyIndex));
             }
         }
         else {
             QRect rect = visualRect(index);
-            if(rect.isValid() && visibleRect.contains(rect)) {
+            if(rect.isValid() && visibleRect.intersects(rect)) {
                 update.append(index);
             }
         }

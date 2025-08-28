@@ -353,6 +353,21 @@ void AbstractItemModel::appendColumnHeader(int type, const QColor &columnTextCol
     _columnHeaders.setTextColorForType(type, columnTextColor);
 }
 
+void AbstractItemModel::insertColumnHeader(int type, int index, const QString& text)
+{
+    TableHeader::IntMap headers = _columnHeaders;
+    _columnHeaders.clear();
+    for(int col = 0;col < headers.count();col++) {
+        TableHeader header = columnHeader(col);
+        if(col != index) {
+            appendColumnHeader(header.type(), header.columnTextColor(), header.text());
+        }
+        else {
+            appendColumnHeader(type, text);
+        }
+    }
+}
+
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
 {
     QString text = value.isEmpty() ? TableHeader::typeToString(type) : value;
