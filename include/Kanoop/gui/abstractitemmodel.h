@@ -99,6 +99,7 @@ protected:
     // Update Items
     void updateItemAtIndex(const QModelIndex& itemIndex, const EntityMetadata &metadata);
     void updateItemsAtIndexes(const QModelIndexList& indexes, const EntityMetadata &metadata);
+    void refreshAll();
 
     TableHeader::IntMap columnHeadersIntMap() const { return _columnHeaders; }
     TableHeader::IntMap rowHeadersIntMap() const { return _rowHeaders; }

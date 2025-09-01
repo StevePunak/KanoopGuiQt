@@ -464,6 +464,13 @@ void AbstractItemModel::updateItemsAtIndexes(const QModelIndexList &indexes, con
     }
 }
 
+void AbstractItemModel::refreshAll()
+{
+    QModelIndex topLeft = createIndex(0, 0);
+    QModelIndex bottomRight = createIndex(rowCount() - 1, columnCount() - 1);
+    emit dataChanged(topLeft, bottomRight);
+}
+
 void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
 {
     QModelIndex firstColIndex = index(rowIndex.row(), 0, rowIndex.parent());
