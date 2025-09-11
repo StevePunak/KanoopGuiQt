@@ -61,6 +61,33 @@ public:
     AbstractModelItem* appendChild(AbstractModelItem* child);
     void deleteChild(AbstractModelItem* child);
 
+    template <typename T>
+    QList<T> findChildren() const
+    {
+        QList<T> result;
+        for(AbstractModelItem* item : _children) {
+            T candidate = dynamic_cast<T>(item);
+            if(candidate != nullptr) {
+                result.append(candidate);
+            }
+        }
+        return result;
+    }
+
+    template <typename T>
+    T firstChild() const
+    {
+        T result = nullptr;
+        for(AbstractModelItem* item : _children) {
+            T candidate = dynamic_cast<T>(item);
+            if(candidate != nullptr) {
+                result = candidate;
+                break;
+            }
+        }
+        return result;
+    }
+
     AbstractItemModel* model() const { return _model; }
 
 protected:
