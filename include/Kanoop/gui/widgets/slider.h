@@ -2,8 +2,9 @@
 #define SLIDER_H
 
 #include <QSlider>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class Slider : public QSlider
+class LIBKANOOPGUI_EXPORT Slider : public QSlider
 {
     Q_OBJECT
 public:
