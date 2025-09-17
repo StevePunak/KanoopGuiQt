@@ -33,7 +33,7 @@ public:
 
     QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
     QModelIndexList indexesOfUuid(const QUuid& uuid) const;
-    void setCurrentUuid(const QUuid& uuid);
+    void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);

@@ -89,7 +89,7 @@ QModelIndex TreeViewBase::firstIndexOfEntityUuid(const QUuid& uuid) const
     return result;
 }
 
-void TreeViewBase::setCurrentUuid(const QUuid &uuid)
+void TreeViewBase::setCurrentUuid(const QUuid &uuid, ScrollHint scrollHint)
 {
     if(model() == nullptr) {
         return;
@@ -101,7 +101,7 @@ void TreeViewBase::setCurrentUuid(const QUuid &uuid)
         for(const QModelIndex& parentIndex : parents) {
             setExpanded(parentIndex, true);
         }
-        scrollTo(index, EnsureVisible);
+        scrollTo(index, scrollHint);
         selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current | QItemSelectionModel::Rows);
         expand(index);
         emit itemProgramaticallySelected(index);
