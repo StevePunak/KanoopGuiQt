@@ -97,6 +97,13 @@ int AbstractModelItem::row() const
     return result;
 }
 
+AbstractModelItem* AbstractModelItem::insertChild(int index, AbstractModelItem* child)
+{
+    child->_parent = this;
+    _children.insert(index, child);
+    return child;
+}
+
 AbstractModelItem *AbstractModelItem::appendChild(AbstractModelItem *child)
 {
     child->_parent = this;
@@ -136,3 +143,4 @@ int AbstractModelItem::childCountRecursive(int entityType) const
     }
     return count;
 }
+

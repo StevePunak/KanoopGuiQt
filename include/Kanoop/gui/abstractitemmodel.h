@@ -35,16 +35,16 @@ public:
     }
 
     // EntityMetadata Helpers
-    QModelIndexList indexesOfEntityType(int type) const;
-    QModelIndexList indexesOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
-    QModelIndexList indexesOfEntityUuid(const QUuid& uuid) const;
-    QModelIndex firstIndexOfEntityType(int type) const;
-    QModelIndex firstIndexOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
-    QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
-    QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
-    QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const;
-    QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
-    QModelIndexList childIndexes(const QModelIndex& parent, int type) const;
+    virtual QModelIndexList indexesOfEntityType(int type) const;
+    virtual QModelIndexList indexesOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
+    virtual QModelIndexList indexesOfEntityUuid(const QUuid& uuid) const;
+    virtual QModelIndex firstIndexOfEntityType(int type) const;
+    virtual QModelIndex firstIndexOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
+    virtual QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
+    virtual QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
+    virtual QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const;
+    virtual QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
+    virtual QModelIndexList childIndexes(const QModelIndex& parent, int type) const;
 
     TableHeader::List columnHeaders() const;
     TableHeader columnHeader(int section) const { return _columnHeaders.value(section); }

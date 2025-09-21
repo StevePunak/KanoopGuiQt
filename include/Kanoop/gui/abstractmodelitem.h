@@ -58,6 +58,7 @@ public:
     int childCount(int entityType = 0) const;
     int childCountRecursive(int entityType = 0) const;
 
+    AbstractModelItem* insertChild(int index, AbstractModelItem* child);
     AbstractModelItem* appendChild(AbstractModelItem* child);
     void deleteChild(AbstractModelItem* child);
 

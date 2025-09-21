@@ -262,14 +262,14 @@ QModelIndex AbstractItemModel::firstIndexOfEntityUuid(const QUuid &uuid) const
 
 QModelIndex AbstractItemModel::firstIndexOfChildEntityType(const QModelIndex &parent, int type) const
 {
-    QModelIndexList matches = match(parent, KANOOP::EntityTypeRole, type, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    QModelIndexList matches = match(parent, KANOOP::EntityTypeRole, type, 1, Qt::MatchExactly | Qt::MatchRecursive);
     QModelIndex result = matches.count() > 0 ? matches.first() : QModelIndex();
     return result;
 }
 
 QModelIndex AbstractItemModel::firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const
 {
-    QModelIndexList matches = match(parent, KANOOP::UUidRole, uuid, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    QModelIndexList matches = match(parent, KANOOP::UUidRole, uuid, 1, Qt::MatchExactly | Qt::MatchRecursive);
     QModelIndex result = matches.count() > 0 ? matches.first() : QModelIndex();
     return result;
 }
