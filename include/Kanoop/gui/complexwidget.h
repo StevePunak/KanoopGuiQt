@@ -21,6 +21,7 @@ protected:
     void initializeBase();
     void connectValidationSignals();
 
+protected slots:
     virtual void validate() {}
 
 private:

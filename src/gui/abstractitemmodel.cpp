@@ -421,11 +421,11 @@ void AbstractItemModel::deleteRootItem(AbstractModelItem *item)
         beginRemoveRows(index.parent(), row, row);
         _rootItems.removeAll(item);
         endRemoveRows();
+        delete item;
     }
     else {
         logText(LVL_WARNING, "Failed to find root item for deletion");
     }
-    delete item;
 }
 
 void AbstractItemModel::deleteRootItems(const QUuid &uuid)

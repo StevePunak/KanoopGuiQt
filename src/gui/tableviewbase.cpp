@@ -142,6 +142,20 @@ int TableViewBase::rowCount() const
     return 0;
 }
 
+QModelIndexList TableViewBase::allRows() const
+{
+    QModelIndexList result;
+    if(model() == nullptr) {
+        return result;
+    }
+
+    for(int row = 0;row < rowCount();row++) {
+        QModelIndex rowIndex = model()->index(row, 0);
+        result.append(rowIndex);
+    }
+    return result;
+}
+
 QModelIndex TableViewBase::findFirstMatch(const QVariant& needle, int role) const
 {
     QModelIndex result;
