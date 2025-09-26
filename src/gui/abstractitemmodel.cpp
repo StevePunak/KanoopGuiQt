@@ -284,7 +284,7 @@ QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, i
     return result;
 }
 
-QModelIndexList AbstractItemModel::childIndexes(const QModelIndex& parent, int type) const
+QModelIndexList AbstractItemModel::childIndexes(const QModelIndex& parent, int type, bool recursive) const
 {
     QModelIndexList result;
 
@@ -292,11 +292,13 @@ QModelIndexList AbstractItemModel::childIndexes(const QModelIndex& parent, int t
     for(int row = 0;row < item->childCount();row++) {
         AbstractModelItem* child = item->child(row);
         QModelIndex index = createIndex(row, 0, child);
-        if(child->entityType() == type) {
+        if(type == -1 || child->entityType() == type) {
             result.append(index);
         }
-        QModelIndexList indexes = childIndexes(index, type);
-        result.append(indexes);
+        if(recursive == true) {
+            QModelIndexList indexes = childIndexes(index, type, recursive);
+            result.append(indexes);
+        }
     }
 
     return result;
@@ -469,6 +471,19 @@ void AbstractItemModel::refreshAll()
     QModelIndex topLeft = createIndex(0, 0);
     QModelIndex bottomRight = createIndex(rowCount() - 1, columnCount() - 1);
     emit dataChanged(topLeft, bottomRight);
+}
+
+QModelIndex AbstractItemModel::findFirstDirectChild(const QModelIndex& parentIndex, const QVariant& value, int role) const
+{
+    QModelIndex result;
+    QModelIndexList children = childIndexes(parentIndex, -1, false);
+    for(const QModelIndex& index : children) {
+        if(index.data(role) == value) {
+            result = index;
+            break;
+        }
+    }
+    return result;
 }
 
 void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)

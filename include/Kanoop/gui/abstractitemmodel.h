@@ -44,7 +44,7 @@ public:
     virtual QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
     virtual QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const;
     virtual QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
-    virtual QModelIndexList childIndexes(const QModelIndex& parent, int type) const;
+    virtual QModelIndexList childIndexes(const QModelIndex& parent, int type = -1, bool recursive = true) const;
 
     TableHeader::List columnHeaders() const;
     TableHeader columnHeader(int section) const { return _columnHeaders.value(section); }
@@ -100,6 +100,9 @@ protected:
     void updateItemAtIndex(const QModelIndex& itemIndex, const EntityMetadata &metadata);
     void updateItemsAtIndexes(const QModelIndexList& indexes, const EntityMetadata &metadata);
     void refreshAll();
+
+    // Search helpers
+    QModelIndex findFirstDirectChild(const QModelIndex& parentIndex, const QVariant& value, int role) const;
 
     TableHeader::IntMap columnHeadersIntMap() const { return _columnHeaders; }
     TableHeader::IntMap rowHeadersIntMap() const { return _rowHeaders; }
