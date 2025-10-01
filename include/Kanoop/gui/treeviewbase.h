@@ -45,8 +45,13 @@ public:
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
 
     void collapseRecursively(const QModelIndex& index, int depth = -1);
+    bool isLeafExpanded(const QModelIndex& index, bool recursive = true) const;
 
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
+
+    int columnForHeaderType(int headerType) const;
+    void setColumnTypesVisible(const QList<int>& headerTypes, bool visible, bool exclusive = false);
+    void setColumnsVisible(const QList<int>& columns, bool visible, bool exclusive = false);
 
 public slots:
     virtual void refreshVisibleColumns(const QList<int>& columns);

@@ -85,6 +85,12 @@ QSize GuiSettings::getLastWindowSize(const QWidget *widget, const QSize &default
     return result;
 }
 
+bool GuiSettings::widgetHasPersistentGeometry(const QWidget* widget) const
+{
+    QString key = makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName());
+    return _settings.contains(key);
+}
+
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
 {
     QString key = makeCompoundObjectKey(splitter->orientation() == Qt::Vertical

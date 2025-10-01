@@ -13,8 +13,13 @@ public:
 
     void setFontPointSize(int size);
     void setFontPixelSize(int size);
+
     void setForegroundColor(const QColor& color);
+    QColor foregroundColor() const { return _foregroundColor; }
+
     void setBackgroundColor(const QColor& color);
+    QColor backgroundColor() const { return _backgroundColor; }
+
     void setDefaultForegroundColor();
     void setDefaultBackgroundColor();
 

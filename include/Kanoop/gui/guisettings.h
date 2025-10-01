@@ -30,6 +30,8 @@ public:
     void setLastWindowSize(const QWidget* widget, const QSize& size) { _settings.setValue(makeKey(KEY_LAST_WIDGET_SIZE, widget->objectName()), size); }
     QSize getLastWindowSize(const QWidget* widget, const QSize& defaultSize = QSize());
 
+    bool widgetHasPersistentGeometry(const QWidget* widget) const;
+
     void saveLastSplitterState(QSplitter* splitter);
     void restoreLastSplitterState(QSplitter* splitter);
 

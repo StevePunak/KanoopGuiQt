@@ -186,6 +186,33 @@ void TreeViewBase::collapseRecursively(const QModelIndex& index, int depth)
     }
 }
 
+bool TreeViewBase::isLeafExpanded(const QModelIndex& index, bool recursive) const
+{
+    if(sourceModel() == nullptr) {
+        return false;
+    }
+
+    bool result = isExpanded(index);
+    if(result == false) {
+        return false;
+    }
+
+    if(recursive == false) {
+        return result;
+    }
+
+    int rowCount = model()->rowCount(index);
+    for(int row = 0;row < rowCount;row++) {
+        QModelIndex childIndex = model()->index(row, 0, index);
+        if (childIndex.isValid()) {
+            if(isLeafExpanded(childIndex, recursive) == false) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 {
     QStyledItemDelegate* existing = _columnDelegates.value(type);
@@ -197,6 +224,38 @@ void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
     if(column != -1) {
         _columnDelegates.insert(type, delegate);
         setItemDelegateForColumn(column, delegate);
+    }
+}
+
+int TreeViewBase::columnForHeaderType(int headerType) const
+{
+    if(sourceModel() != nullptr) {
+        return sourceModel()->columnForHeader(headerType);
+    }
+    return -1;
+}
+
+void TreeViewBase::setColumnTypesVisible(const QList<int>& headerTypes, bool visible, bool exclusive)
+{
+    QList<int> columns;
+    for(int headerType : headerTypes) {
+        int col = columnForHeaderType(headerType);
+        if(col >= 0) {
+            columns.append(col);
+        }
+    }
+    setColumnsVisible(columns, visible, exclusive);
+}
+
+void TreeViewBase::setColumnsVisible(const QList<int>& columns, bool visible, bool exclusive)
+{
+    for(int col = 0;col < header()->count();col++) {
+        if(columns.contains(col)) {
+            setColumnHidden(col, visible == false);
+        }
+        else if(exclusive) {
+            setColumnHidden(col, visible);
+        }
     }
 }
 
