@@ -62,6 +62,8 @@ protected:
 
     void connectValidationSignals();
 
+    void setChildInputWidgetsEnabled(QWidget* widget, bool enabled);
+
     QColor defaultTextColor() const { return palette().color(QPalette::Text); }
 
     QSize defaultSize() const { return _defaultSize; }
@@ -107,6 +109,17 @@ private:
     void setButtonBoxButtons();
 
     void closeLogConsumer();
+
+    template <typename T>
+    void appendToList(QList<QWidget*>& list, const QList<T>& typedList) const
+    {
+        for(T widget : typedList) {
+            QWidget* w = qobject_cast<QWidget*>(widget);
+            if(w != nullptr) {
+                list.append(w);
+            }
+        }
+    }
 
     QDialogButtonBox* _buttonBox = nullptr;
     QStatusBar* _statusBar = nullptr;
