@@ -82,6 +82,10 @@ EntityMetadata TreeViewBase::metadataAtPos(const QPoint &pos) const
 QModelIndex TreeViewBase::firstIndexOfEntityUuid(const QUuid& uuid) const
 {
     QModelIndex result;
+    if(model() == nullptr) {
+        return result;
+    }
+
     QModelIndexList indexes = model()->match(model()->index(0, 0, QModelIndex()), KANOOP::UUidRole, uuid, 1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
     if(indexes.count() > 0) {
         result = indexes.first();
@@ -404,6 +408,8 @@ void TreeViewBase::onHorizontalHeaderResized(int, int, int)
 
 void TreeViewBase::onHeaderContextMenuRequested()
 {
+    _contextMenuPos = mapFromGlobal(QCursor::pos());
+
     QMenu menu;
     menu.addAction(_actionColSettings);
     menu.addAction(_actionHideCol);
@@ -433,7 +439,7 @@ void TreeViewBase::onColumnSettingsClicked()
 
 void TreeViewBase::onHideColumnClicked()
 {
-    int section = header()->logicalIndexAt(QCursor::pos());
+    int section = header()->logicalIndexAt(_contextMenuPos);
     if(section < 0 || sourceModel() == nullptr) {
         return;
     }

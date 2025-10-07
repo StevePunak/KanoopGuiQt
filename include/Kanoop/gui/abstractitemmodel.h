@@ -67,6 +67,8 @@ public:
 
     void setColumnHeaderVisible(int type, bool visible);
 
+    static QString indexToString(const QModelIndex& index);
+
 protected:
     // Retrieve root items
     AbstractModelItem::List rootItems() const { return _rootItems; }
