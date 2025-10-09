@@ -45,6 +45,8 @@ public:
 
     QModelIndex findFirstMatch(const QVariant& needle, int role) const;
 
+    void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
+
     void restoreHeaderStates();
     void restoreHorizontalHeaderState();
     void restoreVerticalHeaderState();
