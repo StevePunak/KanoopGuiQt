@@ -211,6 +211,11 @@ void TableViewBase::clear()
     }
 }
 
+void TableViewBase::currentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    emit currentIndexChanged(current, previous);
+}
+
 void TableViewBase::onHorizontalHeaderResized(int, int, int)
 {
     if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
