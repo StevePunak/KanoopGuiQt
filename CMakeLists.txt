@@ -27,6 +27,7 @@ target_compile_options(${PROJ} PRIVATE -Wextra -Wall -Werror)
 
 target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
 target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
+target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
 
 set_target_properties(${PROJ} PROPERTIES VERSION "${KANOOP_QTGUI_VERSION}")
 set_target_properties(${PROJ} PROPERTIES SOVERSION 1)
@@ -42,6 +43,7 @@ get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 target_include_directories(${PROJ} PRIVATE ${PARENT_DIR}/KanoopCommon/include)
 
 find_package(Qt6 REQUIRED COMPONENTS Gui Widgets Network)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 target_link_libraries(${PROJ} PRIVATE
