@@ -45,6 +45,8 @@ public:
 
     QModelIndex findFirstMatch(const QVariant& needle, int role) const;
 
+    void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
+
     void restoreHeaderStates();
     void restoreHorizontalHeaderState();
     void restoreVerticalHeaderState();
@@ -69,10 +71,14 @@ signals:
     void verticalHeaderChanged();
 
     void currentSelectionChanged();
+    void currentIndexChanged(const QModelIndex& current, const QModelIndex& previous);
 
     void entityAdded(const EntityMetadata& metadata);
     void entityDeleted(const EntityMetadata& metadata);
     void entityUpdated(const EntityMetadata& metadata);
+
+protected slots:
+    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) override;
 
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);

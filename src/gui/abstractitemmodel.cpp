@@ -393,6 +393,11 @@ void AbstractItemModel::setColumnHeaderVisible(int type, bool visible)
     _columnHeaders.setHeaderVisible(type, visible);
 }
 
+QString AbstractItemModel::indexToString(const QModelIndex& index)
+{
+    return toString(index);
+}
+
 int AbstractItemModel::columnForHeader(int type) const
 {
     int result = -1;

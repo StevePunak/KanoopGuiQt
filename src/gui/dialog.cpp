@@ -216,6 +216,20 @@ void Dialog::connectValidationSignals()
     connectSpinBoxSignals();
 }
 
+void Dialog::setChildInputWidgetsEnabled(QWidget* widget, bool enabled)
+{
+    QList<QWidget*> inputWidgets;
+    appendToList(inputWidgets, widget->findChildren<QLineEdit*>());
+    appendToList(inputWidgets, widget->findChildren<QTextEdit*>());
+    appendToList(inputWidgets, widget->findChildren<QPlainTextEdit*>());
+    appendToList(inputWidgets, widget->findChildren<QComboBox*>());
+    appendToList(inputWidgets, widget->findChildren<QCheckBox*>());
+    appendToList(inputWidgets, widget->findChildren<QSpinBox*>());
+    for(QWidget* childWidget : inputWidgets) {
+        childWidget->setEnabled(enabled);
+    }
+}
+
 void Dialog::moveEvent(QMoveEvent *event)
 {
     // logText(LVL_DEBUG, QString("%1 - move to %2").arg(objectName()).arg(Point(event->pos()).toString()));

@@ -65,14 +65,16 @@ protected:
     QModelIndexList findParents(const QModelIndex& index) const;
 
 private:
-    AbstractItemModel* _sourceModel;
-    QSortFilterProxyModel* _proxyModel;
+    AbstractItemModel* _sourceModel = nullptr;
+    QSortFilterProxyModel* _proxyModel = nullptr;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
     QAction* _actionColSettings = nullptr;
     QAction* _actionHideCol = nullptr;
     QAction* _actionAutoResizeCols = nullptr;
     QAction* _actionResetCols = nullptr;
+
+    QPoint _contextMenuPos;
 
 signals:
     void itemProgramaticallySelected(const QModelIndex& index);

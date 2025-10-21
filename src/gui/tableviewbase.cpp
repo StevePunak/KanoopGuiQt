@@ -168,6 +168,19 @@ QModelIndex TableViewBase::findFirstMatch(const QVariant& needle, int role) cons
     return result;
 }
 
+void TableViewBase::setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint)
+{
+    if(model() == nullptr) {
+        return;
+    }
+
+    QModelIndexList indexes = model()->match(model()->index(0, 0, QModelIndex()), KANOOP::UUidRole, uuid, -1, Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchWrap);
+    for(const QModelIndex& index : indexes) {
+        scrollTo(index, scrollHint);
+        selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current | QItemSelectionModel::Rows);
+    }
+}
+
 void TableViewBase::restoreHeaderStates()
 {
     restoreHorizontalHeaderState();
@@ -209,6 +222,11 @@ void TableViewBase::clear()
     if(_sourceModel != nullptr) {
         _sourceModel->clear();
     }
+}
+
+void TableViewBase::currentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    emit currentIndexChanged(current, previous);
 }
 
 void TableViewBase::onHorizontalHeaderResized(int, int, int)

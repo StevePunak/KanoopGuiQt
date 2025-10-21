@@ -1,4 +1,4 @@
-#include "tabwidget.h"
+#include "widgets/tabwidget.h"
 
 #include "tabbar.h"
 
