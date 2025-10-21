@@ -54,3 +54,9 @@ void PlayPauseButton::onPlayPauseClicked()
     emit clicked();
 }
 
+void PlayPauseButton::setButtonSize(QSize min, QSize max, QSize icon)
+{
+    _button->setMinimumSize(min);
+    _button->setMaximumSize(max);
+    _button->setIconSize(icon);
+}
