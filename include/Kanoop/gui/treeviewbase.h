@@ -28,12 +28,13 @@ public:
     TreeViewBase(QWidget* parent = nullptr);
 
     int entityTypeAtPos(const QPoint& pos);
-    EntityMetadata currentMetadata() const;
-    EntityMetadata metadataAtPos(const QPoint& pos) const;
 
-    QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
-    QModelIndexList indexesOfUuid(const QUuid& uuid) const;
-    void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
+    virtual EntityMetadata currentMetadata() const;
+    virtual EntityMetadata metadataAtPos(const QPoint& pos) const;
+
+    virtual QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
+    virtual QModelIndexList indexesOfUuid(const QUuid& uuid) const;
+    virtual void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
