@@ -284,6 +284,11 @@ QModelIndex AbstractItemModel::firstMatch(const QModelIndex& startSearchIndex, i
     return result;
 }
 
+QModelIndex AbstractItemModel::firstMatch(int role, const QVariant& value, Qt::MatchFlags flags) const
+{
+    return firstMatch(index(0, 0, QModelIndex()), role, value, flags);
+}
+
 QModelIndexList AbstractItemModel::childIndexes(const QModelIndex& parent, int type, bool recursive) const
 {
     QModelIndexList result;

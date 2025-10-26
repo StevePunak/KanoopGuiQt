@@ -44,6 +44,7 @@ public:
     virtual QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
     virtual QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const;
     virtual QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
+    virtual QModelIndex firstMatch(int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
     virtual QModelIndexList childIndexes(const QModelIndex& parent, int type = -1, bool recursive = true) const;
 
     TableHeader::List columnHeaders() const;
