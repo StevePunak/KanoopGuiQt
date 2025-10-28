@@ -19,7 +19,7 @@ public:
     bool isPlaying() const { return _playing; }
     QString text() const { return _text; }
     bool isTextVisible() const;
-    void setButtonSize(QSize min, QSize max, QSize icon);
+    void setButtonSize(const QSize& min, const QSize& max, const QSize& icon);
 
 public slots:
     void setPlaying(bool value);
