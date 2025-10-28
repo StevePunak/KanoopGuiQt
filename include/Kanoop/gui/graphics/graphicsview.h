@@ -48,7 +48,7 @@ private:
 
 signals:
     void scaleChanged(double scale);
-    void resized(const Size& size);
+    void resized(const Size& newSize, const Size& oldSize);
 };
 
 #endif // GRAPHICSVIEW_H

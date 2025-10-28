@@ -155,6 +155,9 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header)
 
 void GuiSettings::saveLastHeaderState(QHeaderView *header, AbstractItemModel *model)
 {
+    if(model == nullptr) {
+        return;
+    }
     TableHeader::List headers = model->columnHeaders();
     HeaderState headerState;
     for(int section = 0;section < headers.count();section++) {

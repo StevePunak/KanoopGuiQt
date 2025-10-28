@@ -66,7 +66,7 @@ bool GraphicsView::eventFilter(QObject *watched, QEvent *event)
 void GraphicsView::resizeEvent(QResizeEvent* event)
 {
     QGraphicsView::resizeEvent(event);
-    emit resized(event->size());
+    emit resized(event->size(), event->oldSize());
 }
 
 bool GraphicsView::processWheelEvent(QWheelEvent *event)
