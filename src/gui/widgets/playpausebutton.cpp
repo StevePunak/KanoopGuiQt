@@ -13,6 +13,9 @@ PlayPauseButton::PlayPauseButton(QWidget *parent) :
     _button = new QPushButton(this);
     _button->setMaximumSize(_textLabel->height(), _textLabel->height());
 
+    _iconWhilePlaying = Resources::getIcon(Resources::Pause);
+    _iconWhilePaused = Resources::getIcon(Resources::Play);
+
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
@@ -30,11 +33,13 @@ bool PlayPauseButton::isTextVisible() const
     return _textLabel->isVisible();
 }
 
-void PlayPauseButton::setPlaying(bool value)
+void PlayPauseButton::setPlaying(bool value, bool blockSignal)
 {
     _playing = value;
-    _button->setIcon(_playing ? Resources::getIcon(Resources::Pause) : Resources::getIcon(Resources::Play));
-    emit playingChanged(_playing);
+    _button->setIcon(_playing ? _iconWhilePlaying : _iconWhilePaused);
+    if(blockSignal == false) {
+        emit playingChanged(_playing);
+    }
 }
 
 void PlayPauseButton::setText(const QString& value)
@@ -46,6 +51,12 @@ void PlayPauseButton::setText(const QString& value)
 void PlayPauseButton::setTextVisible(bool value)
 {
     _textLabel->setVisible(value);
+}
+
+void PlayPauseButton::setTextAlignment(Qt::Alignment value)
+{
+    _textAlignment = value;
+    _textLabel->setAlignment(value);
 }
 
 void PlayPauseButton::onPlayPauseClicked()

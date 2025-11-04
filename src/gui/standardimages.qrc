@@ -15,5 +15,6 @@
         <file>assets/red-minus.png</file>
         <file>assets/dropdown-down.png</file>
         <file>assets/dropdown-up.png</file>
+        <file>assets/label.png</file>
     </qresource>
 </RCC>

@@ -7,6 +7,9 @@
 class LIBKANOOPGUI_EXPORT Label : public QLabel
 {
     Q_OBJECT
+
+    Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor)             // clazy:exclude=qproperty-without-notify
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor)            // clazy:exclude=qproperty-without-notify
 public:
     explicit Label(QWidget *parent = nullptr, Qt::WindowFlags f=Qt::WindowFlags());
     explicit Label(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags f=Qt::WindowFlags());
@@ -14,12 +17,14 @@ public:
     void setFontPointSize(int size);
     void setFontPixelSize(int size);
 
-    void setForegroundColor(const QColor& color);
     QColor foregroundColor() const { return _foregroundColor; }
-
-    void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const { return _backgroundColor; }
 
+public slots:
+    void setForegroundColor(const QColor& color);
+    void setBackgroundColor(const QColor& color);
+
+public:
     void setDefaultForegroundColor();
     void setDefaultBackgroundColor();
 

@@ -29,6 +29,7 @@ public:
         DropDownUp,
         CloseButton,
         GreenPlus,
+        Label,
         NextTrack,
         Pause,
         Play,
@@ -55,6 +56,7 @@ private:
             insert(DropDownDown,        "dropdown-down.png");
             insert(DropDownUp,          "dropdown-up.png");
             insert(GreenPlus,           "green-plus.png");
+            insert(Label,               "label.png");
             insert(NextTrack,           "next-track.png");
             insert(Pause,               "pause.png");
             insert(Play,                "play.png");

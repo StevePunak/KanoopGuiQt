@@ -23,5 +23,4 @@ public:
     virtual QWidget* createWidget(QWidget* parent) override;
 };
 
-
 #endif // DESIGNERPLUGININTERFACES_H
