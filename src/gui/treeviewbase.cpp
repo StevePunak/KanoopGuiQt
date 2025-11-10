@@ -175,7 +175,7 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
         _sourceModel = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
         QTreeView::setModel(_proxyModel);
     }
-    connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &TreeViewBase::currentSelectionChanged);
+    connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &TreeViewBase::onCurrentSelectionChanged);
 }
 
 void TreeViewBase::collapseRecursively(const QModelIndex& index, int depth)
@@ -464,6 +464,15 @@ void TreeViewBase::onResetColumnsClicked()
         header()->resizeSection(section, 120);
     }
     GuiSettings::globalInstance()->saveLastHeaderState(header(), sourceModel());
+}
+
+void TreeViewBase::onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    Q_UNUSED(previous)
+    emit currentSelectionChanged();
+    if(current.isValid()) {
+        emit currentIndexChanged(current);
+    }
 }
 
 QModelIndexList TreeViewBase::indexesOfUuid(const QUuid& uuid) const

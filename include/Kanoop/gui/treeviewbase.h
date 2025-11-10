@@ -81,6 +81,7 @@ signals:
     void itemProgramaticallySelected(const QModelIndex& index);
     void headerChanged();
     void currentSelectionChanged();
+    void currentIndexChanged(const QModelIndex& index);
 
     void entityAdded(const EntityMetadata& metadata);
     void entityDeleted(const EntityMetadata& metadata);
@@ -94,6 +95,7 @@ private slots:
     void onHideColumnClicked();
     void onAutoResizeColumnsClicked();
     void onResetColumnsClicked();
+    void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 };
 
 #endif // TREEVIEWBASE_H

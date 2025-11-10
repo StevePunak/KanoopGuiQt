@@ -41,8 +41,8 @@ public:
     virtual QModelIndex firstIndexOfEntityType(int type) const;
     virtual QModelIndex firstIndexOfEntity(int type, const QVariant &data, int role = Qt::DisplayRole) const;
     virtual QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
-    virtual QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type) const;
-    virtual QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const;
+    virtual QModelIndex firstIndexOfChildEntityType(const QModelIndex& parent, int type, bool recursive = true) const;
+    virtual QModelIndex firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid, bool recursive = true) const;
     virtual QModelIndex firstMatch(const QModelIndex& startSearchIndex, int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
     virtual QModelIndex firstMatch(int role, const QVariant& value, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
     virtual QModelIndexList childIndexes(const QModelIndex& parent, int type = -1, bool recursive = true) const;
@@ -78,6 +78,7 @@ protected:
     int rootItemCount() const { return _rootItems.count(); }
 
     // Append new items
+    AbstractModelItem* insertRootItem(int row, AbstractModelItem* item);
     AbstractModelItem* appendRootItem(AbstractModelItem* item);
     void appendRootItems(QList<AbstractModelItem*> items);
 
@@ -98,6 +99,7 @@ protected:
     void deleteRootItem(AbstractModelItem* item);
     void deleteRootItems(const QUuid& uuid);
     void deleteRootItems(const EntityMetadata& metadata);
+    void deleteItem(const QUuid& uuid);
 
     // Update Items
     void updateItemAtIndex(const QModelIndex& itemIndex, const EntityMetadata &metadata);

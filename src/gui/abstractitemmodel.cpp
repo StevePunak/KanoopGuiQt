@@ -260,17 +260,33 @@ QModelIndex AbstractItemModel::firstIndexOfEntityUuid(const QUuid &uuid) const
     return result;
 }
 
-QModelIndex AbstractItemModel::firstIndexOfChildEntityType(const QModelIndex &parent, int type) const
+QModelIndex AbstractItemModel::firstIndexOfChildEntityType(const QModelIndex &parent, int type, bool recursive) const
 {
-    QModelIndexList matches = match(parent, KANOOP::EntityTypeRole, type, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    QModelIndex result = matches.count() > 0 ? matches.first() : QModelIndex();
+    QModelIndex result;
+    QModelIndexList childIndexes = AbstractItemModel::childIndexes(parent, -1, false);
+    for(const QModelIndex& childIndex : childIndexes) {
+        Qt::MatchFlags flags = recursive ? Qt::MatchExactly | Qt::MatchRecursive : Qt::MatchExactly;
+        QModelIndexList matches = match(childIndex, KANOOP::EntityTypeRole, type, 1, flags);
+        if(matches.count() > 0) {
+            result = matches.at(0);
+            break;
+        }
+    }
     return result;
 }
 
-QModelIndex AbstractItemModel::firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid) const
+QModelIndex AbstractItemModel::firstIndexOfChildEntityUuid(const QModelIndex& parent, const QUuid& uuid, bool recursive) const
 {
-    QModelIndexList matches = match(parent, KANOOP::UUidRole, uuid, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    QModelIndex result = matches.count() > 0 ? matches.first() : QModelIndex();
+    QModelIndex result;
+    QModelIndexList childIndexes = AbstractItemModel::childIndexes(parent, -1, false);
+    for(const QModelIndex& childIndex : childIndexes) {
+        Qt::MatchFlags flags = recursive ? Qt::MatchExactly | Qt::MatchRecursive : Qt::MatchExactly;
+        QModelIndexList matches = match(childIndex, KANOOP::UUidRole, uuid, 1, flags);
+        if(matches.count() > 0) {
+            result = matches.at(0);
+            break;
+        }
+    }
     return result;
 }
 
@@ -317,6 +333,12 @@ TableHeader::List AbstractItemModel::columnHeaders() const
         result.append(_columnHeaders.value(key));
     }
     return result;
+}
+
+AbstractModelItem* AbstractItemModel::insertRootItem(int row, AbstractModelItem* item)
+{
+    _rootItems.insert(row, item);
+    return item;
 }
 
 AbstractModelItem *AbstractItemModel::appendRootItem(AbstractModelItem *item)
@@ -459,6 +481,24 @@ void AbstractItemModel::deleteRootItems(const EntityMetadata &metadata)
         beginRemoveRows(index.parent(), index.row(), index.row());
         deleteRootItem(item);
         endRemoveRows();
+    }
+}
+
+void AbstractItemModel::deleteItem(const QUuid& uuid)
+{
+    QModelIndex index = firstIndexOfEntityUuid(uuid);
+    QModelIndex parentIndex = parent(index);
+    if(index.isValid() && parentIndex.isValid()) {
+        AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parentIndex.internalPointer());
+        beginRemoveRows(parentIndex, index.row(), index.row());
+        parentItem->deleteChild(static_cast<AbstractModelItem*>(index.internalPointer()));
+        endRemoveRows();
+    }
+    else if(index.isValid()) {
+        AbstractModelItem* item = static_cast<AbstractModelItem*>(index.internalPointer());
+        if(_rootItems.contains(item)) {
+            deleteRootItem(item);
+        }
     }
 }
 
