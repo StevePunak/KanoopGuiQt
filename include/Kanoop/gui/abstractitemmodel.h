@@ -58,6 +58,9 @@ public:
 
     // QAbstractItemModel interface
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+#if NEEDS_TESTING
+    virtual QModelIndex sibling(int row, int column, const QModelIndex& idx) const override;
+#endif
     virtual QModelIndex parent(const QModelIndex &child) const override;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -114,6 +117,7 @@ protected:
 
     void emitRowChanged(const QModelIndex &rowIndex);
 
+public:
     static QString toString(const QModelIndex& index);
 
 private:

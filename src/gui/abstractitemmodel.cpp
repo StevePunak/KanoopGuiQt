@@ -67,6 +67,24 @@ QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &par
     return result;
 }
 
+#ifdef NEEDS_TESTING
+QModelIndex AbstractItemModel::sibling(int row, int column, const QModelIndex& idx) const
+{
+    QModelIndex result;
+    AbstractModelItem* item = static_cast<AbstractModelItem*>(idx.internalPointer());
+    if(item->parent() == nullptr) {
+        if(row < _rootItems.count()) {
+            AbstractModelItem* sibPtr = _rootItems.at(row);
+            result = createIndex(row, column, sibPtr);
+        }
+    }
+    else if(item->parent()->childCount() < row) {
+        result = createIndex(row, column, item->parent()->child(row));
+    }
+    return result;
+}
+#endif
+
 QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
 {
     logText(LVL_DEBUG, LVL3(), QString("func: %1  child: [%2]").arg(__FUNCTION__).arg(toString(child)));
