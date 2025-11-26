@@ -193,17 +193,11 @@ QModelIndex TreeViewBase::previousIndex(const QModelIndex& from) const
         QModelIndex current = from;
         QModelIndex parentIndex = model()->parent(current);
         if(parentIndex.isValid()) {
-            // if the parent has no previous siblings, we're done
-            if(parentIndex.row() == 0) {
-                result = parentIndex;
-            }
-            else {
-                QModelIndex siblingIndex = model()->sibling(parentIndex.row() - 1, from.column(), parentIndex);
-                if(siblingIndex.isValid()) {
-                    result = finalChildIndex(siblingIndex);
-                }
-            }
+            result = parentIndex;
         }
+    }
+    else {
+        result = finalChildIndex(result);
     }
     return result;
 }
