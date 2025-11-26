@@ -28,9 +28,11 @@ public:
     void setDefaultForegroundColor();
     void setDefaultBackgroundColor();
 
+protected:
+    virtual void applyStylesheet();
+
 private:
     void commonInit();
-    void makeStyleSheet();
 
     QColor _backgroundColor;
     QColor _foregroundColor;
