@@ -16,6 +16,7 @@
 #include <QRadioButton>
 #include <QScrollBar>
 #include <QToolBar>
+#include <QGroupBox>
 
 
 template<typename T>
@@ -64,6 +65,7 @@ QString StyleSheet<T>::toString() const
 
 template class StyleSheet<QWidget>;
 template class StyleSheet<QFrame>;
+template class StyleSheet<QGroupBox>;
 template class StyleSheet<QLabel>;
 template class StyleSheet<QPushButton>;
 template class StyleSheet<QListView>;
