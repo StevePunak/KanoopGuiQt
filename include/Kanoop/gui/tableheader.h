@@ -75,6 +75,16 @@ public:
                 (*it).setVisible(visible);
             }
         }
+
+        TableHeader findByName(const QString& text) const
+        {
+            TableHeader result;
+            auto it = std::find_if(constBegin(), constEnd(), [text](const TableHeader& header) { return header.text() == text; });
+            if(it != constEnd()) {
+                result = *it;
+            }
+            return result;
+        }
     };
 
     static QString typeToString(int type) { return _TableHeaderTypeToStringMap.value(type); }

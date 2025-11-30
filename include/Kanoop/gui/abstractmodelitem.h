@@ -44,7 +44,41 @@ public:
     virtual void updateFromVariant(int headerType, const QVariant& value) { Q_UNUSED(headerType) Q_UNUSED(value) }
 
     // List
-    class List : public QList<AbstractModelItem*>{};
+    class List : public QList<AbstractModelItem*>
+    {
+    public:
+        AbstractModelItem* findByUuid(const QUuid& uuid) const
+        {
+            AbstractModelItem* result = nullptr;
+            auto it = std::find_if(constBegin(), constEnd(), [uuid](AbstractModelItem* a) { return a->uuid() == uuid; } );
+            if(it != constEnd()) {
+                result = *it;
+            }
+            return result;
+        }
+
+        int indexOfUuid(const QUuid& uuid) const
+        {
+            int result = -1;
+            auto it = std::find_if(constBegin(), constEnd(), [uuid](AbstractModelItem* a) { return a->uuid() == uuid; } );
+            if(it != constEnd()) {
+                result = std::distance(constBegin(), it);
+            }
+            return result;
+        }
+
+        int lastIndexOfEntityType(int entityType) const
+        {
+            int result = -1;
+            for(int i = 0;i < count();i++) {
+                AbstractModelItem* item = this->at(i);
+                if(item->entityType() == entityType) {
+                    result = i;
+                }
+            }
+            return result;
+        }
+    };
 
     // Model Properties and Methods
     int row() const;

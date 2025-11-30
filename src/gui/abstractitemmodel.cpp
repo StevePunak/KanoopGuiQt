@@ -355,7 +355,10 @@ TableHeader::List AbstractItemModel::columnHeaders() const
 
 AbstractModelItem* AbstractItemModel::insertRootItem(int row, AbstractModelItem* item)
 {
+    QModelIndex insertIndex = index(row, 0, QModelIndex());
+    beginInsertRows(insertIndex, row, row);
     _rootItems.insert(row, item);
+    endInsertRows();
     return item;
 }
 
@@ -391,18 +394,25 @@ void AbstractItemModel::appendColumnHeader(int type, const QString &text)
     QString headerText = text.isEmpty() ? TableHeader::typeToString(type) : text;
 
     TableHeader header(type, headerText, Qt::Horizontal);
-    _columnHeaders.insert(_columnHeaders.count(), header);
+    int col = _columnHeaders.count();
+    beginInsertColumns(QModelIndex(), col, col);
+    _columnHeaders.insert(col, header);
+    endInsertColumns();
 }
 
 void AbstractItemModel::appendColumnHeader(int type, const QColor &columnTextColor, const QString &text)
 {
     appendColumnHeader(type, text);
+    int col = _columnHeaders.count();
+    beginInsertColumns(QModelIndex(), col, col);
     _columnHeaders.setTextColorForType(type, columnTextColor);
+    endInsertColumns();
 }
 
 void AbstractItemModel::insertColumnHeader(int type, int index, const QString& text)
 {
     TableHeader::IntMap headers = _columnHeaders;
+    beginInsertColumns(QModelIndex(), index, index);
     _columnHeaders.clear();
     for(int col = 0;col < headers.count();col++) {
         TableHeader header = columnHeader(col);
@@ -413,6 +423,7 @@ void AbstractItemModel::insertColumnHeader(int type, int index, const QString& t
             appendColumnHeader(type, text);
         }
     }
+    endInsertColumns();
 }
 
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
