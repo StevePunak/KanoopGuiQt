@@ -35,6 +35,18 @@ public:
     virtual QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
     virtual QModelIndexList indexesOfUuid(const QUuid& uuid) const;
     virtual void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
+    virtual void setCurrentIndex(const QModelIndex& index, ScrollHint scrollHint = EnsureVisible);
+
+    virtual QModelIndex findNextMatch(const QString& text, const QModelIndex& fromIndex) const;
+    virtual QModelIndex findPreviousMatch(const QString& text, const QModelIndex& fromIndex) const;
+    virtual QModelIndex finalChildIndex(const QModelIndex& from) const;
+    virtual QModelIndex nextIndex(const QModelIndex& from) const;
+    virtual QModelIndex previousIndex(const QModelIndex& from) const;
+    virtual QModelIndexList matchBackwards(const QModelIndex &start, int role,
+                                           const QVariant &value, int hits = 1,
+                                           Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
+
+    QModelIndex currentSourceIndex() const;
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -65,6 +77,9 @@ protected:
     EntityMetadata findFirstParent(const QModelIndex& index, int entityMetadataType) const;
     QModelIndexList findParents(const QModelIndex& index) const;
 
+    static void logIndex(const char* file, int lineNumber, Log::LogLevel level, const QModelIndex& index, const QString& text);
+    static bool testMatch(const QModelIndex& index, int role, const QVariant &value, Qt::MatchFlags flags, QModelIndexList& foundIndexes);
+
 private:
     AbstractItemModel* _sourceModel = nullptr;
     QSortFilterProxyModel* _proxyModel = nullptr;
@@ -81,6 +96,7 @@ signals:
     void itemProgramaticallySelected(const QModelIndex& index);
     void headerChanged();
     void currentSelectionChanged();
+    void currentIndexChanged(const QModelIndex& index);
 
     void entityAdded(const EntityMetadata& metadata);
     void entityDeleted(const EntityMetadata& metadata);
@@ -94,6 +110,7 @@ private slots:
     void onHideColumnClicked();
     void onAutoResizeColumnsClicked();
     void onResetColumnsClicked();
+    void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 };
 
 #endif // TREEVIEWBASE_H

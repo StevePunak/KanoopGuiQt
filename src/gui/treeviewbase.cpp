@@ -112,6 +112,121 @@ void TreeViewBase::setCurrentUuid(const QUuid &uuid, ScrollHint scrollHint)
     }
 }
 
+void TreeViewBase::setCurrentIndex(const QModelIndex& index, ScrollHint scrollHint)
+{
+    if(sourceModel() != nullptr) {
+        QTreeView::setCurrentIndex(index);
+        scrollTo(index, scrollHint);
+        selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current | QItemSelectionModel::Rows);
+        expand(index);
+        emit itemProgramaticallySelected(index);
+    }
+}
+
+QModelIndex TreeViewBase::findNextMatch(const QString& text, const QModelIndex& fromIndex) const
+{
+    QModelIndex current = fromIndex;
+    QModelIndexList indexes = model()->match(current, Qt::DisplayRole, text, 1, Qt::MatchContains | Qt::MatchRecursive);
+
+    if(indexes.count() > 0) {
+        return indexes.at(0);
+    }
+    else {
+        // Climb up parents and find the next tree to search
+        QModelIndex parentIndex = model()->parent(current);
+        while(parentIndex.isValid()) {
+            int parentRow = parentIndex.row();
+            QModelIndex parentSibling = model()->sibling(parentRow + 1, fromIndex.column(), parentIndex);
+            if(parentSibling.isValid()) {
+                return findNextMatch(text, parentSibling);
+            }
+            parentIndex = model()->parent(parentIndex);
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex TreeViewBase::findPreviousMatch(const QString& text, const QModelIndex& fromIndex) const
+{
+    QModelIndex current = fromIndex;
+    QModelIndexList indexes = matchBackwards(current, Qt::DisplayRole, text, 1, Qt::MatchContains | Qt::MatchWrap | Qt::MatchRecursive);
+
+    if(indexes.count() > 0) {
+        return indexes.at(0);
+    }
+    return QModelIndex();
+}
+
+QModelIndex TreeViewBase::finalChildIndex(const QModelIndex& from) const
+{
+    QModelIndex result = from;
+    int rows;
+    while((rows = model()->rowCount(result)) > 0) {
+        result = model()->index(rows - 1, from.column(), result);
+    }
+    return result;
+}
+
+QModelIndex TreeViewBase::nextIndex(const QModelIndex& from) const
+{
+    QModelIndex result = model()->sibling(from.row() + 1, from.column(), from);
+    if(result.isValid() == false) {
+        // climb up to parents next sibling
+        QModelIndex current = from;
+        QModelIndex parentIndex = model()->parent(current);
+        while(parentIndex.isValid()) {
+            if((result = model()->sibling(parentIndex.row() + 1, from.column(), parentIndex)).isValid()) {
+                break;
+            }
+            parentIndex = model()->parent(parentIndex);
+        }
+    }
+    return result;
+}
+
+QModelIndex TreeViewBase::previousIndex(const QModelIndex& from) const
+{
+    // Get immediate previous sibling
+    QModelIndex result = model()->sibling(from.row() - 1, from.column(), from);
+    if(result.isValid() == false) {
+        // climb up to parents previous sibling
+        QModelIndex current = from;
+        QModelIndex parentIndex = model()->parent(current);
+        if(parentIndex.isValid()) {
+            result = parentIndex;
+        }
+    }
+    else {
+        result = finalChildIndex(result);
+    }
+    return result;
+}
+
+QModelIndexList TreeViewBase::matchBackwards(const QModelIndex& start, int role, const QVariant& value, int hits, Qt::MatchFlags flags) const
+{
+    QModelIndexList result;
+    QModelIndex current = start;
+
+    // Traverse upwards and then backwards through siblings
+    while(current.isValid()) {
+        if(testMatch(current, role, value, flags, result) && hits > 0 && result.count() >= hits) {
+            return result;
+        }
+        current = previousIndex(current);
+    }
+
+    return QModelIndexList();
+}
+
+QModelIndex TreeViewBase::currentSourceIndex() const
+{
+    QModelIndex result = currentIndex();
+    if(proxyModel() != nullptr) {
+        result = proxyModel()->mapToSource(result);
+    }
+    return result;
+}
+
 QByteArray TreeViewBase::saveState() const
 {
     QByteArray result;
@@ -175,7 +290,7 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
         _sourceModel = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
         QTreeView::setModel(_proxyModel);
     }
-    connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &TreeViewBase::currentSelectionChanged);
+    connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &TreeViewBase::onCurrentSelectionChanged);
 }
 
 void TreeViewBase::collapseRecursively(const QModelIndex& index, int depth)
@@ -397,6 +512,56 @@ QModelIndexList TreeViewBase::findParents(const QModelIndex &index) const
     return result;
 }
 
+void TreeViewBase::logIndex(const char* file, int lineNumber, Log::LogLevel level, const QModelIndex& index, const QString& text)
+{
+    Log::logText(file, lineNumber, level, QString("%1: %2 [%3]")
+                 .arg(text)
+                 .arg(index.data().toString())
+                 .arg(index.data(KANOOP::UUidRole).toUuid().toString(QUuid::WithoutBraces)));
+}
+
+bool TreeViewBase::testMatch(const QModelIndex& index, int role, const QVariant& value, Qt::MatchFlags flags, QModelIndexList& foundIndexes)
+{
+    QVariant valueAtIndex = index.data(role);
+    if(valueAtIndex.isNull()) {
+        return value.isNull() ? true : false;
+    }
+
+    bool result = false;
+    int matchFlags = flags & Qt::MatchTypeMask;
+    switch(matchFlags) {
+    case Qt::MatchExactly:
+        result = value == valueAtIndex;
+        break;
+    case Qt::MatchWildcard:     // not supported (yet)
+    case Qt::MatchFixedString:  // not supported (yet)
+    case Qt::MatchContains:
+        result = valueAtIndex.toString().contains(value.toString(), flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        break;
+    case Qt::MatchStartsWith:
+        result = valueAtIndex.toString().startsWith(value.toString(), flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        break;
+    case Qt::MatchEndsWith:
+        result = valueAtIndex.toString().endsWith(value.toString(), flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        break;
+    case Qt::MatchRegularExpression:
+    {
+        QRegularExpression regex(value.toString());
+        QRegularExpressionMatch match = regex.match(valueAtIndex.toString());
+        result = match.hasMatch();
+        break;
+    }
+    default:
+        break;
+    }
+
+    if(result) {
+        foundIndexes.append(index);
+        return true;
+    }
+    return false;
+}
+
 void TreeViewBase::onHorizontalHeaderResized(int, int, int)
 {
     if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
@@ -464,6 +629,15 @@ void TreeViewBase::onResetColumnsClicked()
         header()->resizeSection(section, 120);
     }
     GuiSettings::globalInstance()->saveLastHeaderState(header(), sourceModel());
+}
+
+void TreeViewBase::onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    Q_UNUSED(previous)
+    emit currentSelectionChanged();
+    if(current.isValid()) {
+        emit currentIndexChanged(current);
+    }
 }
 
 QModelIndexList TreeViewBase::indexesOfUuid(const QUuid& uuid) const

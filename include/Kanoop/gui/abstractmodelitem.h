@@ -50,7 +50,7 @@ public:
     int row() const;
 
     AbstractModelItem* parent() const { return _parent; }
-    AbstractModelItem* child(int row);
+    AbstractModelItem* child(int row) const;
     List children() const { return _children; }
     List& childrenRef() { return _children; }
     List siblings() const { return _siblings; }

@@ -117,7 +117,7 @@ void AbstractModelItem::deleteChild(AbstractModelItem *child)
     delete child;
 }
 
-AbstractModelItem *AbstractModelItem::child(int row)
+AbstractModelItem *AbstractModelItem::child(int row) const
 {
     AbstractModelItem* result = row < _children.count() ? _children.at(row) : nullptr;
     return result;

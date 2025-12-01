@@ -16,6 +16,10 @@ public:
 
     virtual void setModel(QAbstractItemModel* model) override;
 
+    virtual QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
+    virtual QModelIndexList indexesOfUuid(const QUuid& uuid) const;
+    virtual void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
+
     AbstractItemModel* sourceModel() const { return _sourceModel; }
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
 
@@ -25,6 +29,10 @@ private:
 
 signals:
     void currentSelectionChanged();
+    void currentIndexChanged(const QModelIndex& index);
+
+private slots:
+    void onCurrentSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 };
 
 #endif // LISTVIEW_H

@@ -41,28 +41,28 @@ void Label::setFontPixelSize(int size)
 void Label::setForegroundColor(const QColor &color)
 {
     _foregroundColor = color;
-    makeStyleSheet();
+    applyStylesheet();
 }
 
 void Label::setBackgroundColor(const QColor &color)
 {
     _backgroundColor = color;
-    makeStyleSheet();
+    applyStylesheet();
 }
 
 void Label::setDefaultForegroundColor()
 {
     _foregroundColor = palette().color(QPalette::Text);
-    makeStyleSheet();
+    applyStylesheet();
 }
 
 void Label::setDefaultBackgroundColor()
 {
     _backgroundColor = palette().color(QPalette::Window);
-    makeStyleSheet();
+    applyStylesheet();
 }
 
-void Label::makeStyleSheet()
+void Label::applyStylesheet()
 {
     StyleSheet<QLabel> ss;
     ss.setProperty(SP_Color, _foregroundColor);
