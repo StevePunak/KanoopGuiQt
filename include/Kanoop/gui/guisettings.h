@@ -10,6 +10,7 @@
 ******************************************************************************************/
 #ifndef GUISETTINGS_H
 #define GUISETTINGS_H
+#include <QObject>
 #include <QSettings>
 #include <QWidget>
 #include <Kanoop/gui/libkanoopgui.h>
@@ -18,8 +19,10 @@ class QHeaderView;
 class QSplitter;
 class AbstractItemModel;
 class TreeViewBase;
-class LIBKANOOPGUI_EXPORT GuiSettings
+class LIBKANOOPGUI_EXPORT GuiSettings : public QObject
 {
+    Q_OBJECT
+
 public:
     GuiSettings();
 
@@ -66,6 +69,9 @@ public:
 
     static GuiSettings* globalInstance();
     static void setGlobalInstance(GuiSettings* value) { _globalInstance = value; }
+
+signals:
+    void settingsChanged();
 
 protected:
     static QString makeStandardKey(const QString& key) { return QString("%1/%2").arg(KEY_APP).arg(key); }

@@ -158,11 +158,11 @@ void MainWindowBase::onPreferencesChanged()
     newFont.setPointSize(pointSize);
     setFont(newFont);
 
-    // Not sure why menus are still rendered in system font, but we will
-    // fix that up here
-    QList<QMenu*> menus = findChildren<QMenu*>();
-    for(QMenu* menu : menus) {
-        menu->setFont(newFont);
+    // Force all child widgets to update their fonts
+    for (QWidget* widget : findChildren<QWidget*>()) {
+        if (widget != this) { // Don't set font on self again
+            widget->setFont(newFont);
+        }
     }
 }
 
