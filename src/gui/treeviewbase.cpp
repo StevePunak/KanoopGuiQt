@@ -512,6 +512,22 @@ QModelIndexList TreeViewBase::findParents(const QModelIndex &index) const
     return result;
 }
 
+QModelIndexList TreeViewBase::mapToSource(const QModelIndexList& indexes) const
+{
+    if(sourceModel() == nullptr || model() == sourceModel() || proxyModel() == nullptr) {
+        return indexes;
+    }
+
+    QModelIndexList result;
+    for(const QModelIndex& index : indexes) {
+        QModelIndex sourceIndex = proxyModel()->mapToSource(index);
+        if(sourceIndex.isValid()) {
+            result.append(sourceIndex);
+        }
+    }
+    return result;
+}
+
 void TreeViewBase::logIndex(const char* file, int lineNumber, Log::LogLevel level, const QModelIndex& index, const QString& text)
 {
     Log::logText(file, lineNumber, level, QString("%1: %2 [%3]")

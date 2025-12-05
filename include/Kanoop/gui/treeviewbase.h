@@ -76,6 +76,8 @@ protected:
     EntityMetadata findCurrentParent(int entityMetadataType) const;
     EntityMetadata findFirstParent(const QModelIndex& index, int entityMetadataType) const;
     QModelIndexList findParents(const QModelIndex& index) const;
+    QModelIndexList mapToSource(const QModelIndexList& indexes) const;
+
 
     virtual void addHeaderContextMenuItems(QMenu* menu, const QPoint& globalPos) { Q_UNUSED(menu) Q_UNUSED(globalPos) }
 
