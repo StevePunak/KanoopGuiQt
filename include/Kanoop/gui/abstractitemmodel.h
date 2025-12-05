@@ -68,6 +68,7 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     virtual bool removeRows(int row, int count, const QModelIndex& parentIndex) override;
     virtual bool hasChildren(const QModelIndex& parent) const override;
+    virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role) override;
 
     void setColumnHeaderVisible(int type, bool visible);
 
@@ -90,8 +91,10 @@ protected:
     void appendColumnHeader(int type, const QColor& columnTextColor, const QString& text);
     void insertColumnHeader(int type, int index, const QString& text);
     void appendAdHocColumnHeader(int type, const QString& value) { appendColumnHeader(type, value); }
+    void deleteColumnHeader(int section);
     void appendRowHeader(int type, const QString& value = QString());
     void appendAdHocRowHeader(int type, const QString& value) { appendRowHeader(type, value); }
+    void setColumnHeaderText(int section, const QString& text);
     void setColumnHeaderEntityMetadata(int type, const EntityMetadata& metadata);
     EntityMetadata columnEntityMetadata(int type) const;
 
@@ -108,6 +111,20 @@ protected:
     void updateItemAtIndex(const QModelIndex& itemIndex, const EntityMetadata &metadata);
     void updateItemsAtIndexes(const QModelIndexList& indexes, const EntityMetadata &metadata);
     void refreshAll();
+
+    template <typename T>
+    QList<T> findItems() const
+    {
+        QList<T> result;
+        for(AbstractModelItem* item : rootItems()) {
+            T candidate = dynamic_cast<T>(item);
+            if(candidate != nullptr) {
+                result.append(candidate);
+            }
+            result.append(item->findChildren<T>(true));
+        }
+        return result;
+    }
 
     // Search helpers
     QModelIndex findFirstDirectChild(const QModelIndex& parentIndex, const QVariant& value, int role) const;

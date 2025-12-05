@@ -178,6 +178,9 @@ QVariant AbstractItemModel::headerData(int section, Qt::Orientation orientation,
         result = orientation == Qt::Horizontal ? _columnHeaders.value(section).text() : _rowHeaders.value(section).text();
         break;
     default:
+        if(_columnHeaders.contains(section)) {
+            result = _columnHeaders[section].entityMetadata().data(role);
+        }
         break;
     }
     return result;
@@ -221,6 +224,21 @@ bool AbstractItemModel::hasChildren(const QModelIndex& parent) const
         result = _rootItems.count() > 0;
     }
     return result;
+}
+
+bool AbstractItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+{
+    if(orientation == Qt::Horizontal && _columnHeaders.contains(section) == true) {
+        TableHeader& header = _columnHeaders[section];
+        header.entityMetadataRef().setData(value, role);
+        return true;
+    }
+    else if(orientation == Qt::Vertical && _rowHeaders.contains(section) == true) {
+        TableHeader& header = _rowHeaders[section];
+        header.entityMetadataRef().setData(value, role);
+        return true;
+    }
+    return QAbstractItemModel::setHeaderData(section, orientation, value, role);
 }
 
 QModelIndexList AbstractItemModel::indexesOfEntityType(int type) const
@@ -426,12 +444,39 @@ void AbstractItemModel::insertColumnHeader(int type, int index, const QString& t
     endInsertColumns();
 }
 
+void AbstractItemModel::deleteColumnHeader(int section)
+{
+    TableHeader::List headers = _columnHeaders.toSortedList();
+    if(section >= headers.count()) {
+        logText(LVL_ERROR, QString("Failing to delete column header at section %1 (invalid state bug)").arg(section));
+        return;
+    }
+    headers.removeAt(section);
+
+    beginRemoveColumns(QModelIndex(), section, section);
+    _columnHeaders.clear();
+    for(int col = 0;col < headers.count();col++) {
+        _columnHeaders.insert(col, headers.at(col));
+    }
+    endRemoveColumns();
+}
+
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
 {
     QString text = value.isEmpty() ? TableHeader::typeToString(type) : value;
 
     TableHeader header(type, text, Qt::Vertical);
     _rowHeaders.insert(_columnHeaders.count(), header);
+}
+
+void AbstractItemModel::setColumnHeaderText(int section, const QString& text)
+{
+    if(_columnHeaders.contains(section) == false) {
+        return;
+    }
+
+    TableHeader& header = _columnHeaders[section];
+    header.setText(text);
 }
 
 void AbstractItemModel::setColumnHeaderEntityMetadata(int type, const EntityMetadata& metadata)

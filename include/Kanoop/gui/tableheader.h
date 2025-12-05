@@ -24,6 +24,8 @@ public:
 
     int type() const { return _type; }
     QString text() const { return _text; }
+    void setText(const QString& text) { _text = text; }
+
     Qt::Orientation orientation() const { return _orientation; }
 
     QColor columnTextColor() const { return _columnTextColor; }
@@ -33,13 +35,52 @@ public:
     void setVisible(bool value) { _visible = value; }
 
     EntityMetadata entityMetadata() const { return _entityMetadata; }
+    EntityMetadata& entityMetadataRef() { return _entityMetadata; }
     void setEntityMetadata(const EntityMetadata& value) { _entityMetadata = value; }
 
+    QVariant data(int role) const { return _entityMetadata.data(role); }
+    void setData(const QVariant& value, int role) { _entityMetadata.setData(value, role); }
+
+    QUuid uuid() const { return _entityMetadata.data(KANOOP::UUidRole).toUuid(); }
+
     bool isValid() const { return _type != 0; }
+
+    class List : public QList<TableHeader>
+    {
+    public:
+        void setHeaderVisible(int type, bool visible)
+        {
+            auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
+            if(it != end()) {
+                (*it).setVisible(visible);
+            }
+        }
+
+        TableHeader findByName(const QString& text) const
+        {
+            TableHeader result;
+            auto it = std::find_if(constBegin(), constEnd(), [text](const TableHeader& header) { return header.text() == text; });
+            if(it != constEnd()) {
+                result = *it;
+            }
+            return result;
+        }
+    };
 
     class IntMap : public QMap<int, TableHeader>
     {
     public:
+        List toSortedList() const
+        {
+            List result;
+            QList<int> cols = keys();
+            std::sort(cols.begin(), cols.end());
+            for(int col : cols) {
+                result.append(this->value(col));
+            }
+            return result;
+        }
+
         void setTextColorForType(int type, const QColor& color)
         {
             auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
@@ -62,28 +103,6 @@ public:
                 TableHeader& header = *it;
                 header.setEntityMetadata(metadata);
             }
-        }
-    };
-
-    class List : public QList<TableHeader>
-    {
-    public:
-        void setHeaderVisible(int type, bool visible)
-        {
-            auto it = std::find_if(begin(), end(), [type](TableHeader& header) { return header.type() == type; });
-            if(it != end()) {
-                (*it).setVisible(visible);
-            }
-        }
-
-        TableHeader findByName(const QString& text) const
-        {
-            TableHeader result;
-            auto it = std::find_if(constBegin(), constEnd(), [text](const TableHeader& header) { return header.text() == text; });
-            if(it != constEnd()) {
-                result = *it;
-            }
-            return result;
         }
     };
 
