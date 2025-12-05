@@ -67,6 +67,18 @@ public:
             return result;
         }
 
+        int firstIndexOfEntityType(int entityType) const
+        {
+            int result = -1;
+            for(int i = 0;i < count();i++) {
+                AbstractModelItem* item = this->at(i);
+                if(item->entityType() == entityType) {
+                    result = i;
+                    break;
+                }
+            }
+            return result;
+        }
         int lastIndexOfEntityType(int entityType) const
         {
             int result = -1;
@@ -74,6 +86,23 @@ public:
                 AbstractModelItem* item = this->at(i);
                 if(item->entityType() == entityType) {
                     result = i;
+                }
+            }
+            return result;
+        }
+
+        template <typename T>
+        QList<T> findChildItems(bool recursive = true) const
+        {
+            QList<T> result;
+            for(AbstractModelItem* item : *this) {
+                T candidate = dynamic_cast<T>(item);
+                if(candidate != nullptr) {
+                    result.append(candidate);
+                }
+
+                if(recursive) {
+                    result.append(item->findChildren<T>(recursive));
                 }
             }
             return result;
@@ -97,15 +126,9 @@ public:
     void deleteChild(AbstractModelItem* child);
 
     template <typename T>
-    QList<T> findChildren() const
+    QList<T> findChildren(bool recursive = false) const
     {
-        QList<T> result;
-        for(AbstractModelItem* item : _children) {
-            T candidate = dynamic_cast<T>(item);
-            if(candidate != nullptr) {
-                result.append(candidate);
-            }
-        }
+        QList<T> result = _children.findChildItems<T>(recursive);
         return result;
     }
 

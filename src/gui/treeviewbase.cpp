@@ -576,6 +576,12 @@ void TreeViewBase::onHeaderContextMenuRequested()
     _contextMenuPos = mapFromGlobal(QCursor::pos());
 
     QMenu menu;
+    // Allow subclasses to add their own actions
+    addHeaderContextMenuItems(&menu, QCursor::pos());
+    if(menu.actions().count() > 0) {
+        menu.addSeparator();
+    }
+
     menu.addAction(_actionColSettings);
     menu.addAction(_actionHideCol);
     menu.addAction(_actionAutoResizeCols);

@@ -77,6 +77,8 @@ protected:
     EntityMetadata findFirstParent(const QModelIndex& index, int entityMetadataType) const;
     QModelIndexList findParents(const QModelIndex& index) const;
 
+    virtual void addHeaderContextMenuItems(QMenu* menu, const QPoint& globalPos) { Q_UNUSED(menu) Q_UNUSED(globalPos) }
+
     static void logIndex(const char* file, int lineNumber, Log::LogLevel level, const QModelIndex& index, const QString& text);
     static bool testMatch(const QModelIndex& index, int role, const QVariant &value, Qt::MatchFlags flags, QModelIndexList& foundIndexes);
 
