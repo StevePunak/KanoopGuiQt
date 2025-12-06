@@ -293,6 +293,12 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
     connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &TreeViewBase::onCurrentSelectionChanged);
 }
 
+void TreeViewBase::setSelectionModel(QItemSelectionModel* selectionModel)
+{
+    QTreeView::setSelectionModel(selectionModel);
+    connect(selectionModel, &QItemSelectionModel::currentChanged, this, &TreeViewBase::onCurrentSelectionChanged);
+}
+
 void TreeViewBase::collapseRecursively(const QModelIndex& index, int depth)
 {
     collapse(index);

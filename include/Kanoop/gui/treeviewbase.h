@@ -54,6 +54,7 @@ public:
     void restoreHeaderStates();
 
     virtual void setModel(QAbstractItemModel* model) override;
+    virtual void setSelectionModel(QItemSelectionModel* selectionModel) override;
     AbstractItemModel* sourceModel() const { return _sourceModel; }
     QSortFilterProxyModel* proxyModel() const { return _proxyModel; }
 
