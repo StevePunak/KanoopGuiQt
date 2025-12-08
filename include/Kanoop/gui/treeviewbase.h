@@ -61,6 +61,8 @@ public:
     void collapseRecursively(const QModelIndex& index, int depth = -1);
     bool isLeafExpanded(const QModelIndex& index, bool recursive = true) const;
 
+    bool isIndexVisible(const QModelIndex& index) const;
+
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 
     int columnForHeaderType(int headerType) const;

@@ -16,6 +16,7 @@
 #include <guisettings.h>
 #include <treeviewbase.h>
 
+#include <Kanoop/geometry/rectangle.h>
 #include <Kanoop/stringutil.h>
 #include <QHeaderView>
 #include <QStyledItemDelegate>
@@ -336,6 +337,13 @@ bool TreeViewBase::isLeafExpanded(const QModelIndex& index, bool recursive) cons
         }
     }
     return true;
+}
+
+bool TreeViewBase::isIndexVisible(const QModelIndex& index) const
+{
+    Rectangle rectForIndex = visualRect(index);
+    Rectangle viewportRect = viewport()->rect();
+    return viewportRect.intersects(rectForIndex);
 }
 
 void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)

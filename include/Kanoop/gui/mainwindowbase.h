@@ -49,13 +49,13 @@ public:
     QMdiArea* parentMdiArea();
     StatusBar* statusBar();
 
+    bool formLoadComplete() const { return _formLoadComplete; }
+    bool formLoadFailed() const { return _formLoadFailed; }
+
 protected:
     void initializeBase();
 
-    bool formLoadComplete() const { return _formLoadComplete; }
     void setFormLoadComplete(bool value) { _formLoadComplete = value; }
-
-    bool formLoadFailed() const { return _formLoadFailed; }
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
     // QWidget interface
