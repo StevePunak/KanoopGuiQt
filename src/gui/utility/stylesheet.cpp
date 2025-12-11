@@ -17,6 +17,7 @@
 #include <QScrollBar>
 #include <QToolBar>
 #include <QGroupBox>
+#include <QWizard>
 
 
 template<typename T>
@@ -84,4 +85,6 @@ template class StyleSheet<QComboBox>;
 template class StyleSheet<QTabWidget>;
 template class StyleSheet<QScrollBar>;
 template class StyleSheet<QTabBar>;
+template class StyleSheet<QWizard>;
+template class StyleSheet<QWizardPage>;
 
