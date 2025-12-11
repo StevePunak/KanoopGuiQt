@@ -2,8 +2,9 @@
 #define CHECKBOX_H
 
 #include <QCheckBox>
+#include <Kanoop/gui/libkanoopgui.h>
 
-class CheckBox : public QCheckBox
+class LIBKANOOPGUI_EXPORT CheckBox : public QCheckBox
 {
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)             // clazy:exclude=qproperty-without-notify
     Q_OBJECT
