@@ -25,6 +25,7 @@ public:
         UnknownImage = 0,
 
         BackDelete,
+        CheckBox,
         DropDownDown,
         DropDownUp,
         CloseButton,
@@ -52,6 +53,7 @@ private:
         StandardImageToStringMap()
         {
             insert(BackDelete,          "back-delete.png");
+            insert(CheckBox,            "checkbox.png");
             insert(CloseButton,         "close-button.png");
             insert(DropDownDown,        "dropdown-down.png");
             insert(DropDownUp,          "dropdown-up.png");

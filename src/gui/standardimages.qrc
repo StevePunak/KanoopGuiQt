@@ -16,5 +16,7 @@
         <file>assets/dropdown-down.png</file>
         <file>assets/dropdown-up.png</file>
         <file>assets/label.png</file>
+        <file>assets/checkbox.png</file>
+        <file>assets/simulation.png</file>
     </qresource>
 </RCC>
