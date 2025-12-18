@@ -123,6 +123,16 @@ AbstractModelItem *AbstractModelItem::child(int row) const
     return result;
 }
 
+AbstractModelItem::List AbstractModelItem::siblings() const
+{
+    List result;
+    if(_parent != nullptr) {
+        result = _parent->_children;
+        result.removeAll(this);
+    }
+    return result;
+}
+
 int AbstractModelItem::childCount(int entityType) const
 {
     int count = 0;

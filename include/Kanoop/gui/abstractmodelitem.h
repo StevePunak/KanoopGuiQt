@@ -116,7 +116,7 @@ public:
     AbstractModelItem* child(int row) const;
     List children() const { return _children; }
     List& childrenRef() { return _children; }
-    List siblings() const { return _siblings; }
+    List siblings() const;
 
     int childCount(int entityType = 0) const;
     int childCountRecursive(int entityType = 0) const;
@@ -157,7 +157,6 @@ private:
     QUuid _uuid;
     AbstractModelItem* _parent;
     List _children;
-    List _siblings;
 
     QIcon _icon;
 };
