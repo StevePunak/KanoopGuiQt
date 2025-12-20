@@ -41,13 +41,13 @@ void Label::setFontPixelSize(int size)
 void Label::setForegroundColor(const QColor &color)
 {
     _foregroundColor = color;
-    applyStylesheet();
+    Label::applyStylesheet();
 }
 
 void Label::setBackgroundColor(const QColor &color)
 {
     _backgroundColor = color;
-    applyStylesheet();
+    Label::applyStylesheet();
 }
 
 void Label::setDefaultForegroundColor()
