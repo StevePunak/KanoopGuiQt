@@ -112,7 +112,7 @@ int AbstractItemModel::rowCount(const QModelIndex &parent) const
     // We don't support children other than column 0
     if(parent.isValid()) {
         if(parent.column() == 0) {
-            result = static_cast<AbstractModelItem*>(parent.internalPointer())->children().count();
+            result = static_cast<AbstractModelItem*>(parent.internalPointer())->childCount();
         }
     }
     else {
@@ -126,7 +126,7 @@ int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
     logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
 
-    return qMax(1, columnHeadersIntMap().count());
+    return qMax(1, _columnHeaders.count());
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
@@ -218,7 +218,7 @@ bool AbstractItemModel::hasChildren(const QModelIndex& parent) const
 
     if(parent.isValid() && parent.internalPointer() != nullptr) {
         AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parent.internalPointer());
-        result = parentItem->childrenRef().count() > 0;
+        result = parentItem->childCount() > 0;
     }
     else if(parent.isValid() == false) {
         result = _rootItems.count() > 0;
@@ -494,9 +494,9 @@ void AbstractItemModel::setColumnHeaderVisible(int type, bool visible)
     _columnHeaders.setHeaderVisible(type, visible);
 }
 
-QString AbstractItemModel::indexToString(const QModelIndex& index)
+QString AbstractItemModel::indexToString(const QModelIndex& index, bool includeText)
 {
-    return toString(index);
+    return toString(index, includeText);
 }
 
 int AbstractItemModel::columnForHeader(int type) const
@@ -617,12 +617,16 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
     emit dataChanged(firstColIndex, lastColIndex);
 }
 
-QString AbstractItemModel::toString(const QModelIndex &index)
+QString AbstractItemModel::toString(const QModelIndex &index, bool includeText)
 {
-    return QString("row: %1  col: %2  ptr: 0x%3")
-            .arg(index.row())
-            .arg(index.column())
-            .arg((quint64)index.constInternalPointer(), 0, 16);
+    QString result = QString("row: %1  col: %2  ptr: 0x%3")
+                     .arg(index.row())
+                     .arg(index.column())
+                     .arg((quint64)index.constInternalPointer(), 0, 16);
+    if(includeText) {
+        result.append(QString(" [%1]").arg(index.data().toString()));
+    }
+    return result;
 }
 
 

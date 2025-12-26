@@ -75,4 +75,5 @@ void ListView::onCurrentSelectionChanged(const QModelIndex& current, const QMode
 {
     Q_UNUSED(previous)
     emit currentIndexChanged(current);
+    emit currentSelectionChanged();
 }

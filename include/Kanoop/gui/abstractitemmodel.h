@@ -72,7 +72,7 @@ public:
 
     void setColumnHeaderVisible(int type, bool visible);
 
-    static QString indexToString(const QModelIndex& index);
+    static QString indexToString(const QModelIndex& index, bool includeText = false);
 
 protected:
     // Retrieve root items
@@ -135,7 +135,7 @@ protected:
     void emitRowChanged(const QModelIndex &rowIndex);
 
 public:
-    static QString toString(const QModelIndex& index);
+    static QString toString(const QModelIndex& index, bool includeText = false);
 
 private:
     void commonInit();
