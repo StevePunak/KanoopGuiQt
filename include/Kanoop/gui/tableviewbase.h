@@ -66,6 +66,8 @@ private:
     QAction* _actionAutoResizeCols = nullptr;
     QAction* _actionResetCols = nullptr;
 
+    QPoint _contextMenuPoint;
+
 signals:
     void horizontalHeaderChanged();
     void verticalHeaderChanged();
@@ -84,7 +86,7 @@ private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
     virtual void onVerticalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
 
-    void onHeaderContextMenuRequested();
+    void onHeaderContextMenuRequested(const QPoint& pos);
     void onColumnSettingsClicked();
     void onHideColumnClicked();
     void onAutoResizeColumnsClicked();

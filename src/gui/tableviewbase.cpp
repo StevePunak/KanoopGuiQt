@@ -247,8 +247,10 @@ void TableViewBase::onVerticalHeaderResized(int, int, int)
     emit verticalHeaderChanged();
 }
 
-void TableViewBase::onHeaderContextMenuRequested()
+void TableViewBase::onHeaderContextMenuRequested(const QPoint &pos)
 {
+    _contextMenuPoint = pos;
+
     QMenu menu;
     menu.addAction(_actionColSettings);
     menu.addAction(_actionHideCol);
@@ -278,7 +280,7 @@ void TableViewBase::onColumnSettingsClicked()
 
 void TableViewBase::onHideColumnClicked()
 {
-    int section = horizontalHeader()->logicalIndexAt(QCursor::pos());
+    int section = horizontalHeader()->logicalIndexAt(_contextMenuPoint);
     if(section < 0 || sourceModel() == nullptr) {
         return;
     }
