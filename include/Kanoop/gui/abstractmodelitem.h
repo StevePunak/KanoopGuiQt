@@ -153,9 +153,9 @@ protected:
 
 private:
     EntityMetadata _entityMetadata;
-    AbstractItemModel* _model;
+    AbstractItemModel* _model = nullptr;
     QUuid _uuid;
-    AbstractModelItem* _parent;
+    AbstractModelItem* _parent = nullptr;
     List _children;
 
     QIcon _icon;

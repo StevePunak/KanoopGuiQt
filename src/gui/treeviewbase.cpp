@@ -283,7 +283,7 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
             _sourceModel = abstractModel;
         }
         else {
-            logText(LVL_ERROR, "The provided model is not an AbstractItemModel. Results are now undefined.");
+            logText(LVL_WARNING, "The provided model is not an AbstractItemModel. Be careful!");
         }
     }
     else {
