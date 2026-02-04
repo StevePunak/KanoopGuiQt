@@ -170,6 +170,11 @@ QModelIndex TreeViewBase::finalChildIndex(const QModelIndex& from) const
 
 QModelIndex TreeViewBase::nextIndex(const QModelIndex& from) const
 {
+    // check if current index has children (using column 0)
+    if (model()->rowCount(from.siblingAtColumn(0)) > 0) {
+        return model()->index(0, from.column(), from.siblingAtColumn(0));
+    }
+
     QModelIndex result = model()->sibling(from.row() + 1, from.column(), from);
     if(result.isValid() == false) {
         // climb up to parents next sibling
