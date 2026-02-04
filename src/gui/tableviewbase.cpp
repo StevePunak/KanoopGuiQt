@@ -17,6 +17,7 @@
 #include <QMenu>
 #include <QSortFilterProxyModel>
 #include <QStyledItemDelegate>
+#include <Kanoop/geometry/rectangle.h>
 
 TableViewBase::TableViewBase(QWidget *parent) :
     QTableView(parent),
@@ -179,6 +180,13 @@ void TableViewBase::setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint)
         scrollTo(index, scrollHint);
         selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current | QItemSelectionModel::Rows);
     }
+}
+
+bool TableViewBase::isIndexVisible(const QModelIndex& index) const
+{
+    Rectangle rectForIndex = visualRect(index);
+    Rectangle viewportRect = viewport()->rect();
+    return viewportRect.intersects(rectForIndex);
 }
 
 void TableViewBase::restoreHeaderStates()

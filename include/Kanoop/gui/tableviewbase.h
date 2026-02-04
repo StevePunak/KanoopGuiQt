@@ -47,6 +47,8 @@ public:
 
     void setCurrentUuid(const QUuid& uuid, ScrollHint scrollHint = EnsureVisible);
 
+    bool isIndexVisible(const QModelIndex& index) const;
+
     void restoreHeaderStates();
     void restoreHorizontalHeaderState();
     void restoreVerticalHeaderState();
