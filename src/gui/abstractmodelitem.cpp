@@ -117,6 +117,12 @@ void AbstractModelItem::deleteChild(AbstractModelItem *child)
     delete child;
 }
 
+void AbstractModelItem::deleteAllChildren()
+{
+    qDeleteAll(_children);
+    _children.clear();
+}
+
 AbstractModelItem *AbstractModelItem::child(int row) const
 {
     AbstractModelItem* result = row < _children.count() ? _children.at(row) : nullptr;
