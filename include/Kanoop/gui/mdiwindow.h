@@ -13,7 +13,7 @@ public:
 
 protected:
     MainWindowBase* activeSubWindow();
-    virtual void openSubWindow(MainWindowBase* window, int type);
+    virtual MdiSubWindow* openSubWindow(MainWindowBase* window, int type);
     virtual void closeSubWindows(int type);
 
     MdiSubWindow* findFirstMdiSubWindow(int type) const;

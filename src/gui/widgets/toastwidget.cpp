@@ -4,6 +4,7 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <QToolButton>
+#include <QVBoxLayout>
 #include <resources.h>
 #include <stylesheets.h>
 
@@ -28,14 +29,14 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
 {
     setAttribute(Qt::WA_TransparentForMouseEvents, false);
 
-    _closeButton = new QToolButton(this);
+    _closeButton = new QToolButton;
     _closeButton->setIcon(Resources::getIcon(Resources::CloseButton));
     _closeButton->setFixedSize(16, 16);
     _closeButton->setAttribute(Qt::WA_TransparentForMouseEvents, false);
     connect(_closeButton, &QToolButton::clicked, this, &ToastWidget::complete);
     connect(_closeButton, &QToolButton::clicked, this, &ToastWidget::onClick);
 
-    _label = new Label(text, this);
+    _label = new Label(text);
     _label->setWordWrap(true);
     _label->setAlignment(Qt::AlignCenter);
     _label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
@@ -52,6 +53,12 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
 
     _label->setStyleSheet(styleSheet());
     _closeButton->setStyleSheet(styleSheet());
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(_closeButton);
+    layout->addWidget(_label);
+
+    setLayout(layout);
 
     // calculate fade sleep
     _fadeSleepTime = TimeSpan::fromMilliseconds(50);

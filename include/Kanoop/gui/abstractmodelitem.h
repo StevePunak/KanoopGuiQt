@@ -124,6 +124,7 @@ public:
     AbstractModelItem* insertChild(int index, AbstractModelItem* child);
     AbstractModelItem* appendChild(AbstractModelItem* child);
     void deleteChild(AbstractModelItem* child);
+    void deleteAllChildren();
 
     template <typename T>
     QList<T> findChildren(bool recursive = false) const
