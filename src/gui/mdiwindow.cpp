@@ -19,11 +19,11 @@ MainWindowBase* MdiWindow::activeSubWindow()
     return result;
 }
 
-void MdiWindow::openSubWindow(MainWindowBase* window, int type)
+MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
 {
     if(mdiArea() == nullptr) {
         logText(LVL_ERROR, "Can't add sub-window without setting MDI area first");
-        return;
+        return nullptr;
     }
 
     window->setType(type);
@@ -56,6 +56,8 @@ void MdiWindow::openSubWindow(MainWindowBase* window, int type)
 
     mdiSubWindow->show();
     window->show();
+
+    return mdiSubWindow;
 }
 
 void MdiWindow::closeSubWindows(int type)
