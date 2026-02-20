@@ -36,6 +36,11 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
     connect(_closeButton, &QToolButton::clicked, this, &ToastWidget::complete);
     connect(_closeButton, &QToolButton::clicked, this, &ToastWidget::onClick);
 
+    QHBoxLayout* topLayout = new QHBoxLayout;
+    topLayout->addStretch(1);
+    topLayout->addWidget(_closeButton);
+    topLayout->setContentsMargins(0, 0, 0, 0);
+
     _label = new Label(text);
     _label->setWordWrap(true);
     _label->setAlignment(Qt::AlignCenter);
@@ -55,7 +60,8 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
     _closeButton->setStyleSheet(styleSheet());
 
     QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(_closeButton);
+    layout->setSpacing(0);
+    layout->addLayout(topLayout);
     layout->addWidget(_label);
 
     setLayout(layout);
