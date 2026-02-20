@@ -16,7 +16,7 @@ public:
     virtual QString group() const override { return "Kanoop"; }
     virtual QString toolTip() const override { return "Colored Label"; }
     virtual QString whatsThis() const override { return "Colored Label"; }
-    virtual QString includeFile() const override { return "Kanoop/gui/widgets/label.h"; }
+    virtual QString includeFile() const override { return "KanoopGuiQt/gui/widgets/label.h"; }
     virtual QIcon icon() const override;
     virtual bool isContainer() const override { return false; }
     virtual QWidget* createWidget(QWidget* parent) override;

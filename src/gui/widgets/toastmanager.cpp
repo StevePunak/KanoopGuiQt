@@ -38,10 +38,10 @@ void ToastManager::displayToast(const QString& text, const QColor& backgroundCol
     _toasts.append(toast);
 
     QFontMetrics fm(toast->font());
-    QRect boundingRect = fm.boundingRect(0, 0, _size.width(), 0, Qt::TextWordWrap, text);
-    boundingRect.setHeight(boundingRect.height() + 48);     // close button
-    boundingRect.setWidth(_size.width());
-    toast->setFixedSize(boundingRect.size());
+    QRect maxRect(QPoint(0, 0), QSize(_size.width(), 500));
+    QRect boundingRect = fm.boundingRect(maxRect, Qt::TextWordWrap, text);
+    QSize widgetSize(_size.width(), boundingRect.height() * 3);
+    toast->setFixedSize(widgetSize);
     toast->show();
 
     performLayout();
