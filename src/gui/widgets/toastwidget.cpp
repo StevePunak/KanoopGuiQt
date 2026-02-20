@@ -4,7 +4,6 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <QToolButton>
-#include <QVBoxLayout>
 #include <resources.h>
 #include <stylesheets.h>
 
@@ -29,19 +28,14 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
 {
     setAttribute(Qt::WA_TransparentForMouseEvents, false);
 
-    _closeButton = new QToolButton;
+    _closeButton = new QToolButton(this);
     _closeButton->setIcon(Resources::getIcon(Resources::CloseButton));
     _closeButton->setFixedSize(16, 16);
     _closeButton->setAttribute(Qt::WA_TransparentForMouseEvents, false);
     connect(_closeButton, &QToolButton::clicked, this, &ToastWidget::complete);
     connect(_closeButton, &QToolButton::clicked, this, &ToastWidget::onClick);
 
-    QHBoxLayout* topLayout = new QHBoxLayout;
-    topLayout->addStretch(1);
-    topLayout->addWidget(_closeButton);
-    topLayout->setContentsMargins(0, 0, 0, 0);
-
-    _label = new Label(text);
+    _label = new Label(text, this);
     _label->setWordWrap(true);
     _label->setAlignment(Qt::AlignCenter);
     _label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
@@ -59,13 +53,6 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
     _label->setStyleSheet(styleSheet());
     _closeButton->setStyleSheet(styleSheet());
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->setSpacing(0);
-    layout->addLayout(topLayout);
-    layout->addWidget(_label);
-
-    setLayout(layout);
-
     // calculate fade sleep
     _fadeSleepTime = TimeSpan::fromMilliseconds(50);
     double steps = fadeTime.totalMilliseconds() / _fadeSleepTime.totalMilliseconds();
@@ -77,9 +64,11 @@ ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, con
 void ToastWidget::resizeEvent(QResizeEvent* event)
 {
     static const int CloseButtonOffset = 2;
+    static const int LabelMargin = 4;
     QFrame::resizeEvent(event);
-    QSize size = event->size().shrunkBy(QMargins(2, 2, 2, 2));
+    QSize size = event->size().shrunkBy(QMargins(LabelMargin, LabelMargin, LabelMargin, LabelMargin));
     _label->resize(size);
+    _label->move(LabelMargin, LabelMargin);
     QPoint pos((event->size().width() - _closeButton->width()) - CloseButtonOffset, CloseButtonOffset);
     _closeButton->move(pos);
     _closeButton->raise();
