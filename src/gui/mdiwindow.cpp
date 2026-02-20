@@ -63,8 +63,7 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
 void MdiWindow::closeSubWindows(int type)
 {
     for(MdiSubWindow* window : findMdiSubWindows(type)) {
-        window->close();
-        delete window;
+        window->close();  // WA_DeleteOnClose handles deletion
     }
 }
 

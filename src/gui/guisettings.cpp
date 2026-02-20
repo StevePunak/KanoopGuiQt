@@ -215,7 +215,7 @@ void GuiSettings::restoreTreeViewState(TreeViewBase *treeView)
 
 GuiSettings *GuiSettings::globalInstance()
 {
-    QMutex _lock;
+    static QMutex _lock;
     _lock.lock();
     if(_globalInstance == nullptr) {
         _globalInstance = new GuiSettings;

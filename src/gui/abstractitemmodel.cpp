@@ -400,7 +400,7 @@ void AbstractItemModel::appendRootItems(QList<AbstractModelItem*> items)
 
     int firstRow = rowCount(QModelIndex());
     int lastRow = firstRow + items.count() - 1;
-    QModelIndex insertIndex = index(firstRow, lastRow, QModelIndex());
+    QModelIndex insertIndex = index(firstRow, 0, QModelIndex());
 
     beginInsertRows(insertIndex, firstRow, lastRow);
     _rootItems.append(items);

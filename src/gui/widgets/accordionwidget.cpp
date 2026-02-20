@@ -37,7 +37,10 @@ void AccordionWidget::removeItem(int index)
 {
     QVBoxLayout* layout = static_cast<QVBoxLayout*>(AccordionWidget::layout());
     QLayoutItem* item = layout->takeAt(index);
-    delete item->widget();
+    if(item != nullptr) {
+        delete item->widget();
+        delete item;
+    }
     emit itemCountModified();
 }
 

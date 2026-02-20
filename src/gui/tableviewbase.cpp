@@ -214,7 +214,7 @@ void TableViewBase::restoreVerticalHeaderState()
 void TableViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 {
     QStyledItemDelegate* existing = _columnDelegates.value(type);
-    if(existing == nullptr) {
+    if(existing != nullptr) {
         _columnDelegates.remove(type);
         delete existing;
     }
