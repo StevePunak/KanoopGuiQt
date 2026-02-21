@@ -1,0 +1,26 @@
+var classPlayPauseButton =
+[
+    [ "PlayPauseButton", "classPlayPauseButton.html#add8648fc8cc3ecb0dd2bdb67b42aaf20", null ],
+    [ "clicked", "classPlayPauseButton.html#a791673ec6e686ddfbdfa0a15c314d136", null ],
+    [ "iconWhilePaused", "classPlayPauseButton.html#a1b1208e0827395344fcd62578e08d58a", null ],
+    [ "iconWhilePlaying", "classPlayPauseButton.html#a51f93931c2ab98a2cc97fb64b61359f3", null ],
+    [ "isPlaying", "classPlayPauseButton.html#af60ba43eb86e46715af4b58d328f720c", null ],
+    [ "isTextVisible", "classPlayPauseButton.html#a840aa11ee08a201252e415781eaaeff5", null ],
+    [ "playingChanged", "classPlayPauseButton.html#a6ad1734cade8fb6b29cb34c2dde775c3", null ],
+    [ "setButtonSize", "classPlayPauseButton.html#a33eadf2bbc741a90159171c6e5e318f2", null ],
+    [ "setIconWhilePaused", "classPlayPauseButton.html#a077d47213946816571cf1318f9979b61", null ],
+    [ "setIconWhilePlaying", "classPlayPauseButton.html#a5f52bdfdf505f71ee8c3b90260cc6ae1", null ],
+    [ "setPlaying", "classPlayPauseButton.html#ab986315a612fdd4c557b2b42d493edc7", null ],
+    [ "setText", "classPlayPauseButton.html#a6229a92683b94eeba9e44deef8cc3aac", null ],
+    [ "setTextAlignment", "classPlayPauseButton.html#ae62523b846e17f0a112e190f637b1f31", null ],
+    [ "setTextVisible", "classPlayPauseButton.html#a56288b4537355f697a7d86911084032f", null ],
+    [ "text", "classPlayPauseButton.html#a12241a5886c71dd731a3804402557b4b", null ],
+    [ "textAlignment", "classPlayPauseButton.html#a201cdd73c6470783e9f2bc46d1e7f180", null ],
+    [ "textChanged", "classPlayPauseButton.html#a036fb42d55df5c05fcbc3a0e79bc0660", null ],
+    [ "iconWhilePaused", "classPlayPauseButton.html#a78fa64c1400772ff686e1761a03d8dba", null ],
+    [ "iconWhilePlaying", "classPlayPauseButton.html#a6328f777f073111f22b664d748fc7b13", null ],
+    [ "playing", "classPlayPauseButton.html#a1d77dc1f7eda602f9dcbcdeb1142b924", null ],
+    [ "text", "classPlayPauseButton.html#a4ca9cf8e10551f8e670b5fb3aa5a2f02", null ],
+    [ "textAlignment", "classPlayPauseButton.html#a07f8388f47ec970fdc215d751545b7b2", null ],
+    [ "textVisible", "classPlayPauseButton.html#a1ebd104d4dff94b8baa7f02e13955c9c", null ]
+];

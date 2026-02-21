@@ -1,0 +1,14 @@
+PROJECT_NAME           = KanoopGuiQt
+PROJECT_NUMBER         = 1.3.0
+OUTPUT_DIRECTORY       = docs
+INPUT                  = include/
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = NO
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = YES
+JAVADOC_AUTOBRIEF      = YES

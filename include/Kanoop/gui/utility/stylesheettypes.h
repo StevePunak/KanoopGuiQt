@@ -3,7 +3,12 @@
 
 #include <Kanoop/kanoopcommon.h>
 
-
+/**
+ * @brief Qt stylesheet property identifiers.
+ *
+ * Each value corresponds to a CSS property supported by Qt's stylesheet engine.
+ * Pass these to StyleSheet::setProperty() or StyleSheetStrings::getPropertyString().
+ */
 enum StyleSheetProperty {
     SP_AccentColor,
     SP_AlternateBackgroundColor,
@@ -104,6 +109,12 @@ enum StyleSheetProperty {
     SP_QtStyleFeatures,
 };
 
+/**
+ * @brief Qt stylesheet pseudo-state identifiers.
+ *
+ * Each value corresponds to a CSS pseudo-state supported by Qt's stylesheet engine.
+ * Pass these to StyleSheet::setPseudoState() or StyleSheetStrings::getPseudoStateString().
+ */
 enum StyleSheetPseudoState {
     PS_Invalid = 0,
 
@@ -153,10 +164,24 @@ enum StyleSheetPseudoState {
     PS_Window,                  // The widget is a window (i.e top level widget)
 };
 
+/**
+ * @brief Utility class for converting stylesheet enums to their CSS string equivalents.
+ */
 class StyleSheetStrings
 {
 public:
+    /**
+     * @brief Return the CSS property name for a StyleSheetProperty value.
+     * @param property Property enum value
+     * @return CSS property name string (e.g., "background-color")
+     */
     static QString getPropertyString(StyleSheetProperty property) { return _PropertyToStringMap.getString(property); }
+
+    /**
+     * @brief Return the CSS pseudo-state name for a StyleSheetPseudoState value.
+     * @param pseudoState Pseudo-state enum value
+     * @return CSS pseudo-state string (e.g., "hover")
+     */
     static QString getPseudoStateString(StyleSheetPseudoState pseudoState) { return _PseudoStateToStringMap.getString(pseudoState); }
 
 private:

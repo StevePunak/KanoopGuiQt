@@ -13,6 +13,13 @@
 
 #include <QtCore/qglobal.h>
 
+/**
+ * @def LIBKANOOPGUI_EXPORT
+ * @brief Symbol visibility macro for KanoopGuiQt public API.
+ *
+ * Expands to Q_DECL_EXPORT when building the library and Q_DECL_IMPORT when
+ * consuming it.  Apply to every class or function that is part of the public API.
+ */
 #if defined(KANOOP_QTGUI_LIBRARY)
 #  define LIBKANOOPGUI_EXPORT Q_DECL_EXPORT
 #else
