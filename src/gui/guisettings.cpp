@@ -213,6 +213,11 @@ void GuiSettings::restoreTreeViewState(TreeViewBase *treeView)
     treeView->restoreState(state);
 }
 
+void GuiSettings::sync()
+{
+    _settings.sync();
+}
+
 GuiSettings *GuiSettings::globalInstance()
 {
     static QMutex _lock;

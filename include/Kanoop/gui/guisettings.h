@@ -209,6 +209,11 @@ public:
     virtual void saveLastDirectory(int fileType, const QString& value) { _settings.setValue(makeFileTypeKey(KEY_LAST_DIRECTORY, fileType), value); }
 
     /**
+     * @brief Synchronize settings file to disk and reload any changed values
+     */
+    void sync();
+
+    /**
      * @brief Return the persisted font size.
      * @return Font point size, or 0 if not set
      */
