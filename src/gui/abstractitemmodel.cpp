@@ -177,6 +177,11 @@ QVariant AbstractItemModel::headerData(int section, Qt::Orientation orientation,
     case Qt::DisplayRole:
         result = orientation == Qt::Horizontal ? _columnHeaders.value(section).text() : _rowHeaders.value(section).text();
         break;
+    case KANOOP::EntityMetadataRole:
+        if(_columnHeaders.contains(section)) {
+            result = _columnHeaders[section].entityMetadata().toVariant();
+        }
+        break;
     default:
         if(_columnHeaders.contains(section)) {
             result = _columnHeaders[section].entityMetadata().data(role);

@@ -113,6 +113,13 @@ public:
     QModelIndex findFirstMatch(const QVariant& needle, int role) const;
 
     /**
+     * @brief Return the first index whose item UUID matches.
+     * @param uuid UUID to search for
+     * @return First matching index, or invalid index if not found
+     */
+    virtual QModelIndex firstIndexOfEntityUuid(const QUuid& uuid) const;
+
+    /**
      * @brief Select the item with the given UUID and optionally scroll to it.
      * @param uuid UUID of the item to select
      * @param scrollHint How to scroll to make the item visible
