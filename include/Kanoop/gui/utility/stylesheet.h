@@ -55,6 +55,30 @@ public:
     void setPropertyPixels(StyleSheetProperty property, int value);
 
     /**
+     * @brief Set the background to a gradient string (qradialgradient / qlineargradient).
+     * @param gradient Full CSS gradient value string
+     */
+    void setGradient(const QString& gradient) { setProperty(SP_Background, gradient); }
+
+    /**
+     * @brief Set all four border properties at once using the dome highlight/shadow convention.
+     *
+     * Top and left edges receive @p topLeft (highlight); bottom and right receive
+     * @p bottomRight (shadow). This matches the standard glassy-dome button style
+     * used throughout the UI.
+     *
+     * @param topLeft     CSS border value for the top and left edges
+     * @param bottomRight CSS border value for the bottom and right edges
+     */
+    void setBorder(const QString& topLeft, const QString& bottomRight)
+    {
+        setProperty(SP_BorderTop,    topLeft);
+        setProperty(SP_BorderLeft,   topLeft);
+        setProperty(SP_BorderBottom, bottomRight);
+        setProperty(SP_BorderRight,  bottomRight);
+    }
+
+    /**
      * @brief Set the pseudo-state selector (e.g., PS_Hover, PS_Checked).
      * @param value Pseudo-state enum value
      */
