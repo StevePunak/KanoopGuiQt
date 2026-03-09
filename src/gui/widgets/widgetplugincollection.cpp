@@ -8,6 +8,7 @@ WidgetPluginCollection::WidgetPluginCollection(QObject *parent) :
     QObject(parent)
 {
     _widgets.append(new PlayPauseButtonDesignerPlugin(this));
+    _widgets.append(new PushButtonDesignerPlugin(this));
     _widgets.append(new LabelDesignerPlugin(this));
     _widgets.append(new CheckBoxDesignerPlugin(this));
 }

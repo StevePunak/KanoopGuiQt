@@ -4,6 +4,7 @@
 #include <QLineEdit>
 #include <QListView>
 #include <QPushButton>
+#include <QSlider>
 #include <QStatusBar>
 #include <QTableView>
 #include <QTextEdit>
@@ -84,6 +85,7 @@ template class StyleSheet<QCheckBox>;
 template class StyleSheet<QComboBox>;
 template class StyleSheet<QTabWidget>;
 template class StyleSheet<QScrollBar>;
+template class StyleSheet<QSlider>;
 template class StyleSheet<QTabBar>;
 template class StyleSheet<QWizard>;
 template class StyleSheet<QWizardPage>;

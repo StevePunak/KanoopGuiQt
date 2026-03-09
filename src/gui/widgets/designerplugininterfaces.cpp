@@ -3,6 +3,7 @@
 #include <resources.h>
 
 #include <widgets/playpausebutton.h>
+#include <widgets/pushbutton.h>
 
 QIcon PlayPauseButtonDesignerPlugin::icon() const
 {
@@ -12,4 +13,14 @@ QIcon PlayPauseButtonDesignerPlugin::icon() const
 QWidget* PlayPauseButtonDesignerPlugin::createWidget(QWidget* parent)
 {
     return new PlayPauseButton(parent);
+}
+
+QIcon PushButtonDesignerPlugin::icon() const
+{
+    return QIcon();
+}
+
+QWidget* PushButtonDesignerPlugin::createWidget(QWidget* parent)
+{
+    return new PushButton(parent);
 }
