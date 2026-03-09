@@ -76,18 +76,7 @@ public:
      * @param stops   Gradient stops (position in 0–1 and color, including alpha)
      */
     void setRadialGradient(double cx, double cy, double radius, double fx, double fy,
-                           const QGradientStops& stops)
-    {
-        QString s = QString("qradialgradient(cx:%1, cy:%2, radius:%3, fx:%4, fy:%5")
-            .arg(cx).arg(cy).arg(radius).arg(fx).arg(fy);
-        for(const QGradientStop& stop : stops) {
-            const QColor& c = stop.second;
-            s += QString(", stop:%1 rgba(%2,%3,%4,%5)")
-                .arg(stop.first).arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
-        }
-        s += QLatin1Char(')');
-        setGradient(s);
-    }
+                           const QGradientStops& stops);
 
     /**
      * @brief Set all four border properties at once using the dome highlight/shadow convention.
@@ -99,13 +88,7 @@ public:
      * @param topLeft     CSS border value for the top and left edges
      * @param bottomRight CSS border value for the bottom and right edges
      */
-    void setBorder(const QString& topLeft, const QString& bottomRight)
-    {
-        setProperty(SP_BorderTop,    topLeft);
-        setProperty(SP_BorderLeft,   topLeft);
-        setProperty(SP_BorderBottom, bottomRight);
-        setProperty(SP_BorderRight,  bottomRight);
-    }
+    void setBorder(const QString& topLeft, const QString& bottomRight);
 
     /**
      * @brief Set all four border properties using a pixel width and two colors.
@@ -117,14 +100,7 @@ public:
      * @param topLeft     Color for top and left edges (highlight)
      * @param bottomRight Color for bottom and right edges (shadow)
      */
-    void setBorder(int widthPx, const QColor& topLeft, const QColor& bottomRight)
-    {
-        auto make = [widthPx](const QColor& c) {
-            return QString("%1px solid rgba(%2,%3,%4,%5)")
-                .arg(widthPx).arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
-        };
-        setBorder(make(topLeft), make(bottomRight));
-    }
+    void setBorder(int widthPx, const QColor& topLeft, const QColor& bottomRight);
 
     /**
      * @brief Set the pseudo-state selector (e.g., PS_Hover, PS_Checked).
