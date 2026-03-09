@@ -5,6 +5,8 @@
 #include <Kanoop/gui/utility/stylesheettypes.h>
 #include <Kanoop/gui/libkanoopgui.h>
 
+#include <QColor>
+#include <QGradient>
 #include <QWidget>
 
 /**
@@ -61,6 +63,33 @@ public:
     void setGradient(const QString& gradient) { setProperty(SP_Background, gradient); }
 
     /**
+     * @brief Set the background to a radial gradient specified by its geometric parameters.
+     *
+     * Generates a CSS qradialgradient() value from the given parameters and passes it to
+     * setGradient().  Colors are converted to rgba() notation so alpha is always preserved.
+     *
+     * @param cx      Centre x (0–1)
+     * @param cy      Centre y (0–1)
+     * @param radius  Radius  (0–1)
+     * @param fx      Focal-point x (0–1)
+     * @param fy      Focal-point y (0–1)
+     * @param stops   Gradient stops (position in 0–1 and color, including alpha)
+     */
+    void setRadialGradient(double cx, double cy, double radius, double fx, double fy,
+                           const QGradientStops& stops)
+    {
+        QString s = QString("qradialgradient(cx:%1, cy:%2, radius:%3, fx:%4, fy:%5")
+            .arg(cx).arg(cy).arg(radius).arg(fx).arg(fy);
+        for(const QGradientStop& stop : stops) {
+            const QColor& c = stop.second;
+            s += QString(", stop:%1 rgba(%2,%3,%4,%5)")
+                .arg(stop.first).arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+        }
+        s += QLatin1Char(')');
+        setGradient(s);
+    }
+
+    /**
      * @brief Set all four border properties at once using the dome highlight/shadow convention.
      *
      * Top and left edges receive @p topLeft (highlight); bottom and right receive
@@ -76,6 +105,25 @@ public:
         setProperty(SP_BorderLeft,   topLeft);
         setProperty(SP_BorderBottom, bottomRight);
         setProperty(SP_BorderRight,  bottomRight);
+    }
+
+    /**
+     * @brief Set all four border properties using a pixel width and two colors.
+     *
+     * Generates "Npx solid rgba(r,g,b,a)" strings for top/left and bottom/right edges,
+     * then delegates to the string overload.
+     *
+     * @param widthPx     Border thickness in pixels
+     * @param topLeft     Color for top and left edges (highlight)
+     * @param bottomRight Color for bottom and right edges (shadow)
+     */
+    void setBorder(int widthPx, const QColor& topLeft, const QColor& bottomRight)
+    {
+        auto make = [widthPx](const QColor& c) {
+            return QString("%1px solid rgba(%2,%3,%4,%5)")
+                .arg(widthPx).arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+        };
+        setBorder(make(topLeft), make(bottomRight));
     }
 
     /**
