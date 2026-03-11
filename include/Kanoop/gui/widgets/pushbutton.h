@@ -4,68 +4,58 @@
 #include <QPushButton>
 #include <Kanoop/gui/libkanoopgui.h>
 
-/**
- * @brief QPushButton subclass with font size and color helpers.
- *
- * PushButton provides setFontPointSize(), setFontPixelSize(),
- * setForegroundColor(), and setBackgroundColor() as convenient alternatives
- * to manual stylesheet construction.
- */
 class LIBKANOOPGUI_EXPORT PushButton : public QPushButton
 {
     Q_OBJECT
+
+    Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor) // clazy:exclude=qproperty-without-notify
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor) // clazy:exclude=qproperty-without-notify
+
 public:
-    /**
-     * @brief Construct with an optional parent.
-     * @param parent Optional QWidget parent
-     */
     explicit PushButton(QWidget *parent = nullptr);
-
-    /**
-     * @brief Construct with label text.
-     * @param text Button label
-     * @param parent Optional QWidget parent
-     */
     explicit PushButton(const QString &text, QWidget *parent = nullptr);
-
-    /**
-     * @brief Construct with an icon and label text.
-     * @param icon Button icon
-     * @param text Button label
-     * @param parent Optional QWidget parent
-     */
     PushButton(const QIcon& icon, const QString &text, QWidget *parent = nullptr);
 
-    /**
-     * @brief Set the font size in points.
-     * @param size Point size
-     */
+    // Font helpers
     void setFontPointSize(int size);
-
-    /**
-     * @brief Set the font size in pixels.
-     * @param size Pixel size
-     */
     void setFontPixelSize(int size);
+    void setBold(bool bold);
+    void setItalic(bool italic);
 
-    /**
-     * @brief Set the foreground (text) color via a stylesheet.
-     * @param color New foreground color
-     */
+    // Color getters
+    QColor foregroundColor() const { return _foregroundColor; }
+    QColor backgroundColor() const { return _backgroundColor; }
+
+    // Border
+    void setBorderRadius(int radius);
+
+    // Hover/pressed/disabled state colors
+    void setHoverForegroundColor(const QColor& color);
+    void setHoverBackgroundColor(const QColor& color);
+    void setPressedForegroundColor(const QColor& color);
+    void setPressedBackgroundColor(const QColor& color);
+    void setDisabledForegroundColor(const QColor& color);
+    void setDisabledBackgroundColor(const QColor& color);
+
+public slots:
     void setForegroundColor(const QColor& color);
-
-    /**
-     * @brief Set the background color via a stylesheet.
-     * @param color New background color
-     */
     void setBackgroundColor(const QColor& color);
+    void setDefaultForegroundColor();
+    void setDefaultBackgroundColor();
 
 private:
     void commonInit();
     void makeStyleSheet();
 
-    QColor _backgroundColor;
     QColor _foregroundColor;
+    QColor _backgroundColor;
+    QColor _hoverForegroundColor;    // invalid QColor() = not set
+    QColor _hoverBackgroundColor;
+    QColor _pressedForegroundColor;
+    QColor _pressedBackgroundColor;
+    QColor _disabledForegroundColor;
+    QColor _disabledBackgroundColor;
+    int    _borderRadius = 0;
 };
 
 #endif // PUSHBUTTON_H

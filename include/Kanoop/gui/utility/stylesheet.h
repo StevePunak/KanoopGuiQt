@@ -5,6 +5,8 @@
 #include <Kanoop/gui/utility/stylesheettypes.h>
 #include <Kanoop/gui/libkanoopgui.h>
 
+#include <QColor>
+#include <QGradient>
 #include <QWidget>
 
 /**
@@ -61,6 +63,22 @@ public:
     void setGradient(const QString& gradient) { setProperty(SP_Background, gradient); }
 
     /**
+     * @brief Set the background to a radial gradient specified by its geometric parameters.
+     *
+     * Generates a CSS qradialgradient() value from the given parameters and passes it to
+     * setGradient().  Colors are converted to rgba() notation so alpha is always preserved.
+     *
+     * @param cx      Centre x (0–1)
+     * @param cy      Centre y (0–1)
+     * @param radius  Radius  (0–1)
+     * @param fx      Focal-point x (0–1)
+     * @param fy      Focal-point y (0–1)
+     * @param stops   Gradient stops (position in 0–1 and color, including alpha)
+     */
+    void setRadialGradient(double cx, double cy, double radius, double fx, double fy,
+                           const QGradientStops& stops);
+
+    /**
      * @brief Set all four border properties at once using the dome highlight/shadow convention.
      *
      * Top and left edges receive @p topLeft (highlight); bottom and right receive
@@ -70,13 +88,19 @@ public:
      * @param topLeft     CSS border value for the top and left edges
      * @param bottomRight CSS border value for the bottom and right edges
      */
-    void setBorder(const QString& topLeft, const QString& bottomRight)
-    {
-        setProperty(SP_BorderTop,    topLeft);
-        setProperty(SP_BorderLeft,   topLeft);
-        setProperty(SP_BorderBottom, bottomRight);
-        setProperty(SP_BorderRight,  bottomRight);
-    }
+    void setBorder(const QString& topLeft, const QString& bottomRight);
+
+    /**
+     * @brief Set all four border properties using a pixel width and two colors.
+     *
+     * Generates "Npx solid rgba(r,g,b,a)" strings for top/left and bottom/right edges,
+     * then delegates to the string overload.
+     *
+     * @param widthPx     Border thickness in pixels
+     * @param topLeft     Color for top and left edges (highlight)
+     * @param bottomRight Color for bottom and right edges (shadow)
+     */
+    void setBorder(int widthPx, const QColor& topLeft, const QColor& bottomRight);
 
     /**
      * @brief Set the pseudo-state selector (e.g., PS_Hover, PS_Checked).
