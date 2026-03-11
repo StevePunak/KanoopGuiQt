@@ -12,7 +12,7 @@ public:
     CheckBoxDesignerPlugin(QObject* parent = nullptr) :
         QObject(parent) {}
 
-    virtual QString name() const override { return "Check Box Widget"; }
+    virtual QString name() const override { return "CheckBox"; }
     virtual QString group() const override { return "Kanoop"; }
     virtual QString toolTip() const override { return "Check Box Widget"; }
     virtual QString whatsThis() const override { return "Check Box Widget"; }
