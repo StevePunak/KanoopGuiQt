@@ -3,7 +3,7 @@
 #include "mdisubwindow.h"
 
 #include <QMdiArea>
-#include <guisettings.h>
+#include "guisettings.h"
 
 MdiWindow::MdiWindow(const QString& logPrefix, QWidget* parent) :
     MainWindowBase(logPrefix, parent)

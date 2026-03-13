@@ -10,10 +10,9 @@
 ******************************************************************************************/
 #include "abstractmodelitem.h"
 #include "resources.h"
-#include "guitypes.h"
 
 #include <QModelIndex>
-#include <abstractitemmodel.h>
+#include "abstractitemmodel.h"
 
 
 AbstractModelItem::AbstractModelItem() :

@@ -15,6 +15,5 @@ var searchData=
   ['pos_12',['pos',['../classToastManager.html#a66ccd2cc7833093fe674f0ab64f7efa0',1,'ToastManager']]],
   ['preferenceschanged_13',['preferencesChanged',['../classApplication.html#a37138c66a82b89d47f0418ab4157be2f',1,'Application']]],
   ['previousindex_14',['previousIndex',['../classTreeViewBase.html#a487e54af05d91d84e7b01ba222a97f83',1,'TreeViewBase']]],
-  ['proxymodel_15',['proxyModel',['../classListView.html#a61cad29040b802659b6899cac009e632',1,'ListView::proxyModel()'],['../classTableViewBase.html#a1ae13b0d3ab6e1eb7a466ea726eae438',1,'TableViewBase::proxyModel()'],['../classTreeViewBase.html#a118dc83f1b32e09c3be232df3558510d',1,'TreeViewBase::proxyModel()']]],
-  ['pushbutton_16',['PushButton',['../classPushButton.html#aff7923c3d3fb0e46a57c06afa0f7f41e',1,'PushButton::PushButton(QWidget *parent=nullptr)'],['../classPushButton.html#a9a65164f3f23851761858f64313f33fb',1,'PushButton::PushButton(const QString &amp;text, QWidget *parent=nullptr)'],['../classPushButton.html#a08d8ef8dc48d007bbc36a0a3bcc35637',1,'PushButton::PushButton(const QIcon &amp;icon, const QString &amp;text, QWidget *parent=nullptr)']]]
+  ['proxymodel_15',['proxyModel',['../classListView.html#a61cad29040b802659b6899cac009e632',1,'ListView::proxyModel()'],['../classTableViewBase.html#a1ae13b0d3ab6e1eb7a466ea726eae438',1,'TableViewBase::proxyModel()'],['../classTreeViewBase.html#a118dc83f1b32e09c3be232df3558510d',1,'TreeViewBase::proxyModel()']]]
 ];

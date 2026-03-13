@@ -1,6 +1,4 @@
-#include <treeselectionmodel.h>
-
-#include <abstractitemmodel.h>
+#include "treeselectionmodel.h"
 
 TreeSelectionModel::TreeSelectionModel(QAbstractItemModel* model, QObject* parent) :
     QItemSelectionModel(model, parent)

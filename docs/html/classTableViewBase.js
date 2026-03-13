@@ -15,6 +15,7 @@ var classTableViewBase =
     [ "entityTypeAtPos", "classTableViewBase.html#a9e8b95cb27466945ca622f3f87e6e07c", null ],
     [ "entityUpdated", "classTableViewBase.html#a1b5fd491b8f6da6f9064f031ab8ba447", null ],
     [ "findFirstMatch", "classTableViewBase.html#a802be5803631a6402f526d5b5c058629", null ],
+    [ "firstIndexOfEntityUuid", "classTableViewBase.html#a7905fe084fa4685c513b48387bda9061", null ],
     [ "horizontalHeaderChanged", "classTableViewBase.html#a34d50363b031a45125e6342f027a1932", null ],
     [ "isIndexVisible", "classTableViewBase.html#a954a5dabf6563309dbc27c24c8cdae70", null ],
     [ "metadataAtPos", "classTableViewBase.html#ac0357772171dc94137aa1f88caa31c52", null ],

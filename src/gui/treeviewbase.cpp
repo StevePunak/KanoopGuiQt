@@ -12,9 +12,9 @@
 
 #include <QMenu>
 #include <QSortFilterProxyModel>
-#include <abstractitemmodel.h>
-#include <guisettings.h>
-#include <treeviewbase.h>
+#include "abstractitemmodel.h"
+#include "guisettings.h"
+#include "treeviewbase.h"
 
 #include <Kanoop/geometry/rectangle.h>
 #include <Kanoop/stringutil.h>

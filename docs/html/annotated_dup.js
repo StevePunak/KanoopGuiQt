@@ -35,7 +35,7 @@ var annotated_dup =
     [ "PixmapGraphicsItem", "classPixmapGraphicsItem.html", "classPixmapGraphicsItem" ],
     [ "PlainTextEdit", "classPlainTextEdit.html", "classPlainTextEdit" ],
     [ "PlayPauseButton", "classPlayPauseButton.html", "classPlayPauseButton" ],
-    [ "PushButton", "classPushButton.html", "classPushButton" ],
+    [ "PushButton", "classPushButton.html", null ],
     [ "QObjectGraphicsItem", "classQObjectGraphicsItem.html", "classQObjectGraphicsItem" ],
     [ "Quaternion", "classQuaternion.html", "classQuaternion" ],
     [ "RectangleGraphicsItem", "classRectangleGraphicsItem.html", "classRectangleGraphicsItem" ],

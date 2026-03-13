@@ -130,6 +130,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6bb28bc8aa4ee03326707fac87dbe924" id="r_a6bb28bc8aa4ee03326707fac87dbe924"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6bb28bc8aa4ee03326707fac87dbe924">setPropertyPixels</a> (StyleSheetProperty property, int value)</td></tr>
 <tr class="memdesc:a6bb28bc8aa4ee03326707fac87dbe924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a stylesheet property to a pixel integer value.  <br /></td></tr>
 <tr class="separator:a6bb28bc8aa4ee03326707fac87dbe924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b8e30d26408be21b5b4caf012f4d68a" id="r_a6b8e30d26408be21b5b4caf012f4d68a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b8e30d26408be21b5b4caf012f4d68a">setGradient</a> (const QString &amp;gradient)</td></tr>
+<tr class="memdesc:a6b8e30d26408be21b5b4caf012f4d68a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the background to a gradient string (qradialgradient / qlineargradient).  <br /></td></tr>
+<tr class="separator:a6b8e30d26408be21b5b4caf012f4d68a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3be5c54f200973612ca356268a36a8cb" id="r_a3be5c54f200973612ca356268a36a8cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3be5c54f200973612ca356268a36a8cb">setRadialGradient</a> (double cx, double cy, double radius, double fx, double fy, const QGradientStops &amp;stops)</td></tr>
+<tr class="memdesc:a3be5c54f200973612ca356268a36a8cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the background to a radial gradient specified by its geometric parameters.  <br /></td></tr>
+<tr class="separator:a3be5c54f200973612ca356268a36a8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fe0c925b05a29273eb074cd88c1f416" id="r_a4fe0c925b05a29273eb074cd88c1f416"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fe0c925b05a29273eb074cd88c1f416">setBorder</a> (const QString &amp;topLeft, const QString &amp;bottomRight)</td></tr>
+<tr class="memdesc:a4fe0c925b05a29273eb074cd88c1f416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all four border properties at once using the dome highlight/shadow convention.  <br /></td></tr>
+<tr class="separator:a4fe0c925b05a29273eb074cd88c1f416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dc68f1291b0afecbac4771a8a119d00" id="r_a2dc68f1291b0afecbac4771a8a119d00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2dc68f1291b0afecbac4771a8a119d00">setBorder</a> (int widthPx, const QColor &amp;topLeft, const QColor &amp;bottomRight)</td></tr>
+<tr class="memdesc:a2dc68f1291b0afecbac4771a8a119d00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all four border properties using a pixel width and two colors.  <br /></td></tr>
+<tr class="separator:a2dc68f1291b0afecbac4771a8a119d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84f228c6360641a6930f03a9f57512fd" id="r_a84f228c6360641a6930f03a9f57512fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84f228c6360641a6930f03a9f57512fd">setPseudoState</a> (StyleSheetPseudoState value)</td></tr>
 <tr class="memdesc:a84f228c6360641a6930f03a9f57512fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pseudo-state selector (e.g., PS_Hover, PS_Checked).  <br /></td></tr>
 <tr class="separator:a84f228c6360641a6930f03a9f57512fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +183,113 @@ class StyleSheet&lt; T &gt;</div><p>Template helper for building typed Qt styles
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4fe0c925b05a29273eb074cd88c1f416" name="a4fe0c925b05a29273eb074cd88c1f416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fe0c925b05a29273eb074cd88c1f416">&#9670;&#160;</a></span>setBorder() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classStyleSheet.html">StyleSheet</a>&lt; T &gt;::setBorder </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>topLeft</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>bottomRight</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set all four border properties at once using the dome highlight/shadow convention. </p>
+<p>Top and left edges receive <code class="param">topLeft</code> (highlight); bottom and right receive <code class="param">bottomRight</code> (shadow). This matches the standard glassy-dome button style used throughout the UI.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topLeft</td><td>CSS border value for the top and left edges </td></tr>
+    <tr><td class="paramname">bottomRight</td><td>CSS border value for the bottom and right edges </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2dc68f1291b0afecbac4771a8a119d00" name="a2dc68f1291b0afecbac4771a8a119d00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dc68f1291b0afecbac4771a8a119d00">&#9670;&#160;</a></span>setBorder() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classStyleSheet.html">StyleSheet</a>&lt; T &gt;::setBorder </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>widthPx</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QColor &amp;</td>          <td class="paramname"><span class="paramname"><em>topLeft</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QColor &amp;</td>          <td class="paramname"><span class="paramname"><em>bottomRight</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set all four border properties using a pixel width and two colors. </p>
+<p>Generates "Npx solid rgba(r,g,b,a)" strings for top/left and bottom/right edges, then delegates to the string overload.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">widthPx</td><td>Border thickness in pixels </td></tr>
+    <tr><td class="paramname">topLeft</td><td>Color for top and left edges (highlight) </td></tr>
+    <tr><td class="paramname">bottomRight</td><td>Color for bottom and right edges (shadow) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6b8e30d26408be21b5b4caf012f4d68a" name="a6b8e30d26408be21b5b4caf012f4d68a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b8e30d26408be21b5b4caf012f4d68a">&#9670;&#160;</a></span>setGradient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classStyleSheet.html">StyleSheet</a>&lt; T &gt;::setGradient </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>gradient</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the background to a gradient string (qradialgradient / qlineargradient). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gradient</td><td>Full CSS gradient value string </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ae1e26617a938e5605718c0488a899f23" name="ae1e26617a938e5605718c0488a899f23"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1e26617a938e5605718c0488a899f23">&#9670;&#160;</a></span>setProperty() <span class="overload">[1/2]</span></h2>
 
@@ -296,6 +415,63 @@ template&lt;typename T&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>Pseudo-state enum value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3be5c54f200973612ca356268a36a8cb" name="a3be5c54f200973612ca356268a36a8cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3be5c54f200973612ca356268a36a8cb">&#9670;&#160;</a></span>setRadialGradient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classStyleSheet.html">StyleSheet</a>&lt; T &gt;::setRadialGradient </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>cx</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>cy</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>fx</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>fy</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QGradientStops &amp;</td>          <td class="paramname"><span class="paramname"><em>stops</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the background to a radial gradient specified by its geometric parameters. </p>
+<p>Generates a CSS qradialgradient() value from the given parameters and passes it to <a class="el" href="#a6b8e30d26408be21b5b4caf012f4d68a" title="Set the background to a gradient string (qradialgradient / qlineargradient).">setGradient()</a>. Colors are converted to rgba() notation so alpha is always preserved.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cx</td><td>Centre x (0–1) </td></tr>
+    <tr><td class="paramname">cy</td><td>Centre y (0–1) </td></tr>
+    <tr><td class="paramname">radius</td><td>Radius (0–1) </td></tr>
+    <tr><td class="paramname">fx</td><td>Focal-point x (0–1) </td></tr>
+    <tr><td class="paramname">fy</td><td>Focal-point y (0–1) </td></tr>
+    <tr><td class="paramname">stops</td><td>Gradient stops (position in 0–1 and color, including alpha) </td></tr>
   </table>
   </dd>
 </dl>
