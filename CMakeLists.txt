@@ -37,6 +37,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/libKanoopQtGui.pc.in" "libKanoopQtGu
 
 target_include_directories(${PROJ} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop/gui)
+target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop/gui/graphics)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJ} PRIVATE Qt6::Network)
 
