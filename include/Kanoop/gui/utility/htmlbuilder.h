@@ -10,6 +10,7 @@
 ******************************************************************************************/
 #ifndef HTMLBUILDER_H
 #define HTMLBUILDER_H
+#include <Kanoop/gui/libkanoopgui.h>
 #include <Kanoop/gui/utility/htmlutil.h>
 
 #include <QTextStream>
@@ -20,7 +21,7 @@
  * HtmlBuilder accumulates HTML into an internal string via a QTextStream.
  * Call the open/close methods in order, then retrieve the result with toString().
  */
-class HtmlBuilder
+class LIBKANOOPGUI_EXPORT HtmlBuilder
 {
 public:
     /** @brief Construct an empty builder. */

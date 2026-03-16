@@ -1,6 +1,7 @@
 #ifndef QOBJECTGRAPHICSITEM_H
 #define QOBJECTGRAPHICSITEM_H
 
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QObject>
 
 /**
@@ -10,7 +11,7 @@
  * QGraphicsItem subclasses to add signal/slot support without using QGraphicsObject
  * (which carries additional overhead).
  */
-class QObjectGraphicsItem : public QObject
+class LIBKANOOPGUI_EXPORT QObjectGraphicsItem : public QObject
 {
     Q_OBJECT
 public:

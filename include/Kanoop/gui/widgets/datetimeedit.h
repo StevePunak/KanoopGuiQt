@@ -1,6 +1,7 @@
 #ifndef DATETIMEEDIT_H
 #define DATETIMEEDIT_H
 
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QDateTimeEdit>
 
 /**
@@ -9,7 +10,7 @@
  * DateTimeEdit currently adds no extra functionality beyond QDateTimeEdit
  * but provides a consistent project-local class for future enhancements.
  */
-class DateTimeEdit : public QDateTimeEdit
+class LIBKANOOPGUI_EXPORT DateTimeEdit : public QDateTimeEdit
 {
     Q_OBJECT
 public:

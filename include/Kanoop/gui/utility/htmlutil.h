@@ -1,6 +1,7 @@
 #ifndef HTMLUTIL_H
 #define HTMLUTIL_H
 
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QColor>
 #include <QString>
 
@@ -10,7 +11,7 @@
  * Each method returns a QString containing the appropriate HTML tag or
  * attribute, ready to be concatenated into an HTML fragment.
  */
-class HtmlUtil
+class LIBKANOOPGUI_EXPORT HtmlUtil
 {
 public:
     /**
