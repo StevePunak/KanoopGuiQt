@@ -1,6 +1,7 @@
 #ifndef TABBAR_H
 #define TABBAR_H
 
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QTabBar>
 
 /**
@@ -10,7 +11,7 @@
  * with the index of the tab under the cursor, allowing callers to show a
  * per-tab context menu without subclassing further.
  */
-class TabBar : public QTabBar
+class LIBKANOOPGUI_EXPORT TabBar : public QTabBar
 {
     Q_OBJECT
 public:

@@ -1,6 +1,7 @@
 #ifndef WIDGETPLUGINCOLLECTION_H
 #define WIDGETPLUGINCOLLECTION_H
 
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QtDesigner>
 #include <QtCore>
 
@@ -11,7 +12,7 @@
  * that all custom KanoopGuiQt widgets are registered with Qt Designer as a
  * single plugin.  The list of widgets is populated in the constructor.
  */
-class WidgetPluginCollection : public QObject,
+class LIBKANOOPGUI_EXPORT WidgetPluginCollection : public QObject,
                                public QDesignerCustomWidgetCollectionInterface
 {
     Q_OBJECT
