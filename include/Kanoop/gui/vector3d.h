@@ -1,5 +1,6 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QVector3D>
 
 /**
@@ -8,7 +9,7 @@
  * Mirrors all QVector3D constructors and adds toString() / fromString()
  * for human-readable "x, y, z" serialization.
  */
-class Vector3D : public QVector3D
+class LIBKANOOPGUI_EXPORT Vector3D : public QVector3D
 {
 public:
     /** @brief Default constructor — creates a zero vector. */

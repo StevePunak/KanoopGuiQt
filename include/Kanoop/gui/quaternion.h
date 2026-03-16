@@ -1,5 +1,6 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
+#include <Kanoop/gui/libkanoopgui.h>
 #include <QQuaternion>
 
 /**
@@ -8,7 +9,7 @@
  * Quaternion forwards all QQuaternion constructors and adds toString() for
  * human-readable output and fromString() for round-trip parsing.
  */
-class Quaternion : public QQuaternion
+class LIBKANOOPGUI_EXPORT Quaternion : public QQuaternion
 {
 public:
     /** @brief Default constructor — identity quaternion. */
