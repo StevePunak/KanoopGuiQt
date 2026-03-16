@@ -4,7 +4,7 @@ include(GNUInstallDirs)
 set(PROJ KanoopGuiQt)
 project(${PROJ})
 
-find_package(Qt6 REQUIRED COMPONENTS Network Designer)
+find_package(Qt6 REQUIRED COMPONENTS Gui Network Widgets Designer)
 qt_standard_project_setup()
 
 set(CMAKE_AUTOMOC ON)
@@ -25,11 +25,6 @@ qt_add_library(${PROJ} ${PROJ_SOURCES})
 
 target_compile_options(${PROJ} PRIVATE -Wextra -Wall -Werror)
 
-target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
-target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
-target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
-target_link_libraries(KanoopGuiQt PRIVATE Qt6::Widgets)
-
 set_target_properties(${PROJ} PROPERTIES VERSION "${KANOOP_QTGUI_VERSION}")
 set_target_properties(${PROJ} PROPERTIES SOVERSION 1)
 
@@ -39,16 +34,10 @@ target_include_directories(${PROJ} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop/gui)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop/gui/graphics)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(${PROJ} PRIVATE Qt6::Network)
 
 get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 target_include_directories(${PROJ} PRIVATE ${PARENT_DIR}/KanoopCommon/include)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Widgets Network)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
 target_link_libraries(${PROJ} PRIVATE
     Qt6::Gui
     Qt6::Widgets

@@ -20,5 +20,5 @@ var searchData=
   ['previousindex_17',['previousIndex',['../classTreeViewBase.html#a487e54af05d91d84e7b01ba222a97f83',1,'TreeViewBase']]],
   ['previoustrack_18',['PreviousTrack',['../classResources.html#a1a13a198f92278e7ed2e71c1a1c19893ab0f65e77457b3c5587a237d2245ffcd3',1,'Resources']]],
   ['proxymodel_19',['proxyModel',['../classListView.html#a61cad29040b802659b6899cac009e632',1,'ListView::proxyModel()'],['../classTableViewBase.html#a1ae13b0d3ab6e1eb7a466ea726eae438',1,'TableViewBase::proxyModel()'],['../classTreeViewBase.html#a118dc83f1b32e09c3be232df3558510d',1,'TreeViewBase::proxyModel()']]],
-  ['pushbutton_20',['PushButton',['../classPushButton.html',1,'PushButton'],['../classPushButton.html#aff7923c3d3fb0e46a57c06afa0f7f41e',1,'PushButton::PushButton(QWidget *parent=nullptr)'],['../classPushButton.html#a9a65164f3f23851761858f64313f33fb',1,'PushButton::PushButton(const QString &amp;text, QWidget *parent=nullptr)'],['../classPushButton.html#a08d8ef8dc48d007bbc36a0a3bcc35637',1,'PushButton::PushButton(const QIcon &amp;icon, const QString &amp;text, QWidget *parent=nullptr)']]]
+  ['pushbutton_20',['PushButton',['../classPushButton.html',1,'']]]
 ];

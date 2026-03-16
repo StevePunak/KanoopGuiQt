@@ -1,7 +1,7 @@
 #include "listview.h"
 
 #include <QSortFilterProxyModel>
-#include <abstractitemmodel.h>
+#include "abstractitemmodel.h"
 
 ListView::ListView(QWidget* parent) :
     QListView(parent),

@@ -19,7 +19,7 @@
 #include <QSplitter>
 #include <QStatusBar>
 #include <QTimer>
-#include <mdisubwindow.h>
+#include "mdisubwindow.h"
 
 #include <Kanoop/geometry/point.h>
 #include <Kanoop/geometry/size.h>

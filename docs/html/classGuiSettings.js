@@ -29,6 +29,7 @@ var classGuiSettings =
     [ "setStringValue", "classGuiSettings.html#a0eb3c6033437e89b65b1cf40dd24fd65", null ],
     [ "settingsChanged", "classGuiSettings.html#af1d604b2d79bc9b0d57f68ab4bb11c40", null ],
     [ "setVariantValue", "classGuiSettings.html#a882c59e7790b27b67475cb81d46c56c6", null ],
+    [ "sync", "classGuiSettings.html#ab82abd07612f7668c7f3534aec5dfac4", null ],
     [ "widgetHasPersistentGeometry", "classGuiSettings.html#a56d7dc1e813b228bd5628523ab8e50fb", null ],
     [ "_settings", "classGuiSettings.html#a2adf510a7f4e2fef52acbe919948a7a8", null ]
 ];

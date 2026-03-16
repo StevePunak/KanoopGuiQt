@@ -202,6 +202,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~TableViewBase</b>
 <tr class="memitem:a802be5803631a6402f526d5b5c058629" id="r_a802be5803631a6402f526d5b5c058629"><td class="memItemLeft" align="right" valign="top">QModelIndex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a802be5803631a6402f526d5b5c058629">findFirstMatch</a> (const QVariant &amp;needle, int role) const</td></tr>
 <tr class="memdesc:a802be5803631a6402f526d5b5c058629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the first model index where the given role matches a value.  <br /></td></tr>
 <tr class="separator:a802be5803631a6402f526d5b5c058629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7905fe084fa4685c513b48387bda9061" id="r_a7905fe084fa4685c513b48387bda9061"><td class="memItemLeft" align="right" valign="top">virtual QModelIndex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7905fe084fa4685c513b48387bda9061">firstIndexOfEntityUuid</a> (const QUuid &amp;uuid) const</td></tr>
+<tr class="memdesc:a7905fe084fa4685c513b48387bda9061"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the first index whose item UUID matches.  <br /></td></tr>
+<tr class="separator:a7905fe084fa4685c513b48387bda9061"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade09cb926169db1edd0eaafb7d56f04f" id="r_ade09cb926169db1edd0eaafb7d56f04f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade09cb926169db1edd0eaafb7d56f04f">setCurrentUuid</a> (const QUuid &amp;uuid, ScrollHint scrollHint=EnsureVisible)</td></tr>
 <tr class="memdesc:ade09cb926169db1edd0eaafb7d56f04f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select the item with the given UUID and optionally scroll to it.  <br /></td></tr>
 <tr class="separator:ade09cb926169db1edd0eaafb7d56f04f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -463,6 +466,40 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>currentChange
   <table class="params">
     <tr><td class="paramname">needle</td><td>Value to search for </td></tr>
     <tr><td class="paramname">role</td><td>Model role to compare </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>First matching index, or invalid index if not found </dd></dl>
+
+</div>
+</div>
+<a id="a7905fe084fa4685c513b48387bda9061" name="a7905fe084fa4685c513b48387bda9061"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7905fe084fa4685c513b48387bda9061">&#9670;&#160;</a></span>firstIndexOfEntityUuid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QModelIndex TableViewBase::firstIndexOfEntityUuid </td>
+          <td>(</td>
+          <td class="paramtype">const QUuid &amp;</td>          <td class="paramname"><span class="paramname"><em>uuid</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the first index whose item UUID matches. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uuid</td><td>UUID to search for </td></tr>
   </table>
   </dd>
 </dl>

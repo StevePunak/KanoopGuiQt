@@ -6,7 +6,7 @@
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QSplitter>
-#include <guisettings.h>
+#include "guisettings.h"
 
 ComplexWidget::ComplexWidget(QWidget *parent) :
     QWidget(parent),
