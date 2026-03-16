@@ -16,9 +16,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(KANOOP_QTGUI_VERSION "1.3.0")
 
 file(GLOB_RECURSE PROJ_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.qrc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.qrc"
 )
 
 qt_add_library(${PROJ} ${PROJ_SOURCES})
@@ -32,6 +32,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/libKanoopQtGui.pc.in" "libKanoopQtGu
 
 target_include_directories(${PROJ} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop/gui)
+target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop/gui/graphics)
 target_include_directories(${PROJ} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 get_directory_property(PARENT_DIR PARENT_DIRECTORY)
@@ -57,6 +58,12 @@ endif()
 
 install(TARGETS ${PROJ} LIBRARY DESTINATION "${KANOOP_INSTALL_PREFIX}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/Kanoop" DESTINATION "${KANOOP_INSTALL_PREFIX}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" FILES_MATCHING PATTERN "*.h")
+
+option(BUILD_TESTING "Build unit tests" ON)
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 find_package(Doxygen OPTIONAL_COMPONENTS dot)
 if(Doxygen_FOUND)
