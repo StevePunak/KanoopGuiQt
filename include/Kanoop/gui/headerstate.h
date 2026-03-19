@@ -33,7 +33,7 @@ public:
     /**
      * @brief Describes the saved state of a single header section.
      */
-    class SectionState : public ISerializableToJsonObject,
+    class LIBKANOOPGUI_EXPORT SectionState : public ISerializableToJsonObject,
                          public IDeserializableFromJsonObject
     {
     public:
