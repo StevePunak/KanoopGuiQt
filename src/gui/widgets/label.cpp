@@ -20,8 +20,6 @@ void Label::commonInit()
 {
     _backgroundColor = palette().color(QPalette::Window);
     _foregroundColor = palette().color(QPalette::Text);
-    setBackgroundColor(_backgroundColor);
-    setForegroundColor(_foregroundColor);
 }
 
 void Label::setFontPointSize(int size)
@@ -41,32 +39,40 @@ void Label::setFontPixelSize(int size)
 void Label::setForegroundColor(const QColor &color)
 {
     _foregroundColor = color;
+    _foregroundExplicitlySet = true;
     Label::applyStylesheet();
 }
 
 void Label::setBackgroundColor(const QColor &color)
 {
     _backgroundColor = color;
+    _backgroundExplicitlySet = true;
     Label::applyStylesheet();
 }
 
 void Label::setDefaultForegroundColor()
 {
     _foregroundColor = palette().color(QPalette::Text);
+    _foregroundExplicitlySet = false;
     applyStylesheet();
 }
 
 void Label::setDefaultBackgroundColor()
 {
     _backgroundColor = palette().color(QPalette::Window);
+    _backgroundExplicitlySet = false;
     applyStylesheet();
 }
 
 void Label::applyStylesheet()
 {
     StyleSheet<QLabel> ss;
-    ss.setProperty(SP_Color, _foregroundColor);
-    ss.setProperty(SP_BackgroundColor, _backgroundColor);
+    if(_foregroundExplicitlySet) {
+        ss.setProperty(SP_Color, _foregroundColor);
+    }
+    if(_backgroundExplicitlySet) {
+        ss.setProperty(SP_BackgroundColor, _backgroundColor);
+    }
     setStyleSheet(ss.toString());
 }
 
