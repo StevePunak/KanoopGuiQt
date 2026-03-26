@@ -88,6 +88,8 @@ private:
 
     QColor _backgroundColor;
     QColor _foregroundColor;
+    bool _backgroundExplicitlySet = false;
+    bool _foregroundExplicitlySet = false;
 };
 
 #endif // LABEL_H
