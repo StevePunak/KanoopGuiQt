@@ -277,6 +277,9 @@ protected:
     /** @brief Append a column header (ad-hoc alias for appendColumnHeader). */
     void appendAdHocColumnHeader(int type, const QString& value) { appendColumnHeader(type, value); }
 
+    /** @brief Insert a column header at the given index (ad-hoc alias for insertColumnHeader). */
+    void insertAdHocColumnHeader(int type, int index, const QString& value) { insertColumnHeader(type, index, value); }
+
     /**
      * @brief Delete the column header at the given section.
      * @param section Section index to remove
