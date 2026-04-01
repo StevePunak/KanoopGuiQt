@@ -434,18 +434,17 @@ void AbstractItemModel::appendColumnHeader(int type, const QColor &columnTextCol
 
 void AbstractItemModel::insertColumnHeader(int type, int index, const QString& text)
 {
-    TableHeader::IntMap headers = _columnHeaders;
     beginInsertColumns(QModelIndex(), index, index);
-    _columnHeaders.clear();
-    for(int col = 0;col < headers.count();col++) {
-        TableHeader header = columnHeader(col);
-        if(col != index) {
-            appendColumnHeader(header.type(), header.columnTextColor(), header.text());
-        }
-        else {
-            appendColumnHeader(type, text);
+
+    for(int col = _columnHeaders.count(); col > index; col--) {
+        if(_columnHeaders.contains(col-1)) {
+            _columnHeaders.insert(col, _columnHeaders.value(col-1));
         }
     }
+
+    TableHeader header(type, text, Qt::Horizontal);
+    _columnHeaders.insert(index, header);
+
     endInsertColumns();
 }
 
