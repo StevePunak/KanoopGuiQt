@@ -13,23 +13,19 @@
 #include "headerstate.h"
 #include "treeviewbase.h"
 #include <QApplication>
-#include <QCoreApplication>
+#include <QFont>
 #include <QHeaderView>
 #include <QMdiSubWindow>
-#include <QMutex>
 #include <QScreen>
 #include <QSplitter>
 #include <QTableView>
-#include <QUuid>
 #include <Kanoop/log.h>
 #include <Kanoop/geometry/rectangle.h>
 #include <Kanoop/geometry/size.h>
 
-const QString GuiSettings::KEY_APP                          = "app";
 const QString GuiSettings::KEY_FONT_SIZE                    = "font_size";
 const QString GuiSettings::KEY_HEADER_STATE_HORIZ           = "header_state_h";
 const QString GuiSettings::KEY_HEADER_STATE_VERT            = "header_state_v";
-const QString GuiSettings::KEY_LAST_DIRECTORY               = "last_dir";
 const QString GuiSettings::KEY_LAST_WIDGET_POS              = "widget_pos";
 const QString GuiSettings::KEY_LAST_WIDGET_SIZE             = "widget_size";
 const QString GuiSettings::KEY_MODEL_HEADER_STATE_HORIZ     = "model_header_state_h";
@@ -38,11 +34,8 @@ const QString GuiSettings::KEY_SPLITTER_STATE_HORIZ         = "splitter_state_h"
 const QString GuiSettings::KEY_SPLITTER_STATE_VERT          = "splitter_state_v";
 const QString GuiSettings::KEY_TREEVIEW_STATE               = "treeview_state";
 
-GuiSettings* GuiSettings::_globalInstance                   = nullptr;
-
 GuiSettings::GuiSettings() :
-    _settings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::instance()->organizationName(), QCoreApplication::instance()->applicationName()),
-    _maxRecentFiles(10)
+    AppSettings()
 {
 }
 
@@ -213,70 +206,9 @@ void GuiSettings::restoreTreeViewState(TreeViewBase *treeView)
     treeView->restoreState(state);
 }
 
-void GuiSettings::sync()
-{
-    _settings.sync();
-}
-
-GuiSettings *GuiSettings::globalInstance()
-{
-    static QMutex _lock;
-    _lock.lock();
-    if(_globalInstance == nullptr) {
-        _globalInstance = new GuiSettings;
-    }
-    _lock.unlock();
-    return _globalInstance;
-}
-
-QString GuiSettings::makeObjectKey(const QObject *object)
-{
-    QString result = object->objectName();
-    if(object->parent() != nullptr) {
-        result.prepend(object->parent()->objectName());
-    }
-    return result;
-}
-
-QString GuiSettings::makeFileTypeKey(const QString &key, const QString &extension)
-{
-    QString fixed = extension;
-    fixed.removeIf([extension](const QChar& it) { return it.isPunct() || it.isSpace(); });
-    return QString("%1/%2").arg(key, fixed);
-}
-
-QString GuiSettings::makeFileTypeKey(const QString& key, int fileType)
-{
-    return QString("%1/%2").arg(key, QString("type_%1").arg(fileType));
-}
-
-QString GuiSettings::makeCompoundObjectKey(const QString &key, const QObject *object)
-{
-    QString objectKey = makeKey(key, makeObjectKey(object));
-    return objectKey;
-}
-
 void GuiSettings::ensureValidDefaults()
 {
     if(fontSize() == 0) {
         setFontSize(QFont().pointSize());
     }
-}
-
-QStringList GuiSettings::uuidListToStringList(const QList<QUuid> &uuids)
-{
-    QStringList result;
-    for(const QUuid& uuid : uuids) {
-        result.append(uuid.toString(QUuid::WithoutBraces));
-    }
-    return result;
-}
-
-QList<QUuid> GuiSettings::stringListToUuidList(const QStringList &values)
-{
-    QList<QUuid> result;
-    for(const QString& value : values) {
-        result.append(QUuid::fromString(value));
-    }
-    return result;
 }
