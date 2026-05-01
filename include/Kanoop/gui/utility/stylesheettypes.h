@@ -165,6 +165,53 @@ enum StyleSheetPseudoState {
 };
 
 /**
+ * @brief Qt stylesheet sub-control identifiers.
+ *
+ * Each value corresponds to a CSS sub-control supported by Qt's stylesheet engine.
+ * Pass these to StyleSheet::setSubControl() or StyleSheetStrings::getSubControlString().
+ */
+enum StyleSheetSubControl {
+    SC_Invalid = 0,
+
+    SC_AddLine,                 // The line-up button of a QScrollBar.
+    SC_AddPage,                 // The region between the handle (slider) and the add-line of a QScrollBar.
+    SC_Branch,                  // The branch indicator of a QTreeView.
+    SC_Chunk,                   // The progress chunk of a QProgressBar.
+    SC_CloseButton,             // The close button of a QDockWidget, QMdiSubWindow or QTabBar.
+    SC_Corner,                  // The corner between two scrollbars in a QAbstractScrollArea.
+    SC_DownArrow,               // The down arrow of a QComboBox, QHeaderView, QScrollBar or QSpinBox.
+    SC_DownButton,              // The down button of a QScrollBar or QSpinBox.
+    SC_DropDown,                // The drop-down button of a QComboBox.
+    SC_FloatButton,             // The float button of a QDockWidget.
+    SC_Groove,                  // The groove of a QSlider.
+    SC_Handle,                  // The handle of a QScrollBar, QSplitter or QSlider.
+    SC_Icon,                    // The icon of a QAbstractItemView or QMenu.
+    SC_Indicator,               // The indicator of a QAbstractItemView, QCheckBox, QRadioButton, QMenu or QGroupBox.
+    SC_Item,                    // An item of a QAbstractItemView, QMenuBar, QMenu or QStatusBar.
+    SC_LeftArrow,               // The left arrow of a QScrollBar.
+    SC_LeftCorner,              // The left corner of a QTabWidget.
+    SC_MenuArrow,               // The menu arrow of a QToolButton.
+    SC_MenuButton,              // The menu button of a QToolButton.
+    SC_MenuIndicator,           // The menu indicator of a QPushButton.
+    SC_Pane,                    // The pane (frame) of a QTabWidget.
+    SC_RightArrow,              // The right arrow of a QMenu or QScrollBar.
+    SC_RightCorner,             // The right corner of a QTabWidget.
+    SC_Scroller,                // The scroller of a QMenu or QTabBar.
+    SC_Section,                 // The section of a QHeaderView.
+    SC_Separator,               // The separator of a QMenu or QMainWindow.
+    SC_SubLine,                 // The line-down button of a QScrollBar.
+    SC_SubPage,                 // The region between the handle (slider) and the sub-line of a QScrollBar.
+    SC_Tab,                     // The tab of a QTabBar or QToolBox.
+    SC_TabBar,                  // The tab bar of a QTabWidget.
+    SC_Tear,                    // The tear indicator of a QTabBar.
+    SC_TearOff,                 // The tear-off indicator of a QMenu.
+    SC_Text,                    // The text of a QAbstractItemView.
+    SC_Title,                   // The title of a QGroupBox or QDockWidget.
+    SC_UpArrow,                 // The up arrow of a QHeaderView, QScrollBar or QSpinBox.
+    SC_UpButton,                // The up button of a QSpinBox.
+};
+
+/**
  * @brief Utility class for converting stylesheet enums to their CSS string equivalents.
  */
 class StyleSheetStrings
@@ -183,6 +230,13 @@ public:
      * @return CSS pseudo-state string (e.g., "hover")
      */
     static QString getPseudoStateString(StyleSheetPseudoState pseudoState) { return _PseudoStateToStringMap.getString(pseudoState); }
+
+    /**
+     * @brief Return the CSS sub-control name for a StyleSheetSubControl value.
+     * @param subControl Sub-control enum value
+     * @return CSS sub-control string (e.g., "indicator")
+     */
+    static QString getSubControlString(StyleSheetSubControl subControl) { return _SubControlToStringMap.getString(subControl); }
 
 private:
     class PropertyToStringMap : public KANOOP::EnumToStringMap<StyleSheetProperty>
@@ -342,8 +396,53 @@ private:
         }
     };
 
+    class SubControlToStringMap : public KANOOP::EnumToStringMap<StyleSheetSubControl>
+    {
+    public:
+        SubControlToStringMap()
+        {
+            insert(SC_AddLine,              "add-line");
+            insert(SC_AddPage,              "add-page");
+            insert(SC_Branch,               "branch");
+            insert(SC_Chunk,                "chunk");
+            insert(SC_CloseButton,          "close-button");
+            insert(SC_Corner,               "corner");
+            insert(SC_DownArrow,            "down-arrow");
+            insert(SC_DownButton,           "down-button");
+            insert(SC_DropDown,             "drop-down");
+            insert(SC_FloatButton,          "float-button");
+            insert(SC_Groove,               "groove");
+            insert(SC_Handle,               "handle");
+            insert(SC_Icon,                 "icon");
+            insert(SC_Indicator,            "indicator");
+            insert(SC_Item,                 "item");
+            insert(SC_LeftArrow,            "left-arrow");
+            insert(SC_LeftCorner,           "left-corner");
+            insert(SC_MenuArrow,            "menu-arrow");
+            insert(SC_MenuButton,           "menu-button");
+            insert(SC_MenuIndicator,        "menu-indicator");
+            insert(SC_Pane,                 "pane");
+            insert(SC_RightArrow,           "right-arrow");
+            insert(SC_RightCorner,          "right-corner");
+            insert(SC_Scroller,             "scroller");
+            insert(SC_Section,              "section");
+            insert(SC_Separator,            "separator");
+            insert(SC_SubLine,              "sub-line");
+            insert(SC_SubPage,              "sub-page");
+            insert(SC_Tab,                  "tab");
+            insert(SC_TabBar,               "tab-bar");
+            insert(SC_Tear,                 "tear");
+            insert(SC_TearOff,              "tearoff");
+            insert(SC_Text,                 "text");
+            insert(SC_Title,                "title");
+            insert(SC_UpArrow,              "up-arrow");
+            insert(SC_UpButton,             "up-button");
+        }
+    };
+
     static const PropertyToStringMap _PropertyToStringMap;
     static const PseudoStateToStringMap _PseudoStateToStringMap;
+    static const SubControlToStringMap _SubControlToStringMap;
 };
 
 #endif // STYLESHEETTYPES_H

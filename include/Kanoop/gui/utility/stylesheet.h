@@ -115,6 +115,12 @@ public:
     void setSubControl(const QString& value) { _subControl = value; }
 
     /**
+     * @brief Set the sub-control selector from a typed enum value.
+     * @param value Sub-control enum value (e.g., SC_Indicator)
+     */
+    void setSubControl(StyleSheetSubControl value) { _subControl = StyleSheetStrings::getSubControlString(value); }
+
+    /**
      * @brief Render all accumulated properties into a complete stylesheet rule.
      * @return Stylesheet string suitable for QWidget::setStyleSheet()
      */

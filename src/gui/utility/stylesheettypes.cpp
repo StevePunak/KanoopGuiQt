@@ -2,5 +2,6 @@
 
 const StyleSheetStrings::PropertyToStringMap StyleSheetStrings::_PropertyToStringMap;
 const StyleSheetStrings::PseudoStateToStringMap StyleSheetStrings::_PseudoStateToStringMap;
+const StyleSheetStrings::SubControlToStringMap StyleSheetStrings::_SubControlToStringMap;
 
 
