@@ -30,9 +30,7 @@ public:
     /** @brief Construct and capture the widget class name as the CSS selector. */
     StyleSheet()
     {
-        T* t = new T();
-        _typeName = t->metaObject()->className();
-        delete t;
+        _typeName = T::staticMetaObject.className();
     }
 
     /**
@@ -103,10 +101,22 @@ public:
     void setBorder(int widthPx, const QColor& topLeft, const QColor& bottomRight);
 
     /**
-     * @brief Set the pseudo-state selector (e.g., PS_Hover, PS_Checked).
+     * @brief Set the pseudo-state selector (e.g., PS_Hover, PS_Checked), replacing any previous value(s).
      * @param value Pseudo-state enum value
      */
-    void setPseudoState(StyleSheetPseudoState value) { _pseudoState = value; }
+    void setPseudoState(StyleSheetPseudoState value) { _pseudoStates = { value }; }
+
+    /**
+     * @brief Append a pseudo-state to the selector chain (e.g., :checked:disabled).
+     * @param value Pseudo-state enum value to append
+     */
+    void addPseudoState(StyleSheetPseudoState value) { _pseudoStates.append(value); }
+
+    /**
+     * @brief Set the full pseudo-state chain at once.
+     * @param values Ordered list of pseudo-states; emitted as `:value1:value2...`
+     */
+    void setPseudoStates(const QList<StyleSheetPseudoState>& values) { _pseudoStates = values; }
 
     /**
      * @brief Set the sub-control selector string (e.g., "::handle").
@@ -118,7 +128,7 @@ public:
      * @brief Set the sub-control selector from a typed enum value.
      * @param value Sub-control enum value (e.g., SC_Indicator)
      */
-    void setSubControl(StyleSheetSubControl value) { _subControl = StyleSheetStrings::getSubControlString(value); }
+    void setSubControl(StyleSheetSubControl value);
 
     /**
      * @brief Render all accumulated properties into a complete stylesheet rule.
@@ -132,8 +142,8 @@ public:
 
     /** @brief Accumulated property/value pairs for the stylesheet rule. */
     QMap<StyleSheetProperty, QString> _properties;
-    /** @brief Pseudo-state selector applied to the rule (PS_Invalid = none). */
-    StyleSheetPseudoState _pseudoState = PS_Invalid;
+    /** @brief Pseudo-state selectors applied to the rule, in order (empty = none). */
+    QList<StyleSheetPseudoState> _pseudoStates;
     /** @brief Sub-control selector string (empty = none). */
     QString _subControl;
 };
