@@ -1,4 +1,5 @@
 #include "utility/stylesheet.h"
+#include <QAbstractItemView>
 #include <QGradient>
 #include <QFrame>
 #include <QLabel>
@@ -49,8 +50,8 @@ QString StyleSheet<T>::toString() const
     if(_subControl.isEmpty() == false) {
         output << "::" << _subControl;
     }
-    if(_pseudoState != PS_Invalid) {
-        output << ':' << StyleSheetStrings::getPseudoStateString(_pseudoState);
+    for(StyleSheetPseudoState ps : _pseudoStates) {
+        output << ':' << StyleSheetStrings::getPseudoStateString(ps);
     }
     output << " {";
     QList<StyleSheetProperty> keys = _properties.keys();
@@ -100,7 +101,14 @@ void StyleSheet<T>::setBorder(int widthPx, const QColor& topLeft, const QColor& 
     setBorder(make(topLeft), make(bottomRight));
 }
 
+template<typename T>
+void StyleSheet<T>::setSubControl(StyleSheetSubControl value)
+{
+    _subControl = StyleSheetStrings::getSubControlString(value);
+}
+
 template class StyleSheet<QWidget>;
+template class StyleSheet<QAbstractItemView>;
 template class StyleSheet<QFrame>;
 template class StyleSheet<QGroupBox>;
 template class StyleSheet<QLabel>;
