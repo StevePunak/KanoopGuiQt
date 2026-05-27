@@ -6,8 +6,7 @@
 #include <Kanoop/utility/loggingbaseclass.h>
 #include <Kanoop/gui/libkanoopgui.h>
 #include <Kanoop/geometry/point.h>
-
-class Size;
+#include <Kanoop/geometry/size.h>
 
 /**
  * @brief QGraphicsView subclass with built-in mouse pan and wheel zoom support.
