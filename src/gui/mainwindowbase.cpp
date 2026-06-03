@@ -11,11 +11,13 @@
 #include "guisettings.h"
 #include "mainwindowbase.h"
 
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QMdiArea>
 #include <QMenu>
 #include <QMoveEvent>
 #include <QResizeEvent>
+#include <QScreen>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QTimer>
@@ -121,12 +123,15 @@ void MainWindowBase::showEvent(QShowEvent *event)
 
             // MDI subwindows take care of themselves
             if(isMdiSubWindow == false) {
-                // make sure top-left is not off the screen
-                if(geometryRect.top() < 0) {
-                    geometryRect.setTop(10);
-                }
-                if(geometryRect.left() < 0) {
-                    geometryRect.setLeft(10);
+                // Ensure the restore point is on a connected screen. A stale position can
+                // reference a monitor which has since been removed.
+                if(QGuiApplication::screenAt(geometryRect.topLeft()) == nullptr) {
+                    logText(LVL_DEBUG, QString("The restore point is off the screen - centering on primary screen"));
+                    QRect screenRect = QGuiApplication::primaryScreen()->availableGeometry();
+                    QPoint centered = screenRect.center();
+                    centered.rx() -= (geometryRect.width() / 2);
+                    centered.ry() -= (geometryRect.height() / 2);
+                    geometryRect.moveTopLeft(centered);
                 }
 
                 if(parent != nullptr) {
