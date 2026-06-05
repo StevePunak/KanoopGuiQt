@@ -182,7 +182,14 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
         QString sectionText = tableHeader.text();
         HeaderState::SectionState sectionState = headerState.getSection(section);
         if(sectionState.isValid() && sectionState.text() == sectionText) {
-            header->resizeSection(section, sectionState.size());
+            // A stretch section derives its width from the layout, so restoring a persisted
+            // width onto it would defeat the stretch until the next layout pass and can force
+            // horizontal scrolling. Only restore widths on sections the user actually sizes.
+            bool stretchSection = header->sectionResizeMode(section) == QHeaderView::Stretch ||
+                                  (header->stretchLastSection() && section == header->count() - 1);
+            if(stretchSection == false) {
+                header->resizeSection(section, sectionState.size());
+            }
             QTableView* view = qobject_cast<QTableView*>(header->parent());
             if(view != nullptr) {
                 if(sectionState.isVisible() == false) {
