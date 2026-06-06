@@ -68,3 +68,5 @@ void IconLabel::createLayout(const QString& text, const QIcon& icon)
 
     setLayout(layout);
 }
+
+#include "Kanoop/gui/widgets/moc_iconlabel.cpp"

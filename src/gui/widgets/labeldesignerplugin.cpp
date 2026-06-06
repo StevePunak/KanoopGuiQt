@@ -12,3 +12,5 @@ QWidget* LabelDesignerPlugin::createWidget(QWidget* parent)
 {
     return new Label("Label", parent);
 }
+
+#include "moc_labeldesignerplugin.cpp"

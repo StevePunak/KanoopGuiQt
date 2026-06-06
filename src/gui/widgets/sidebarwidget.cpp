@@ -124,3 +124,5 @@ void SidebarWidget::onItemClicked(const QModelIndex &index)
         emit itemClicked(itemType);
     }
 }
+
+#include "Kanoop/gui/widgets/moc_sidebarwidget.cpp"

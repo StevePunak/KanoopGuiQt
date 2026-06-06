@@ -87,3 +87,5 @@ QRect SidebarPaintDelegate::textRectangle(const QStyleOptionViewItem &option) co
     QFontMetrics metrics(textFont(option));
     return metrics.boundingRect(option.rect, Qt::AlignCenter | Qt::TextWordWrap, option.text);
 }
+
+#include "moc_sidebarwidgetprivate.cpp"

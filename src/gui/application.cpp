@@ -6,3 +6,5 @@ Application::Application(int& argc, char* argv[], const QString& applicationName
 {
     setApplicationName(applicationName);
 }
+
+#include "Kanoop/gui/moc_application.cpp"

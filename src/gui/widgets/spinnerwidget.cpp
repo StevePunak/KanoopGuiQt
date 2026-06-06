@@ -90,3 +90,5 @@ void SpinnerWidget::onSpinTimer()
     _index = _index < _pixmaps.count() - 1 ? _index + 1 : 0;
     update();
 }
+
+#include "Kanoop/gui/widgets/moc_spinnerwidget.cpp"

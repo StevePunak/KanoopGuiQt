@@ -12,3 +12,5 @@ QWidget* CheckBoxDesignerPlugin::createWidget(QWidget* parent)
 {
     return new CheckBox("Some checkbox", parent);
 }
+
+#include "moc_checkboxdesignerplugin.cpp"

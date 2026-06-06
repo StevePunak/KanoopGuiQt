@@ -56,3 +56,5 @@ QVariant AbstractListModel::data(const QModelIndex &index, int role) const
     return result;
 }
 
+
+#include "Kanoop/gui/moc_abstractlistmodel.cpp"

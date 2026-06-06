@@ -115,3 +115,5 @@ void ComplexWidget::onSplitterMoved()
 }
 
 
+
+#include "Kanoop/gui/moc_complexwidget.cpp"

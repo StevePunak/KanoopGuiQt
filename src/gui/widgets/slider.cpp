@@ -17,3 +17,5 @@ void Slider::mousePressEvent(QMouseEvent* event)
         QSlider::mousePressEvent(event);
     }
 }
+
+#include "Kanoop/gui/widgets/moc_slider.cpp"

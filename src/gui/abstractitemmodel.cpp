@@ -635,3 +635,5 @@ QString AbstractItemModel::toString(const QModelIndex &index, bool includeText)
 
 
 
+
+#include "Kanoop/gui/moc_abstractitemmodel.cpp"

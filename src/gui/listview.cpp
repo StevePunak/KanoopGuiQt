@@ -77,3 +77,5 @@ void ListView::onCurrentSelectionChanged(const QModelIndex& current, const QMode
     emit currentIndexChanged(current);
     emit currentSelectionChanged();
 }
+
+#include "Kanoop/gui/moc_listview.cpp"

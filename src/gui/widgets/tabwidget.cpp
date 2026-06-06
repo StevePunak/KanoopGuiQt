@@ -9,3 +9,5 @@ TabWidget::TabWidget(QWidget *parent) :
     connect(tabBar, &TabBar::tabCustomContextMenuRequested, this, &TabWidget::tabCustomContextMenuRequested);
     setTabBar(tabBar);
 }
+
+#include "Kanoop/gui/widgets/moc_tabwidget.cpp"

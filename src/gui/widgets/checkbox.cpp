@@ -22,3 +22,5 @@ void CheckBox::mousePressEvent(QMouseEvent* event)
         QCheckBox::mousePressEvent(event);
     }
 }
+
+#include "Kanoop/gui/widgets/moc_checkbox.cpp"

@@ -691,3 +691,5 @@ QModelIndexList TreeViewBase::indexesOfUuid(const QUuid& uuid) const
     return result;
 }
 
+
+#include "Kanoop/gui/moc_treeviewbase.cpp"

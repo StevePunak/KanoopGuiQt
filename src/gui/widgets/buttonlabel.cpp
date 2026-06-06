@@ -114,3 +114,5 @@ void ButtonLabel::onButtonClicked()
     emit activeChanged();
     emit clicked();
 }
+
+#include "Kanoop/gui/widgets/moc_buttonlabel.cpp"

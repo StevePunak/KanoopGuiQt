@@ -170,3 +170,5 @@ void AccordionWidget::onPreferencesChanged()
     setFont(newFont);
 }
 
+
+#include "Kanoop/gui/widgets/moc_accordionwidget.cpp"

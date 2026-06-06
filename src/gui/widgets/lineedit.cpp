@@ -26,3 +26,5 @@ void LineEdit::setBackgroundColor(const QColor& color)
     ss.setProperty(SP_BackgroundColor, color);
     setStyleSheet(ss.toString());
 }
+
+#include "Kanoop/gui/widgets/moc_lineedit.cpp"

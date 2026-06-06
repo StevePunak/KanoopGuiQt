@@ -17,3 +17,5 @@ void TabBar::mousePressEvent(QMouseEvent* event)
     }
     QTabBar::mousePressEvent(event);
 }
+
+#include "Kanoop/gui/moc_tabbar.cpp"

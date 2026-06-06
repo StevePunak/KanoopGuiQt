@@ -60,3 +60,5 @@ void MdiSubWindow::onPreferencesChanged()
         }
     }
 }
+
+#include "Kanoop/gui/moc_mdisubwindow.cpp"

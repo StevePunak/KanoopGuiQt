@@ -78,3 +78,5 @@ void ToastManager::closeToast()
     }
 }
 
+
+#include "Kanoop/gui/widgets/moc_toastmanager.cpp"

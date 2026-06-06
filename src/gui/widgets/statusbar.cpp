@@ -64,3 +64,5 @@ void StatusBar::onDotTimerExpired()
         _dots = 0;
     }
 }
+
+#include "Kanoop/gui/widgets/moc_statusbar.cpp"

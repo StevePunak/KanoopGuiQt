@@ -30,3 +30,5 @@ void AbstractTreeModel::columnChangedAtRowIndex(const QModelIndex &rowIndex, int
         emit dataChanged(columnIndex, columnIndex);
     }
 }
+
+#include "Kanoop/gui/moc_abstracttreemodel.cpp"

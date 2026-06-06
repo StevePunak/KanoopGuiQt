@@ -24,3 +24,5 @@ QWidget* PushButtonDesignerPlugin::createWidget(QWidget* parent)
 {
     return new PushButton(parent);
 }
+
+#include "moc_designerplugininterfaces.cpp"

@@ -80,3 +80,5 @@ void DropDownButton::paintEvent(QPaintEvent* event)
     QPixmap pm = _expanded ? _down : _up;
     painter.drawPixmap(paintRect, pm);
 }
+
+#include "moc_accordionwidgetprivate.cpp"
