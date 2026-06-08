@@ -122,3 +122,5 @@ bool GraphicsView::processMouseMoveEvent(QMouseEvent* event)
 
 
 
+
+#include "Kanoop/gui/graphics/moc_graphicsview.cpp"

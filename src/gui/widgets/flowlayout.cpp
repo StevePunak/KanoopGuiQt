@@ -38,3 +38,5 @@ void FlowLayout::clear()
         delete item->widget();
     }
 }
+
+#include "Kanoop/gui/widgets/moc_flowlayout.cpp"

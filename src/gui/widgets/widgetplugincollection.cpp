@@ -17,3 +17,5 @@ QList<QDesignerCustomWidgetInterface*> WidgetPluginCollection::customWidgets() c
 {
     return _widgets;
 }
+
+#include "Kanoop/gui/widgets/moc_widgetplugincollection.cpp"

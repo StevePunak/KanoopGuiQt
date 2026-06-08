@@ -41,3 +41,5 @@ void TreeSelectionModel::select(const QItemSelection& selection, SelectionFlags 
         QItemSelectionModel::select(selection, command);
     }
 }
+
+#include "Kanoop/gui/moc_treeselectionmodel.cpp"

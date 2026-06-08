@@ -76,3 +76,5 @@ void Label::applyStylesheet()
     setStyleSheet(ss.toString());
 }
 
+
+#include "Kanoop/gui/widgets/moc_label.cpp"

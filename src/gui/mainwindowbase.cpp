@@ -175,3 +175,5 @@ void MainWindowBase::onSpliltterMoved()
 {
     GuiSettings::globalInstance()->saveLastSplitterState(static_cast<QSplitter*>(sender()));
 }
+
+#include "Kanoop/gui/moc_mainwindowbase.cpp"

@@ -71,3 +71,5 @@ void PlayPauseButton::setButtonSize(const QSize& min, const QSize& max, const QS
     _button->setMaximumSize(max);
     _button->setIconSize(icon);
 }
+
+#include "Kanoop/gui/widgets/moc_playpausebutton.cpp"

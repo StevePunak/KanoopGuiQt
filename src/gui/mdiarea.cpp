@@ -69,3 +69,5 @@ QMdiSubWindow* MdiArea::getNextSubWindowInCycle(bool forward)
 
     return nullptr;  // should not happen
 }
+
+#include "Kanoop/gui/moc_mdiarea.cpp"

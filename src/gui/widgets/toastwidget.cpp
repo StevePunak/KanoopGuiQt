@@ -91,3 +91,5 @@ void ToastWidget::onClick()
 {
     Log::logText(LVL_DEBUG, "Clicked");
 }
+
+#include "moc_toastwidget.cpp"

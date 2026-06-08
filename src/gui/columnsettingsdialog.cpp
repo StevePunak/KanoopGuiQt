@@ -36,3 +36,5 @@ void ColumnSettingsDialog::okClicked()
          _headers.setHeaderVisible(item->type(), item->checkState() == Qt::Checked);
     }
 }
+
+#include "moc_columnsettingsdialog.cpp"

@@ -24,3 +24,5 @@ void Frame::setBackgroundColor(const QColor& color)
     setStyleSheet(ss.toString());
 }
 
+
+#include "Kanoop/gui/widgets/moc_frame.cpp"

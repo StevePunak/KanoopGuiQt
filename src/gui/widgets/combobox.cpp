@@ -43,3 +43,5 @@ void ComboBox::focusOutEvent(QFocusEvent* event)
     emit lostFocus();
 }
 
+
+#include "Kanoop/gui/widgets/moc_combobox.cpp"

@@ -12,3 +12,5 @@ GroupBox::GroupBox(const QString& title, QWidget* parent) :
 {
 
 }
+
+#include "Kanoop/gui/widgets/moc_groupbox.cpp"

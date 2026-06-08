@@ -390,3 +390,5 @@ void Dialog::onCancelClicked()
     cancelClicked();
     reject();
 }
+
+#include "Kanoop/gui/moc_dialog.cpp"

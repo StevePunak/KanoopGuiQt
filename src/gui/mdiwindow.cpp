@@ -102,3 +102,5 @@ void MdiWindow::onSubWindowClosing()
     }
 }
 
+
+#include "Kanoop/gui/moc_mdiwindow.cpp"

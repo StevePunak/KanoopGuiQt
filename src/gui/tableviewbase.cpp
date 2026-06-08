@@ -329,3 +329,5 @@ void TableViewBase::onResetColumnsClicked()
     GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), sourceModel());
 }
 
+
+#include "Kanoop/gui/moc_tableviewbase.cpp"

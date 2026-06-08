@@ -5,3 +5,5 @@ GraphicsScene::GraphicsScene(QObject* parent) :
     LoggingBaseClass("gfx")
 {
 }
+
+#include "Kanoop/gui/graphics/moc_graphicsscene.cpp"

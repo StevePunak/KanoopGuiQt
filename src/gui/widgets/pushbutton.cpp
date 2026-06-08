@@ -156,3 +156,5 @@ void PushButton::makeStyleSheet()
 
     setStyleSheet(ss);
 }
+
+#include "Kanoop/gui/widgets/moc_pushbutton.cpp"

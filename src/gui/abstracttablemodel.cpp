@@ -81,3 +81,5 @@ void AbstractTableModel::columnChangedAtRowIndex(const QModelIndex &rowIndex, in
     }
 }
 
+
+#include "Kanoop/gui/moc_abstracttablemodel.cpp"

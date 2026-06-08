@@ -219,3 +219,5 @@ void GuiSettings::ensureValidDefaults()
         setFontSize(QFont().pointSize());
     }
 }
+
+#include "Kanoop/gui/moc_guisettings.cpp"

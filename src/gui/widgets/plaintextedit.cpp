@@ -30,3 +30,5 @@ void PlainTextEdit::appendFormattedText(const QString& text, TextFlags flags, co
     QString result = html.toString();
     appendHtml(result);
 }
+
+#include "Kanoop/gui/widgets/moc_plaintextedit.cpp"
