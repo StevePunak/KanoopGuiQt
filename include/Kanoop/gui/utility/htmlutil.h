@@ -51,6 +51,52 @@ public:
      * @return "&lt;/strong&gt;"
      */
     static QString endStrong();
+
+    /**
+     * @brief Return an opening &lt;table&gt; tag with the given cell padding/spacing.
+     * @param cellPadding Pixels of padding inside each cell
+     * @param cellSpacing Pixels of spacing between cells
+     * @return HTML string for the opening table tag
+     */
+    static QString startTable(int cellPadding = 2, int cellSpacing = 0);
+
+    /**
+     * @brief Return a closing &lt;/table&gt; tag.
+     * @return "&lt;/table&gt;"
+     */
+    static QString endTable();
+
+    /**
+     * @brief Return an opening &lt;tr&gt; tag.
+     * @return "&lt;tr&gt;"
+     */
+    static QString startRow();
+
+    /**
+     * @brief Return a closing &lt;/tr&gt; tag.
+     * @return "&lt;/tr&gt;"
+     */
+    static QString endRow();
+
+    /**
+     * @brief Return an opening &lt;td&gt; tag with horizontal alignment.
+     * @param alignment Horizontal alignment (AlignLeft, AlignRight, AlignHCenter)
+     * @return HTML string for the opening cell tag
+     */
+    static QString startCell(Qt::Alignment alignment = Qt::AlignLeft);
+
+    /**
+     * @brief Return a closing &lt;/td&gt; tag.
+     * @return "&lt;/td&gt;"
+     */
+    static QString endCell();
+
+    /**
+     * @brief HTML-escape arbitrary text so it can be safely embedded in a fragment.
+     * @param text Text to escape
+     * @return Escaped text
+     */
+    static QString escape(const QString& text);
 };
 
 #endif // HTMLUTIL_H

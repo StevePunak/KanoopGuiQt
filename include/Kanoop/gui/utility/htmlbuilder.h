@@ -48,6 +48,35 @@ public:
     void endStrong();
 
     /**
+     * @brief Append an opening &lt;table&gt; tag.
+     * @param cellPadding Pixels of padding inside each cell
+     * @param cellSpacing Pixels of spacing between cells
+     */
+    void startTable(int cellPadding = 2, int cellSpacing = 0);
+    /** @brief Append a closing &lt;/table&gt; tag. */
+    void endTable();
+
+    /** @brief Append an opening &lt;tr&gt; tag. */
+    void startRow();
+    /** @brief Append a closing &lt;/tr&gt; tag. */
+    void endRow();
+
+    /**
+     * @brief Append an opening &lt;td&gt; tag with horizontal alignment.
+     * @param alignment Horizontal alignment (AlignLeft, AlignRight, AlignHCenter)
+     */
+    void startCell(Qt::Alignment alignment = Qt::AlignLeft);
+    /** @brief Append a closing &lt;/td&gt; tag. */
+    void endCell();
+
+    /**
+     * @brief Append a complete &lt;td&gt; cell containing HTML-escaped text.
+     * @param text Cell text (HTML-escaped automatically)
+     * @param alignment Horizontal alignment (AlignLeft, AlignRight, AlignHCenter)
+     */
+    void appendCell(const QString& text, Qt::Alignment alignment = Qt::AlignLeft);
+
+    /**
      * @brief Append plain text to the output.
      * @param text Text to append (not HTML-escaped)
      */
