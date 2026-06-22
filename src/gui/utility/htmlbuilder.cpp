@@ -36,6 +36,41 @@ void HtmlBuilder::endStrong()
     _output << HtmlUtil::endStrong();
 }
 
+void HtmlBuilder::startTable(int cellPadding, int cellSpacing)
+{
+    _output << HtmlUtil::startTable(cellPadding, cellSpacing);
+}
+
+void HtmlBuilder::endTable()
+{
+    _output << HtmlUtil::endTable();
+}
+
+void HtmlBuilder::startRow()
+{
+    _output << HtmlUtil::startRow();
+}
+
+void HtmlBuilder::endRow()
+{
+    _output << HtmlUtil::endRow();
+}
+
+void HtmlBuilder::startCell(Qt::Alignment alignment)
+{
+    _output << HtmlUtil::startCell(alignment);
+}
+
+void HtmlBuilder::endCell()
+{
+    _output << HtmlUtil::endCell();
+}
+
+void HtmlBuilder::appendCell(const QString& text, Qt::Alignment alignment)
+{
+    _output << HtmlUtil::startCell(alignment) << HtmlUtil::escape(text) << HtmlUtil::endCell();
+}
+
 void HtmlBuilder::appendText(const QString& text)
 {
     _output << text;
