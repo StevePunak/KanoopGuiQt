@@ -199,6 +199,26 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
             }
         }
     }
+
+    QTableView* view = qobject_cast<QTableView*>(header->parent());
+    if(view != nullptr && headers.count() > 0) {
+        bool anyColumnVisible = false;
+        for(int section = 0;section < headers.count();section++) {
+            if(view->isColumnHidden(section) == false) {
+                anyColumnVisible = true;
+                break;
+            }
+        }
+        if(anyColumnVisible == false) {
+            // Every column came back hidden from a previously-saved state -- the
+            // header would offer no clickable area to reopen this menu and
+            // restore them. Force the first column back on and re-save.
+            Log::logText(LVL_WARNING, QString("All columns were hidden for %1 on restore -- forcing column 0 visible").arg(view->objectName()));
+            view->setColumnHidden(0, false);
+            model->setColumnHeaderVisible(headers.at(0).type(), true);
+            saveLastHeaderState(header, model);
+        }
+    }
 }
 
 void GuiSettings::saveTreeViewState(TreeViewBase *treeView)

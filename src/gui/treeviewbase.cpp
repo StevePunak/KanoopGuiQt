@@ -653,6 +653,11 @@ void TreeViewBase::onHideColumnClicked()
     if(columnHeader.isValid() == false) {
         return;
     }
+    if(sourceModel()->columnHeaders().visibleCount() <= 1) {
+        // Never hide the last visible column -- the header would collapse to
+        // nothing and there would be no way to right-click it again to restore.
+        return;
+    }
 
     sourceModel()->setColumnHeaderVisible(columnHeader.type(), false);
     setColumnHidden(section, true);

@@ -9,6 +9,8 @@ namespace Ui {
 class ColumnSettingsDialog;
 }
 
+class QListWidgetItem;
+
 class ColumnSettingsDialog : public Dialog
 {
     Q_OBJECT
@@ -25,6 +27,9 @@ private:
 
     Ui::ColumnSettingsDialog *ui;
     TableHeader::List _headers;
+
+private slots:
+    void onColumnItemChanged(QListWidgetItem* item);
 };
 
 #endif // COLUMNSETTINGSDIALOG_H

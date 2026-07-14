@@ -310,6 +310,11 @@ void TableViewBase::onHideColumnClicked()
     if(header.isValid() == false) {
         return;
     }
+    if(sourceModel()->columnHeaders().visibleCount() <= 1) {
+        // Never hide the last visible column -- the header would collapse to
+        // nothing and there would be no way to right-click it again to restore.
+        return;
+    }
 
     sourceModel()->setColumnHeaderVisible(header.type(), false);
     setColumnHidden(section, true);
