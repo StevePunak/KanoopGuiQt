@@ -47,9 +47,10 @@ public:
          * @param text Header label text
          * @param size Section pixel width
          * @param visible Whether the section is visible
+         * @param visualIndex Visual (display) position of the section
          */
-        SectionState(int section, const QString& text, int size, bool visible) :
-            _section(section), _text(text), _size(size), _visible(visible)  {}
+        SectionState(int section, const QString& text, int size, bool visible, int visualIndex) :
+            _section(section), _text(text), _size(size), _visible(visible), _visualIndex(visualIndex)  {}
 
         /** @brief Virtual destructor. */
         virtual ~SectionState() {}
@@ -84,6 +85,12 @@ public:
         bool isVisible() const { return _visible; }
 
         /**
+         * @brief Return the visual (display) position of the section.
+         * @return Visual index
+         */
+        int visualIndex() const { return _visualIndex; }
+
+        /**
          * @brief Return whether this section state has a non-empty label.
          * @return true if the text is non-empty
          */
@@ -116,6 +123,7 @@ public:
         QString _text;
         int _size = 100;
         bool _visible = true;
+        int _visualIndex = 0;
     };
 
     /**
@@ -124,8 +132,9 @@ public:
      * @param text Header label text
      * @param size Section pixel width
      * @param visible Whether the section is visible
+     * @param visualIndex Visual (display) position of the section
      */
-    void addSection(int section, const QString& text, int size, bool visible);
+    void addSection(int section, const QString& text, int size, bool visible, int visualIndex);
 
     /**
      * @brief Return the saved state for a given section index.

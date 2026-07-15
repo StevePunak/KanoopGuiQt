@@ -155,7 +155,7 @@ void GuiSettings::saveLastHeaderState(QHeaderView *header, AbstractItemModel *mo
     HeaderState headerState;
     for(int section = 0;section < headers.count();section++) {
         TableHeader tableHeader = headers.at(section);
-        headerState.addSection(section, tableHeader.text(), header->sectionSize(section), tableHeader.isVisible());
+        headerState.addSection(section, tableHeader.text(), header->sectionSize(section), tableHeader.isVisible(), header->visualIndex(section));
     }
     QByteArray jsonHeaderState = headerState.serializeToJson();
     if(header->orientation() == Qt::Vertical) {
@@ -177,6 +177,11 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
     headerState.deserializeFromJson(jsonState);
 
     TableHeader::List headers = model->columnHeaders();
+    // visualIndex -> logical section, built only if every section matches the saved
+    // state. A partial or mismatched map means the column set changed since the state
+    // was saved, so the persisted order is not safe to apply and we leave order alone.
+    QMap<int, int> logicalAtVisual;
+    bool orderComplete = true;
     for(int section = 0;section < headers.count();section++) {
         TableHeader tableHeader = headers.at(section);
         QString sectionText = tableHeader.text();
@@ -196,6 +201,26 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
                     Log::logText(LVL_DEBUG, QString("Section %1 of %2 not visible").arg(section).arg(view->objectName()));
                 }
                 view->setColumnHidden(section, sectionState.isVisible() == false);
+            }
+            logicalAtVisual.insert(sectionState.visualIndex(), section);
+        }
+        else {
+            orderComplete = false;
+        }
+    }
+
+    // Restore visual (drag) order only when the saved state fully describes the current
+    // column set. Block header signals so the moves do not re-enter the save slot.
+    if(orderComplete && logicalAtVisual.count() == headers.count()) {
+        QSignalBlocker blocker(header);
+        for(int targetVisual = 0;targetVisual < headers.count();targetVisual++) {
+            int logical = logicalAtVisual.value(targetVisual, -1);
+            if(logical < 0) {
+                continue;
+            }
+            int currentVisual = header->visualIndex(logical);
+            if(currentVisual >= 0 && currentVisual != targetVisual) {
+                header->moveSection(currentVisual, targetVisual);
             }
         }
     }

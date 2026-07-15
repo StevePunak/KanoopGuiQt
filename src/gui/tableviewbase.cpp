@@ -43,6 +43,7 @@ TableViewBase::TableViewBase(QWidget *parent) :
     // Wire up signals for saving header state
     connect(horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TableViewBase::onHeaderContextMenuRequested);
     connect(horizontalHeader(), &QHeaderView::sectionResized, this, &TableViewBase::onHorizontalHeaderResized);
+    connect(horizontalHeader(), &QHeaderView::sectionMoved, this, &TableViewBase::onHorizontalHeaderSectionMoved);
     connect(verticalHeader(), &QHeaderView::sectionResized, this, &TableViewBase::onVerticalHeaderResized);
 
     // Enable context menu on header
@@ -252,6 +253,15 @@ void TableViewBase::currentChanged(const QModelIndex& current, const QModelIndex
 }
 
 void TableViewBase::onHorizontalHeaderResized(int, int, int)
+{
+    if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
+        AbstractItemModel* itemModel = static_cast<AbstractItemModel*>(sourceModel());
+        GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), itemModel);
+    }
+    emit horizontalHeaderChanged();
+}
+
+void TableViewBase::onHorizontalHeaderSectionMoved(int, int, int)
 {
     if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
         AbstractItemModel* itemModel = static_cast<AbstractItemModel*>(sourceModel());

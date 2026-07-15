@@ -20,9 +20,9 @@ void HeaderState::deserializeFromJson(const QByteArray &json)
     _sections.deserializeFromJsonArray(doc["sections"].toArray());
 }
 
-void HeaderState::addSection(int section, const QString &text, int size, bool visible)
+void HeaderState::addSection(int section, const QString &text, int size, bool visible, int visualIndex)
 {
-    _sections.append(SectionState(section, text, size, visible));
+    _sections.append(SectionState(section, text, size, visible, visualIndex));
 }
 
 QJsonObject HeaderState::SectionState::serializeToJsonObject() const
@@ -32,6 +32,7 @@ QJsonObject HeaderState::SectionState::serializeToJsonObject() const
     result["text"] = _text;
     result["size"] = _size;
     result["visible"] = _visible;
+    result["visualIndex"] = _visualIndex;
     return result;
 }
 
@@ -41,4 +42,7 @@ void HeaderState::SectionState::deserializeFromJsonObject(const QJsonObject &jso
     _text = jsonObject["text"].toString();
     _size = jsonObject["size"].toInt();
     _visible = jsonObject["visible"].toBool();
+    // States saved before column-order persistence lack this key; default to the
+    // logical index so the restored order is an identity (no reordering).
+    _visualIndex = jsonObject["visualIndex"].toInt(_section);
 }
