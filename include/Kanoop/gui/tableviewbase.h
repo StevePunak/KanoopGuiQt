@@ -191,6 +191,7 @@ protected slots:
 
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
+    virtual void onHorizontalHeaderSectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/);
     virtual void onVerticalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
 
     void onHeaderContextMenuRequested(const QPoint& pos);

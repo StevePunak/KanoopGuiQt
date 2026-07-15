@@ -31,6 +31,7 @@ TreeViewBase::TreeViewBase(QWidget *parent) :
 
     // Wire up signals for saving header state
     connect(header(), &QHeaderView::sectionResized, this, &TreeViewBase::onHorizontalHeaderResized);
+    connect(header(), &QHeaderView::sectionMoved, this, &TreeViewBase::onHorizontalHeaderSectionMoved);
     connect(header(), &QHeaderView::customContextMenuRequested, this, &TreeViewBase::onHeaderContextMenuRequested);
 
     // Enable context menu on header
@@ -598,6 +599,15 @@ bool TreeViewBase::testMatch(const QModelIndex& index, int role, const QVariant&
 }
 
 void TreeViewBase::onHorizontalHeaderResized(int, int, int)
+{
+    if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
+        AbstractItemModel* itemModel = static_cast<AbstractItemModel*>(sourceModel());
+        GuiSettings::globalInstance()->saveLastHeaderState(header(), itemModel);
+    }
+    emit headerChanged();
+}
+
+void TreeViewBase::onHorizontalHeaderSectionMoved(int, int, int)
 {
     if(GuiSettings::globalInstance() != nullptr && model() != nullptr) {
         AbstractItemModel* itemModel = static_cast<AbstractItemModel*>(sourceModel());

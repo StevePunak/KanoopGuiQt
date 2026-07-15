@@ -332,6 +332,7 @@ signals:
 
 private slots:
     virtual void onHorizontalHeaderResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/);
+    virtual void onHorizontalHeaderSectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/);
 
     void onHeaderContextMenuRequested();
     void onColumnSettingsClicked();

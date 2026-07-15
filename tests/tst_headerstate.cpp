@@ -9,8 +9,8 @@ private slots:
     void addSection_getSection_roundTrip()
     {
         HeaderState state;
-        state.addSection(0, "Name", 150, true);
-        state.addSection(1, "Value", 200, false);
+        state.addSection(0, "Name", 150, true, 1);
+        state.addSection(1, "Value", 200, false, 0);
 
         HeaderState::SectionState s0 = state.getSection(0);
         QVERIFY(s0.isValid());
@@ -18,6 +18,7 @@ private slots:
         QCOMPARE(s0.text(), QStringLiteral("Name"));
         QCOMPARE(s0.size(), 150);
         QVERIFY(s0.isVisible());
+        QCOMPARE(s0.visualIndex(), 1);
 
         HeaderState::SectionState s1 = state.getSection(1);
         QVERIFY(s1.isValid());
@@ -25,12 +26,13 @@ private slots:
         QCOMPARE(s1.text(), QStringLiteral("Value"));
         QCOMPARE(s1.size(), 200);
         QVERIFY(!s1.isVisible());
+        QCOMPARE(s1.visualIndex(), 0);
     }
 
     void getSection_nonExistent_returnsInvalid()
     {
         HeaderState state;
-        state.addSection(0, "Name", 100, true);
+        state.addSection(0, "Name", 100, true, 0);
 
         HeaderState::SectionState s = state.getSection(99);
         QVERIFY(!s.isValid());
@@ -39,9 +41,9 @@ private slots:
     void serializeDeserialize_roundTrip()
     {
         HeaderState original;
-        original.addSection(0, "Alpha", 100, true);
-        original.addSection(1, "Beta", 200, false);
-        original.addSection(2, "Gamma", 300, true);
+        original.addSection(0, "Alpha", 100, true, 2);
+        original.addSection(1, "Beta", 200, false, 0);
+        original.addSection(2, "Gamma", 300, true, 1);
 
         QByteArray json = original.serializeToJson();
         QVERIFY(!json.isEmpty());
@@ -54,18 +56,21 @@ private slots:
         QCOMPARE(s0.text(), QStringLiteral("Alpha"));
         QCOMPARE(s0.size(), 100);
         QVERIFY(s0.isVisible());
+        QCOMPARE(s0.visualIndex(), 2);
 
         HeaderState::SectionState s1 = restored.getSection(1);
         QVERIFY(s1.isValid());
         QCOMPARE(s1.text(), QStringLiteral("Beta"));
         QCOMPARE(s1.size(), 200);
         QVERIFY(!s1.isVisible());
+        QCOMPARE(s1.visualIndex(), 0);
 
         HeaderState::SectionState s2 = restored.getSection(2);
         QVERIFY(s2.isValid());
         QCOMPARE(s2.text(), QStringLiteral("Gamma"));
         QCOMPARE(s2.size(), 300);
         QVERIFY(s2.isVisible());
+        QCOMPARE(s2.visualIndex(), 1);
     }
 
     void sectionState_defaultConstructor_isInvalid()
@@ -75,21 +80,46 @@ private slots:
         QCOMPARE(s.section(), 0);
         QCOMPARE(s.size(), 100);
         QVERIFY(s.isVisible());
+        QCOMPARE(s.visualIndex(), 0);
+    }
+
+    // States persisted before column-order support lack the "visualIndex" key.
+    // They must deserialize with visualIndex defaulted to the logical section so
+    // the restored order is an identity and existing layouts are left untouched.
+    void deserialize_withoutVisualIndex_defaultsToSection()
+    {
+        const QByteArray legacyJson =
+            "{ \"sections\": ["
+            "  { \"section\": 0, \"size\": 100, \"text\": \"Name\",  \"visible\": true },"
+            "  { \"section\": 1, \"size\": 200, \"text\": \"Value\", \"visible\": true }"
+            "] }";
+
+        HeaderState state;
+        state.deserializeFromJson(legacyJson);
+
+        HeaderState::SectionState s0 = state.getSection(0);
+        QVERIFY(s0.isValid());
+        QCOMPARE(s0.visualIndex(), 0);
+
+        HeaderState::SectionState s1 = state.getSection(1);
+        QVERIFY(s1.isValid());
+        QCOMPARE(s1.visualIndex(), 1);
     }
 
     void sectionState_fullConstructor()
     {
-        HeaderState::SectionState s(5, "Column", 250, false);
+        HeaderState::SectionState s(5, "Column", 250, false, 7);
         QVERIFY(s.isValid());
         QCOMPARE(s.section(), 5);
         QCOMPARE(s.text(), QStringLiteral("Column"));
         QCOMPARE(s.size(), 250);
         QVERIFY(!s.isVisible());
+        QCOMPARE(s.visualIndex(), 7);
     }
 
     void sectionState_jsonObjectRoundTrip()
     {
-        HeaderState::SectionState original(3, "Test", 175, true);
+        HeaderState::SectionState original(3, "Test", 175, true, 4);
         QJsonObject obj = original.serializeToJsonObject();
 
         HeaderState::SectionState restored;
@@ -99,6 +129,7 @@ private slots:
         QCOMPARE(restored.text(), QStringLiteral("Test"));
         QCOMPARE(restored.size(), 175);
         QVERIFY(restored.isVisible());
+        QCOMPARE(restored.visualIndex(), 4);
     }
 };
 
