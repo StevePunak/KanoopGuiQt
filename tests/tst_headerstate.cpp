@@ -80,6 +80,30 @@ private slots:
         QCOMPARE(s.section(), 0);
         QCOMPARE(s.size(), 100);
         QVERIFY(s.isVisible());
+        QCOMPARE(s.visualIndex(), 0);
+    }
+
+    // States persisted before column-order support lack the "visualIndex" key.
+    // They must deserialize with visualIndex defaulted to the logical section so
+    // the restored order is an identity and existing layouts are left untouched.
+    void deserialize_withoutVisualIndex_defaultsToSection()
+    {
+        const QByteArray legacyJson =
+            "{ \"sections\": ["
+            "  { \"section\": 0, \"size\": 100, \"text\": \"Name\",  \"visible\": true },"
+            "  { \"section\": 1, \"size\": 200, \"text\": \"Value\", \"visible\": true }"
+            "] }";
+
+        HeaderState state;
+        state.deserializeFromJson(legacyJson);
+
+        HeaderState::SectionState s0 = state.getSection(0);
+        QVERIFY(s0.isValid());
+        QCOMPARE(s0.visualIndex(), 0);
+
+        HeaderState::SectionState s1 = state.getSection(1);
+        QVERIFY(s1.isValid());
+        QCOMPARE(s1.visualIndex(), 1);
     }
 
     void sectionState_fullConstructor()
