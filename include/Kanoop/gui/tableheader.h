@@ -159,21 +159,6 @@ public:
         }
 
         /**
-         * @brief Count how many headers in this list are currently visible.
-         * @return Number of headers with isVisible() == true
-         */
-        int visibleCount() const
-        {
-            int count = 0;
-            for(const TableHeader& header : *this) {
-                if(header.isVisible()) {
-                    count++;
-                }
-            }
-            return count;
-        }
-
-        /**
          * @brief Find the first header with a matching display text.
          * @param text Header label to search for
          * @return Matching TableHeader, or an invalid one if not found

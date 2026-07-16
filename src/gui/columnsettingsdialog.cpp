@@ -22,8 +22,6 @@ ColumnSettingsDialog::ColumnSettingsDialog(const TableHeader::List& headers, QWi
         item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(header.isVisible() ? Qt::Checked : Qt::Unchecked);
     }
-
-    connect(ui->listColumns, &QListWidget::itemChanged, this, &ColumnSettingsDialog::onColumnItemChanged);
 }
 
 ColumnSettingsDialog::~ColumnSettingsDialog()
@@ -36,26 +34,6 @@ void ColumnSettingsDialog::okClicked()
     for(int row = 0;row < ui->listColumns->count();row++) {
          QListWidgetItem* item = ui->listColumns->item(row);
          _headers.setHeaderVisible(item->type(), item->checkState() == Qt::Checked);
-    }
-}
-
-void ColumnSettingsDialog::onColumnItemChanged(QListWidgetItem* item)
-{
-    if(item->checkState() == Qt::Unchecked) {
-        int checkedCount = 0;
-        for(int row = 0;row < ui->listColumns->count();row++) {
-            if(ui->listColumns->item(row)->checkState() == Qt::Checked) {
-                checkedCount++;
-            }
-        }
-
-        if(checkedCount == 0) {
-            // Never allow every column to be hidden -- there would be no way to
-            // reopen this dialog and check one back on.
-            ui->listColumns->blockSignals(true);
-            item->setCheckState(Qt::Checked);
-            ui->listColumns->blockSignals(false);
-        }
     }
 }
 

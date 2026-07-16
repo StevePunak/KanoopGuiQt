@@ -19,6 +19,8 @@
 #include <Kanoop/geometry/rectangle.h>
 #include <Kanoop/stringutil.h>
 #include <QHeaderView>
+#include <QStyle>
+#include <QStyleOptionHeader>
 #include <QStyledItemDelegate>
 
 TreeViewBase::TreeViewBase(QWidget *parent) :
@@ -35,6 +37,18 @@ TreeViewBase::TreeViewBase(QWidget *parent) :
 
     // Enable context menu on header
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // Pin a minimum header height. When every column is hidden the header would
+    // otherwise collapse to zero pixels, so the right-click lands on the body
+    // instead of the header and the "Column Settings" menu becomes unreachable --
+    // leaving no way to restore the hidden columns. Derive the height from the
+    // style so it matches the natural header height on any platform/DPI.
+    QStyleOptionHeader headerOption;
+    headerOption.initFrom(header());
+    header()->setMinimumHeight(
+        header()->style()->sizeFromContents(
+            QStyle::CT_HeaderSection, &headerOption,
+            QSize(0, header()->fontMetrics().height()), header()).height());
 
     // Create header actions
     _actionColSettings = new QAction("Column Settings", this);
@@ -610,6 +624,11 @@ void TreeViewBase::onHeaderContextMenuRequested()
 {
     _contextMenuPos = mapFromGlobal(QCursor::pos());
 
+    // Only offer "Hide Column" when the click is actually over a column -- on the
+    // empty part of the header (e.g. when all columns are hidden) it has nothing
+    // to act on, and the menu is only there so the user can restore columns.
+    _actionHideCol->setVisible(header()->logicalIndexAt(_contextMenuPos) >= 0);
+
     QMenu menu;
     // Allow subclasses to add their own actions
     addHeaderContextMenuItems(&menu, QCursor::pos());
@@ -651,11 +670,6 @@ void TreeViewBase::onHideColumnClicked()
     }
     TableHeader columnHeader = sourceModel()->columnHeader(section);
     if(columnHeader.isValid() == false) {
-        return;
-    }
-    if(sourceModel()->columnHeaders().visibleCount() <= 1) {
-        // Never hide the last visible column -- the header would collapse to
-        // nothing and there would be no way to right-click it again to restore.
         return;
     }
 
