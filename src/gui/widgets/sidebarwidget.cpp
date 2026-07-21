@@ -23,6 +23,8 @@ SidebarWidget::SidebarWidget(QWidget *parent) :
     setContentsMargins(DefaultContentsMargins);
     setIconSize(DefaultIconSize);
 
+    setResizeMode(QListView::Adjust);
+
     setModel(new QStandardItemModel(this));
     setItemDelegate(_delegate);
 }
