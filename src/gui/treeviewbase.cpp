@@ -48,7 +48,7 @@ TreeViewBase::TreeViewBase(QWidget *parent) :
     header()->setMinimumHeight(
         header()->style()->sizeFromContents(
             QStyle::CT_HeaderSection, &headerOption,
-            QSize(0, header()->fontMetrics().height()), header()).height());
+            QSize(), header()).height());
 
     // Create header actions
     _actionColSettings = new QAction("Column Settings", this);
@@ -687,6 +687,13 @@ void TreeViewBase::onResetColumnsClicked()
 {
     for(int section = 0;section < header()->count();section++) {
         header()->resizeSection(section, 120);
+        setColumnHidden(section, false);
+        if(sourceModel() != nullptr) {
+            TableHeader columnHeader = sourceModel()->columnHeader(section);
+            if(columnHeader.isValid()) {
+                sourceModel()->setColumnHeaderVisible(columnHeader.type(), true);
+            }
+        }
     }
     GuiSettings::globalInstance()->saveLastHeaderState(header(), sourceModel());
 }

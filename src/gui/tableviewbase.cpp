@@ -60,7 +60,7 @@ TableViewBase::TableViewBase(QWidget *parent) :
     horizontalHeader()->setMinimumHeight(
         horizontalHeader()->style()->sizeFromContents(
             QStyle::CT_HeaderSection, &headerOption,
-            QSize(0, horizontalHeader()->fontMetrics().height()), horizontalHeader()).height());
+            QSize(), horizontalHeader()).height());
 
     // Create header actions
     _actionColSettings = new QAction("Column Settings", this);
@@ -344,6 +344,13 @@ void TableViewBase::onResetColumnsClicked()
 {
     for(int section = 0;section < horizontalHeader()->count();section++) {
         horizontalHeader()->resizeSection(section, 120);
+        setColumnHidden(section, false);
+        if(sourceModel() != nullptr) {
+            TableHeader header = sourceModel()->columnHeader(section);
+            if(header.isValid()) {
+                sourceModel()->setColumnHeaderVisible(header.type(), true);
+            }
+        }
     }
     GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), sourceModel());
 }
