@@ -16,6 +16,8 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QSortFilterProxyModel>
+#include <QStyle>
+#include <QStyleOptionHeader>
 #include <QStyledItemDelegate>
 #include <Kanoop/geometry/rectangle.h>
 
@@ -48,6 +50,18 @@ TableViewBase::TableViewBase(QWidget *parent) :
 
     // Enable context menu on header
     horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // Pin a minimum header height. When every column is hidden the header would
+    // otherwise collapse to zero pixels, so the right-click lands on the body
+    // instead of the header and the "Column Settings" menu becomes unreachable --
+    // leaving no way to restore the hidden columns. Derive the height from the
+    // style so it matches the natural header height on any platform/DPI.
+    QStyleOptionHeader headerOption;
+    headerOption.initFrom(horizontalHeader());
+    horizontalHeader()->setMinimumHeight(
+        horizontalHeader()->style()->sizeFromContents(
+            QStyle::CT_HeaderSection, &headerOption,
+            QSize(), horizontalHeader()).height());
 
     // Create header actions
     _actionColSettings = new QAction("Column Settings", this);
@@ -283,6 +297,11 @@ void TableViewBase::onHeaderContextMenuRequested(const QPoint &pos)
 {
     _contextMenuPoint = pos;
 
+    // Only offer "Hide Column" when the click is actually over a column -- on the
+    // empty part of the header (e.g. when all columns are hidden) it has nothing
+    // to act on, and the menu is only there so the user can restore columns.
+    _actionHideCol->setVisible(horizontalHeader()->logicalIndexAt(pos) >= 0);
+
     QMenu menu;
     menu.addAction(_actionColSettings);
     menu.addAction(_actionHideCol);
@@ -335,6 +354,13 @@ void TableViewBase::onResetColumnsClicked()
 {
     for(int section = 0;section < horizontalHeader()->count();section++) {
         horizontalHeader()->resizeSection(section, 120);
+        setColumnHidden(section, false);
+        if(sourceModel() != nullptr) {
+            TableHeader header = sourceModel()->columnHeader(section);
+            if(header.isValid()) {
+                sourceModel()->setColumnHeaderVisible(header.type(), true);
+            }
+        }
     }
     GuiSettings::globalInstance()->saveLastHeaderState(horizontalHeader(), sourceModel());
 }
