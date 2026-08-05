@@ -104,6 +104,10 @@ public:
      */
     void setIconSize(const QSize& value);
 
+protected:
+    /** @brief Re-lay out items when the view's width changes. */
+    virtual void resizeEvent(QResizeEvent *event) override;
+
 private:
     QStandardItemModel* sourceModel() const;
 
