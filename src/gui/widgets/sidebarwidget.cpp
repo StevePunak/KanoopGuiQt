@@ -3,6 +3,7 @@
 #include "guitypes.h"
 #include <Kanoop/kanoopcommon.h>
 
+#include <QResizeEvent>
 #include <QStandardItemModel>
 #include <resources.h>
 
@@ -27,6 +28,17 @@ SidebarWidget::SidebarWidget(QWidget *parent) :
 
     setModel(new QStandardItemModel(this));
     setItemDelegate(_delegate);
+}
+
+void SidebarWidget::resizeEvent(QResizeEvent *event)
+{
+    QListView::resizeEvent(event);
+
+    // QListView only auto re-lays-out on flow-direction (height) changes, not width, so a
+    // width-only resize would otherwise leave a stale item width and a spurious scrollbar.
+    if(event->size().width() != event->oldSize().width()) {
+        doItemsLayout();
+    }
 }
 
 void SidebarWidget::addItem(int entityMetadataType, const QString &text, int imageResourceId)
