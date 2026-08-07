@@ -26,6 +26,8 @@
 #include <Kanoop/geometry/point.h>
 #include <Kanoop/geometry/size.h>
 
+#include <algorithm>
+
 MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) :
     QMainWindow{parent},
     LoggingBaseClass(loggingCategory),
@@ -125,13 +127,23 @@ void MainWindowBase::showEvent(QShowEvent *event)
             if(isMdiSubWindow == false) {
                 // Ensure the restore point is on a connected screen. A stale position can
                 // reference a monitor which has since been removed.
-                if(QGuiApplication::screenAt(geometryRect.topLeft()) == nullptr) {
+                QScreen* screen = QGuiApplication::screenAt(geometryRect.topLeft());
+                if(screen == nullptr) {
                     logText(LVL_DEBUG, QString("The restore point is off the screen - centering on primary screen"));
-                    QRect screenRect = QGuiApplication::primaryScreen()->availableGeometry();
+                    screen = QGuiApplication::primaryScreen();
+                    QRect screenRect = screen->availableGeometry();
                     QPoint centered = screenRect.center();
                     centered.rx() -= (geometryRect.width() / 2);
                     centered.ry() -= (geometryRect.height() / 2);
                     geometryRect.moveTopLeft(centered);
+                }
+
+                // The restored size itself was never validated. It can exceed the current screen
+                // because it was saved on a larger monitor, or because the default size is simply
+                // bigger than a laptop panel. Nothing downstream bounds it and the overflow sits
+                // off-screen where it cannot be reached, so bound it to the work area here.
+                if(screen != nullptr) {
+                    geometryRect = boundToScreen(geometryRect, screen);
                 }
 
                 if(parent != nullptr) {
@@ -150,6 +162,51 @@ void MainWindowBase::showEvent(QShowEvent *event)
         }
     }
     QMainWindow::showEvent(event);
+}
+
+QRect MainWindowBase::boundToScreen(const QRect& geometryRect, const QScreen* screen)
+{
+    QRect result = geometryRect;
+    QRect available = screen->availableGeometry();
+
+    QSize bounded = result.size().boundedTo(available.size());
+    if(bounded != result.size()) {
+        logText(LVL_INFO, QString("Restored size %1 exceeds the available screen area %2 - bounding to %3")
+                              .arg(Size(result.size()).toString())
+                              .arg(Size(available.size()).toString())
+                              .arg(Size(bounded).toString()));
+        result.setSize(bounded);
+    }
+
+    // Guard the other direction for windows that asked for a floor. A window shrunk to a handful
+    // of pixels persists that size and reopens unusable. The work area still wins, so this never
+    // forces a window larger than the screen.
+    if(_minimumRestoreSize.isValid()) {
+        QSize raised = result.size().expandedTo(_minimumRestoreSize).boundedTo(available.size());
+        if(raised != result.size()) {
+            logText(LVL_INFO, QString("Restored size %1 is below the minimum restore size %2 - raising to %3")
+                                  .arg(Size(result.size()).toString())
+                                  .arg(Size(_minimumRestoreSize).toString())
+                                  .arg(Size(raised).toString()));
+            result.setSize(raised);
+        }
+    }
+
+    // Now that the size fits, slide the window back inside the work area if the restore point
+    // put part of it beyond the right or bottom edge.
+    QPoint topLeft = result.topLeft();
+    topLeft.setX(std::min(topLeft.x(), available.right() - result.width() + 1));
+    topLeft.setY(std::min(topLeft.y(), available.bottom() - result.height() + 1));
+    topLeft.setX(std::max(topLeft.x(), available.left()));
+    topLeft.setY(std::max(topLeft.y(), available.top()));
+    if(topLeft != result.topLeft()) {
+        logText(LVL_INFO, QString("Restored position %1 puts the window outside the work area - moving to %2")
+                              .arg(Point(result.topLeft()).toString())
+                              .arg(Point(topLeft).toString()));
+        result.moveTopLeft(topLeft);
+    }
+
+    return result;
 }
 
 void MainWindowBase::onPreferencesChanged()

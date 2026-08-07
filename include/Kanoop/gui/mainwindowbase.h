@@ -21,6 +21,7 @@
 class StandardMenus;
 
 class QMdiArea;
+class QScreen;
 
 /**
  * @brief QMainWindow subclass providing logging, status bar helpers, and geometry persistence.
@@ -126,6 +127,23 @@ public:
      */
     virtual QString geometryKindName() const { return objectName(); }
 
+    /**
+     * @brief Return the smallest size this window may be restored at.
+     * @return Minimum restore QSize, or an invalid size when no floor is set
+     */
+    QSize minimumRestoreSize() const { return _minimumRestoreSize; }
+
+    /**
+     * @brief Set the smallest size this window may be restored at.
+     *
+     * A persisted size is otherwise honoured however small it is, so a window shrunk to a few
+     * pixels in one session reopens that way in the next, with no obvious way back. Leave unset
+     * for windows that are legitimately tiny.
+     *
+     * @param value Minimum restore QSize; an invalid size disables the floor
+     */
+    void setMinimumRestoreSize(const QSize& value) { _minimumRestoreSize = value; }
+
 public slots:
     /**
      * @brief Show a coloured status message with an optional timeout.
@@ -193,6 +211,19 @@ protected:
      */
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
+    /**
+     * @brief Bound a restored geometry so it fits entirely within a screen's work area.
+     *
+     * A persisted geometry carries no record of the screen it was saved on, so it can be larger
+     * than the current one, or positioned past its edge. Neither Qt nor this class bounds it
+     * otherwise, and the overflow is unreachable.
+     *
+     * @param geometryRect Restored geometry to bound
+     * @param screen Screen whose availableGeometry() the result must fit inside
+     * @return The geometry, shrunk and/or moved as needed to fit
+     */
+    QRect boundToScreen(const QRect& geometryRect, const QScreen* screen);
+
     /** @brief Persist position on move. */
     virtual void moveEvent(QMoveEvent *event) override;
     /** @brief Persist size on resize. */
@@ -207,6 +238,7 @@ private:
     bool _persistPosition = true;
     bool _persistSize = true;
     QSize _defaultSize;
+    QSize _minimumRestoreSize;
     StatusBar* _statusBar = nullptr;
 
 signals:
