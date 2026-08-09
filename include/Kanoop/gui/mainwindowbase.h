@@ -18,6 +18,8 @@
 #include <Kanoop/timespan.h>
 #include <Kanoop/gui/widgets/statusbar.h>
 
+class StandardMenus;
+
 class QMdiArea;
 
 /**
@@ -38,6 +40,24 @@ public:
      * @param parent Optional QWidget parent
      */
     explicit MainWindowBase(const QString& loggingCategory, QWidget *parent = nullptr);
+
+    /**
+     * @brief Contributes this window's commands to the shell's menus.
+     *
+     * Called when the window becomes the active sub-window of an MdiWindow. A window
+     * hosted in an MDI area has no menu bar of its own; it inserts its actions into the
+     * shell's menus here and takes them out again in removeWindowMenus(), so the menu
+     * bar always reflects the window being looked at.
+     *
+     * @param menus The shell's standard menus
+     */
+    virtual void addWindowMenus(const StandardMenus& menus) { Q_UNUSED(menus) }
+
+    /**
+     * @brief Withdraws this window's commands from the shell's menus.
+     * @param menus The shell's standard menus
+     */
+    virtual void removeWindowMenus(const StandardMenus& menus) { Q_UNUSED(menus) }
 
     /**
      * @brief Return whether the window persists its position between sessions.
