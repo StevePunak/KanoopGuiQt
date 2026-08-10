@@ -212,17 +212,40 @@ protected:
     void setFormLoadFailed(bool value) { _formLoadFailed = value; }
 
     /**
-     * @brief Bound a restored geometry so it fits entirely within a screen's work area.
+     * @brief Bound a restored geometry so it lands entirely on a connected screen.
      *
      * A persisted geometry carries no record of the screen it was saved on, so it can be larger
      * than the current one, or positioned past its edge. Neither Qt nor this class bounds it
      * otherwise, and the overflow is unreachable.
      *
-     * @param geometryRect Restored geometry to bound
-     * @param screen Screen whose availableGeometry() the result must fit inside
+     * A geometry whose every pixel already falls on a connected screen is returned untouched, so
+     * a deliberate multi-monitor layout is never disturbed.
+     *
+     * The restored rect is a hybrid of two coordinate systems - moveEvent persists QWidget::pos(),
+     * which for a window includes the frame, while resizeEvent persists QWidget::size(), which does
+     * not. frameDecoration reconciles them. It may legitimately be (0, 0): on X11 an invisible
+     * window has no frame yet, so the extents are unknown until after the first map. That yields
+     * the unreconciled bound rather than a wrong one.
+     *
+     * @param geometryRect Restored geometry to bound; frame origin with a client-area size
+     * @param frameDecoration Size the window frame adds to the client area, or (0, 0) if unknown
      * @return The geometry, shrunk and/or moved as needed to fit
      */
-    QRect boundToScreen(const QRect& geometryRect, const QScreen* screen);
+    QRect boundToScreen(const QRect& geometryRect, const QSize& frameDecoration);
+
+    /**
+     * @brief Fit a rectangle inside a work area, honouring an optional lower bound on its size.
+     *
+     * Pure geometry: the floor is applied first, then the work area caps it, then the rectangle
+     * slides back inside. The cap wins over the floor, so a floor can never push a window past
+     * the edge of a screen too small to hold it.
+     *
+     * @param frameRect Rectangle to fit, in frame coordinates
+     * @param available Work area the result must fit inside
+     * @param minimumFrameSize Smallest permitted size, or an invalid size for no floor
+     * @return The rectangle, resized and/or moved as needed to fit
+     */
+    static QRect boundRectToArea(const QRect& frameRect, const QRect& available, const QSize& minimumFrameSize);
 
     /** @brief Persist position on move. */
     virtual void moveEvent(QMoveEvent *event) override;
@@ -232,6 +255,28 @@ protected:
     virtual void showEvent(QShowEvent *event) override;
 
 private:
+    /**
+     * @brief Return the screen a restored geometry mostly occupies.
+     *
+     * The screen under the top-left corner is not necessarily the one the window mostly sits on,
+     * so the largest intersection decides rather than a single point.
+     *
+     * @param frameRect Restored geometry, in frame coordinates
+     * @return Screen with the largest intersection, falling back to the primary screen
+     */
+    static QScreen* screenForGeometry(const QRect& frameRect);
+
+    /**
+     * @brief Return whether every pixel of a rectangle falls on a connected screen.
+     *
+     * The union of several work areas can cover a rectangle that no single work area contains,
+     * so the test is against the union rather than against each screen in turn.
+     *
+     * @param frameRect Rectangle to test, in frame coordinates
+     * @return true when no part of the rectangle is unreachable
+     */
+    static bool isFullyVisible(const QRect& frameRect);
+
     int _type = 0;
     bool _formLoadComplete = false;
     bool _formLoadFailed = false;

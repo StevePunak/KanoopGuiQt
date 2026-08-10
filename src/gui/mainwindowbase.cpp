@@ -16,6 +16,7 @@
 #include <QMdiArea>
 #include <QMenu>
 #include <QMoveEvent>
+#include <QRegion>
 #include <QResizeEvent>
 #include <QScreen>
 #include <QSplitter>
@@ -127,11 +128,9 @@ void MainWindowBase::showEvent(QShowEvent *event)
             if(isMdiSubWindow == false) {
                 // Ensure the restore point is on a connected screen. A stale position can
                 // reference a monitor which has since been removed.
-                QScreen* screen = QGuiApplication::screenAt(geometryRect.topLeft());
-                if(screen == nullptr) {
+                if(QGuiApplication::screenAt(geometryRect.topLeft()) == nullptr) {
                     logText(LVL_DEBUG, QString("The restore point is off the screen - centering on primary screen"));
-                    screen = QGuiApplication::primaryScreen();
-                    QRect screenRect = screen->availableGeometry();
+                    QRect screenRect = QGuiApplication::primaryScreen()->availableGeometry();
                     QPoint centered = screenRect.center();
                     centered.rx() -= (geometryRect.width() / 2);
                     centered.ry() -= (geometryRect.height() / 2);
@@ -141,19 +140,14 @@ void MainWindowBase::showEvent(QShowEvent *event)
                 // The restored size itself was never validated. It can exceed the current screen
                 // because it was saved on a larger monitor, or because the default size is simply
                 // bigger than a laptop panel. Nothing downstream bounds it and the overflow sits
-                // off-screen where it cannot be reached, so bound it to the work area here.
-                if(screen != nullptr) {
-                    geometryRect = boundToScreen(geometryRect, screen);
-                }
+                // off-screen where it cannot be reached, so bound it here. The decoration comes
+                // from the widget which is actually moved, which is the parent when there is one.
+                QWidget* target = parent != nullptr ? parent : this;
+                QSize frameDecoration = (target->frameGeometry().size() - target->size()).expandedTo(QSize(0, 0));
+                geometryRect = boundToScreen(geometryRect, frameDecoration);
 
-                if(parent != nullptr) {
-                    parent->resize(geometryRect.size());
-                    parent->move(geometryRect.topLeft());
-                }
-                else {
-                    resize(geometryRect.size());
-                    move(geometryRect.topLeft());
-                }
+                target->resize(geometryRect.size());
+                target->move(geometryRect.topLeft());
             }
         }
         _formLoadComplete = true;
@@ -164,49 +158,113 @@ void MainWindowBase::showEvent(QShowEvent *event)
     QMainWindow::showEvent(event);
 }
 
-QRect MainWindowBase::boundToScreen(const QRect& geometryRect, const QScreen* screen)
+QRect MainWindowBase::boundToScreen(const QRect& geometryRect, const QSize& frameDecoration)
 {
-    QRect result = geometryRect;
-    QRect available = screen->availableGeometry();
+    // Work in frame coordinates throughout. Fitting a client size into the work area and then
+    // pinning the frame origin to its top leaves the decoration hanging past the bottom edge.
+    QRect frameRect(geometryRect.topLeft(), geometryRect.size() + frameDecoration);
 
-    QSize bounded = result.size().boundedTo(available.size());
-    if(bounded != result.size()) {
-        logText(LVL_INFO, QString("Restored size %1 exceeds the available screen area %2 - bounding to %3")
-                              .arg(Size(result.size()).toString())
-                              .arg(Size(available.size()).toString())
-                              .arg(Size(bounded).toString()));
-        result.setSize(bounded);
-    }
+    QSize minimumFrameSize = _minimumRestoreSize.isValid()
+                                 ? _minimumRestoreSize + frameDecoration
+                                 : QSize();
 
-    // Guard the other direction for windows that asked for a floor. A window shrunk to a handful
-    // of pixels persists that size and reopens unusable. The work area still wins, so this never
-    // forces a window larger than the screen.
-    if(_minimumRestoreSize.isValid()) {
-        QSize raised = result.size().expandedTo(_minimumRestoreSize).boundedTo(available.size());
-        if(raised != result.size()) {
-            logText(LVL_INFO, QString("Restored size %1 is below the minimum restore size %2 - raising to %3")
-                                  .arg(Size(result.size()).toString())
-                                  .arg(Size(_minimumRestoreSize).toString())
-                                  .arg(Size(raised).toString()));
-            result.setSize(raised);
+    // A window shrunk to a handful of pixels is fully visible and still unusable, so the floor is
+    // reason enough to correct a geometry which is otherwise entirely on screen.
+    bool belowFloor = minimumFrameSize.isValid()
+                      && frameRect.size().expandedTo(minimumFrameSize) != frameRect.size();
+
+    if(isFullyVisible(frameRect) == false || belowFloor) {
+        const QScreen* screen = screenForGeometry(frameRect);
+        if(screen != nullptr) {
+            QRect available = screen->availableGeometry();
+            QRect bounded = boundRectToArea(frameRect, available, minimumFrameSize);
+
+            if(bounded.size() != frameRect.size()) {
+                // Report client sizes - they are what the caller persisted and what it will restore.
+                QSize from = frameRect.size() - frameDecoration;
+                QSize to = bounded.size() - frameDecoration;
+                if(belowFloor) {
+                    logText(LVL_INFO, QString("Restored size %1 is below the minimum restore size %2 - raising to %3")
+                                          .arg(Size(from).toString())
+                                          .arg(Size(_minimumRestoreSize).toString())
+                                          .arg(Size(to).toString()));
+                }
+                else {
+                    logText(LVL_INFO, QString("Restored size %1 exceeds the available screen area %2 - bounding to %3")
+                                          .arg(Size(from).toString())
+                                          .arg(Size(available.size() - frameDecoration).toString())
+                                          .arg(Size(to).toString()));
+                }
+            }
+
+            if(bounded.topLeft() != frameRect.topLeft()) {
+                logText(LVL_INFO, QString("Restored position %1 puts the window outside the work area - moving to %2")
+                                      .arg(Point(frameRect.topLeft()).toString())
+                                      .arg(Point(bounded.topLeft()).toString()));
+            }
+
+            frameRect = bounded;
         }
     }
 
+    return QRect(frameRect.topLeft(), frameRect.size() - frameDecoration);
+}
+
+QRect MainWindowBase::boundRectToArea(const QRect& frameRect, const QRect& available, const QSize& minimumFrameSize)
+{
+    QRect result = frameRect;
+
+    // The floor first, then the work area over the top of it. Capping last is what guarantees a
+    // floor can never force a window larger than the screen it is opening on.
+    QSize size = result.size();
+    if(minimumFrameSize.isValid()) {
+        size = size.expandedTo(minimumFrameSize);
+    }
+    size = size.boundedTo(available.size());
+    result.setSize(size);
+
     // Now that the size fits, slide the window back inside the work area if the restore point
-    // put part of it beyond the right or bottom edge.
+    // put part of it beyond an edge.
     QPoint topLeft = result.topLeft();
     topLeft.setX(std::min(topLeft.x(), available.right() - result.width() + 1));
     topLeft.setY(std::min(topLeft.y(), available.bottom() - result.height() + 1));
     topLeft.setX(std::max(topLeft.x(), available.left()));
     topLeft.setY(std::max(topLeft.y(), available.top()));
-    if(topLeft != result.topLeft()) {
-        logText(LVL_INFO, QString("Restored position %1 puts the window outside the work area - moving to %2")
-                              .arg(Point(result.topLeft()).toString())
-                              .arg(Point(topLeft).toString()));
-        result.moveTopLeft(topLeft);
-    }
+    result.moveTopLeft(topLeft);
 
     return result;
+}
+
+QScreen* MainWindowBase::screenForGeometry(const QRect& frameRect)
+{
+    QScreen* result = nullptr;
+
+    qint64 largestArea = 0;
+    for(QScreen* screen : QGuiApplication::screens()) {
+        QRect intersection = screen->availableGeometry().intersected(frameRect);
+        if(intersection.isEmpty()) {
+            continue;
+        }
+        qint64 area = (qint64)intersection.width() * (qint64)intersection.height();
+        if(area > largestArea) {
+            largestArea = area;
+            result = screen;
+        }
+    }
+
+    if(result == nullptr) {
+        result = QGuiApplication::primaryScreen();
+    }
+    return result;
+}
+
+bool MainWindowBase::isFullyVisible(const QRect& frameRect)
+{
+    QRegion available;
+    for(const QScreen* screen : QGuiApplication::screens()) {
+        available += screen->availableGeometry();
+    }
+    return QRegion(frameRect).subtracted(available).isEmpty();
 }
 
 void MainWindowBase::onPreferencesChanged()
