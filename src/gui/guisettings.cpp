@@ -42,25 +42,31 @@ GuiSettings::GuiSettings() :
 QPoint GuiSettings::getLastWindowPosition(QWidget* widget, const QSize &defaultSize) const
 {
     QPoint result;
+    QWidget* parent = widget->parentWidget();
+    bool isMdiSubWindow = qobject_cast<QMdiSubWindow*>(parent) != nullptr || qobject_cast<QMdiSubWindow*>(widget) != nullptr;
+
     QString key = makeKey(KEY_LAST_WIDGET_POS, widget->objectName());
     if(_settings.contains(key)) {
         result = _settings.value(key).toPoint();
     }
-    else {
-        QWidget* parent = widget->parentWidget();
-
-        bool isMdiSubWindow = qobject_cast<QMdiSubWindow*>(parent) != nullptr || qobject_cast<QMdiSubWindow*>(widget) != nullptr;
-        if(isMdiSubWindow == false) {
-            // There was no last size. Center the widget on the primary screen
-            QScreen* screen = QApplication::primaryScreen();
-            Rectangle screenGeometry = screen->geometry();
-            Size widgetSize = defaultSize.isEmpty() ? widget->geometry().size() : defaultSize;
-            result = QPoint(screenGeometry.centerPoint().x() - (widgetSize.width() / 2),
-                            screenGeometry.centerPoint().y() - (widgetSize.height() / 2));
-        }
+    else if(isMdiSubWindow == false) {
+        // There was no last size. Center the widget on the primary screen
+        QScreen* screen = QApplication::primaryScreen();
+        Rectangle screenGeometry = screen->geometry();
+        Size widgetSize = defaultSize.isEmpty() ? widget->geometry().size() : defaultSize;
+        result = QPoint(screenGeometry.centerPoint().x() - (widgetSize.width() / 2),
+                        screenGeometry.centerPoint().y() - (widgetSize.height() / 2));
     }
-    result.setX(std::max(result.x(), 0));
-    result.setY(std::max(result.y(), 0));
+
+    // An MDI subwindow is positioned in its area's client coordinates, where a negative value puts
+    // it off the viewport. A top-level window is positioned on the desktop, where a monitor placed
+    // left of or above the primary legitimately has negative coordinates - clamping those to zero
+    // drags the window onto the primary screen and silently discards the restore point.
+    // MainWindowBase and Dialog validate desktop positions against the connected screens instead.
+    if(isMdiSubWindow == true) {
+        result.setX(std::max(result.x(), 0));
+        result.setY(std::max(result.y(), 0));
+    }
     return result;
 }
 
