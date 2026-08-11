@@ -369,10 +369,22 @@ bool TreeViewBase::isIndexVisible(const QModelIndex& index) const
 void TreeViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 {
     QStyledItemDelegate* existing = _columnDelegates.value(type);
-    if(existing != nullptr) {
-        _columnDelegates.remove(type);
-        delete existing;
+    if(existing == delegate) {
+        return;
     }
+
+    _columnDelegates.remove(type);
+
+    // A delegate is often shared across columns, so the one being replaced is only
+    // finished with when no other column still points at it.
+    if(existing != nullptr && _columnDelegates.values().contains(existing) == false) {
+        existing->deleteLater();
+    }
+
+    // The view owns its delegates through the object tree, and owns them once.
+    // setItemDelegateForColumn() does not take ownership.
+    delegate->setParent(this);
+
     int column = sourceModel()->columnForHeader(type);
     if(column != -1) {
         _columnDelegates.insert(type, delegate);
