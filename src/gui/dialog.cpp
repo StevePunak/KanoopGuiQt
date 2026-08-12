@@ -17,6 +17,7 @@
 #include <QShowEvent>
 #include <QTimer>
 
+#include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
@@ -61,6 +62,18 @@ Dialog::~Dialog()
 void Dialog::commonInit()
 {
     Dialog::setObjectName(Dialog::metaObject()->className());
+
+    // QWidget::windowIcon() walks up the parent chain and returns the first ancestor that has an
+    // icon, reaching the application icon only when nobody above has one. A dialog parented to a
+    // window with its own icon therefore inherits that window's icon rather than the application's.
+    //
+    // Guarded against a null application icon: setWindowIcon() stores whatever it is given, and
+    // the getter tests the stored pointer rather than WA_SetWindowIcon, so setting a null icon
+    // would permanently suppress the inheritance for an application that sets none of its own.
+    const QIcon applicationIcon = QApplication::windowIcon();
+    if(applicationIcon.isNull() == false) {
+        Dialog::setWindowIcon(applicationIcon);
+    }
 
     _buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
     connectButtonBoxSignals();
