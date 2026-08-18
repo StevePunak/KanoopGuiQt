@@ -39,9 +39,13 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     connect(mdiSubWindow, &MdiSubWindow::closing, this, &MdiWindow::onSubWindowClosing);
     mdiArea()->addSubWindow(mdiSubWindow);
 
+    // ⚠ Must be read before getLastWindowSize(), which MINTS the size key when it is absent --
+    // the very key this asks about.
+    bool hasStoredGeometry = GuiSettings::globalInstance()->widgetHasPersistentGeometry(mdiSubWindow);
+
     QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(mdiSubWindow, window->defaultSize());
     QSize size = GuiSettings::globalInstance()->getLastWindowSize(mdiSubWindow, window->defaultSize());
-    if(existing.count() > 0) {
+    if(existing.count() > 0 && hasStoredGeometry == false) {
         // position down and to the right a bit from the last existing
         static const int NewWindowOffset = 20;
         pos = QPoint(existing.last()->pos().x() + NewWindowOffset, existing.last()->pos().y() + NewWindowOffset);
