@@ -44,10 +44,15 @@ public:
     /**
      * @brief Contributes this window's commands to the shell's menus.
      *
-     * Called when the window becomes the active sub-window of an MdiWindow. A window
-     * hosted in an MDI area has no menu bar of its own; it inserts its actions into the
-     * shell's menus here and takes them out again in removeWindowMenus(), so the menu
-     * bar always reflects the window being looked at.
+     * A window hosted in an MDI area has no menu bar of its own; it inserts its actions
+     * into the shell's menus here and takes them out again in removeWindowMenus(), so the
+     * menu bar always reflects the window being looked at.
+     *
+     * ⚠ The HOST calls this, on the sub-window it is activating. MdiWindow does not --
+     * it neither tracks which sub-window is active nor calls either hook, so a shell that
+     * overrides these and waits to be asked is never asked and contributes nothing. A
+     * shell wires them to its own activation change; see PulseMdiWindow and
+     * MSimulatorMdiWindow, which both do exactly that.
      *
      * @param menus The shell's standard menus
      */
@@ -55,6 +60,11 @@ public:
 
     /**
      * @brief Withdraws this window's commands from the shell's menus.
+     *
+     * ⚠ Called by the HOST, like addWindowMenus() -- and it must be called on the window
+     * being deactivated BEFORE the next one contributes, or both windows' actions sit in
+     * the shell's menus at once.
+     *
      * @param menus The shell's standard menus
      */
     virtual void removeWindowMenus(const StandardMenus& menus) { Q_UNUSED(menus) }
