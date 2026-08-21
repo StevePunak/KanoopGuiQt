@@ -44,15 +44,10 @@ public:
     /**
      * @brief Contributes this window's commands to the shell's menus.
      *
-     * A window hosted in an MDI area has no menu bar of its own; it inserts its actions
-     * into the shell's menus here and takes them out again in removeWindowMenus(), so the
-     * menu bar always reflects the window being looked at.
-     *
      * ⚠ The HOST calls this, on the sub-window it is activating. MdiWindow does not --
      * it neither tracks which sub-window is active nor calls either hook, so a shell that
      * overrides these and waits to be asked is never asked and contributes nothing. A
-     * shell wires them to its own activation change; see PulseMdiWindow and
-     * MSimulatorMdiWindow, which both do exactly that.
+     * shell wires them to its own activation change.
      *
      * @param menus The shell's standard menus
      */

@@ -41,8 +41,7 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
 
     // ⚠ The POSITION key decides this, never the size key. A window that has a stored position
     // but no stored size -- moved but never resized -- reads as never-seen if the size is what
-    // is asked, and gets cascaded over: measured, a sub-window with 700,500 stored landed at
-    // 40,40 and its restore was discarded. widgetHasPersistentGeometry() asks the size question
+    // is asked, and gets cascaded over. widgetHasPersistentGeometry() asks the size question
     // and is the wrong query here however well its name reads.
     const bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
 
