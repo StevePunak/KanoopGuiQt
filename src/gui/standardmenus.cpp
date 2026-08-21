@@ -19,10 +19,10 @@ StandardMenus::StandardMenus(const QList<QMenu*>& menus)
     }
 }
 
-QAction* StandardMenus::firstAfterSeperator(Menu menuType, int number) const
+QAction* StandardMenus::firstAfterSeparator(Menu menuType, int number) const
 {
     QMenu* menu = _menus.value(menuType);
-    return menu == nullptr ? nullptr : firstAfterSeperator(menu, number);
+    return menu == nullptr ? nullptr : firstAfterSeparator(menu, number);
 }
 
 QAction* StandardMenus::firstAfterText(Menu menuType, const QString& text, int number) const
@@ -31,7 +31,7 @@ QAction* StandardMenus::firstAfterText(Menu menuType, const QString& text, int n
     return menu == nullptr ? nullptr : firstAfterText(menu, text, number);
 }
 
-QAction* StandardMenus::firstAfterSeperator(const QMenu* menu, int number)
+QAction* StandardMenus::firstAfterSeparator(const QMenu* menu, int number)
 {
     int count = -1;
     for(int i = 0;i < menu->actions().count();i++) {

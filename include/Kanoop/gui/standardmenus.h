@@ -47,7 +47,7 @@ public:
      * @param number Zero-based index of the separator to search from
      * @return The action after that separator, or nullptr
      */
-    QAction* firstAfterSeperator(Menu menuType, int number = 0) const;
+    QAction* firstAfterSeparator(Menu menuType, int number = 0) const;
 
     /**
      * @brief Returns the action following the one with the given text.
@@ -59,7 +59,7 @@ public:
     QAction* firstAfterText(Menu menuType, const QString& text, int number = 0) const;
 
     /** @brief Returns the action following a separator in an arbitrary menu. */
-    static QAction* firstAfterSeperator(const QMenu* menu, int number = 0);
+    static QAction* firstAfterSeparator(const QMenu* menu, int number = 0);
 
     /** @brief Returns the action following the one with the given text in an arbitrary menu. */
     static QAction* firstAfterText(const QMenu* menu, const QString& text, int number = 0);

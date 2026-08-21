@@ -8,16 +8,16 @@
  * @brief Asking GuiSettings about a widget's stored geometry, and what the asking costs.
  *
  * ⚠ getLastWindowSize() MINTS the size key when it is absent, and widgetHasPersistentGeometry()
- * tests that same key. So the question "did this widget have geometry stored?" can only be
- * answered BEFORE the size is fetched -- afterwards it is always yes, and the caller cannot tell
- * a genuinely restored window from one it has just created the record for.
+ * tests that same key. So the size question is answered "yes" by the act of having asked for the
+ * size, and it cannot tell a genuinely restored window from one whose record was just created.
+ * That is why a placement decision is keyed on the POSITION instead: reading a position computes
+ * a default rather than recording one, so widgetHasPersistentPosition() stays answerable.
  *
- * That asymmetry is invisible at every call site. A caller that reads the guard after fetching
- * the size compiles clean, runs clean, and is simply always wrong; the only thing protecting it
- * is the ordering of two adjacent lines. These tests pin the contract those lines depend on.
+ * The asymmetry between the two is invisible at every call site, and the two queries read as
+ * interchangeable from their names. These tests pin which one records and which one does not.
  *
  * ⚠ What this does NOT cover: where a sub-window is actually placed. MdiWindow::openSubWindow()
- * consumes this contract and its own guard order is not reachable from here -- that needs an MDI
+ * consumes these queries, but which one it picks is not reachable from here -- that needs an MDI
  * area, a main window and an ini seeded with a position the cascade could never produce.
  */
 class TstGeometryPersistence : public QObject
@@ -85,14 +85,14 @@ private slots:
         _settings->getLastWindowSize(target, QSize(640, 480));
 
         QVERIFY2(_settings->widgetHasPersistentGeometry(target),
-                 "fetching the size no longer records it; the ordering constraint in "
-                 "MdiWindow::openSubWindow is now unnecessary");
+                 "fetching the size no longer records it; this query could now answer a "
+                 "placement decision, which it currently cannot");
     }
 
     void askingForTheLastPositionCreatesNothing()
     {
-        // ⚠ The two getters are not alike, which is the entire reason the order matters for one
-        // of them. A caller generalising from this one to the other gets it wrong.
+        // ⚠ The two getters are not alike, and their names do not say so. A caller generalising
+        // from this one to the other gets it exactly backwards.
         QWidget widget;
         QWidget* target = named(widget, "position-only");
 
@@ -104,7 +104,7 @@ private slots:
     void aSizeThatWasActuallyStoredReadsAsStoredToo()
     {
         // Without this the "yes" above could only ever be the minted artefact, and the query
-        // would be pinned as useless rather than as order-dependent.
+        // would be pinned as useless rather than as unable to tell the two apart.
         QWidget widget;
         QWidget* target = named(widget, "genuinely-stored");
 
@@ -112,6 +112,43 @@ private slots:
 
         QVERIFY(_settings->widgetHasPersistentGeometry(target));
         QCOMPARE(_settings->getLastWindowSize(target, QSize(640, 480)), QSize(300, 200));
+    }
+
+    void aWidgetNobodyHasPlacedHasNoStoredPosition()
+    {
+        QWidget widget;
+        QVERIFY(_settings->widgetHasPersistentPosition(named(widget, "unplaced")) == false);
+    }
+
+    void askingForEitherGeometryValueCreatesNoStoredPosition()
+    {
+        // ⚠⚠ The property a placement decision is keyed on, and the reason it is keyed on the
+        // position rather than the size. Reading the size records the size -- so a size key
+        // exists from the first window of a type onward -- but neither read may invent a
+        // POSITION, or the cascade branch becomes unreachable for every window after the first.
+        QWidget widget;
+        QWidget* target = named(widget, "read-both");
+
+        _settings->getLastWindowPosition(target, QSize(640, 480));
+        _settings->getLastWindowSize(target, QSize(640, 480));
+
+        QVERIFY2(_settings->widgetHasPersistentGeometry(target),
+                 "fetching the size no longer records it");
+        QVERIFY2(_settings->widgetHasPersistentPosition(target) == false,
+                 "reading a geometry value invented a stored position; any placement decision "
+                 "keyed on it is now unreachable after the first window of a type");
+    }
+
+    void aPositionThatWasActuallyStoredReadsAsStored()
+    {
+        // Without this the "no" above could only ever mean the query never answers yes.
+        QWidget widget;
+        QWidget* target = named(widget, "placed");
+
+        _settings->setLastWindowPosition(target, QPoint(300, 200));
+
+        QVERIFY(_settings->widgetHasPersistentPosition(target));
+        QCOMPARE(_settings->getLastWindowPosition(target, QSize(640, 480)), QPoint(300, 200));
     }
 
     void theRecordTheQuestionCreatesHoldsTheDefaultItWasGiven()

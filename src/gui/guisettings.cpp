@@ -84,6 +84,12 @@ bool GuiSettings::widgetHasPersistentGeometry(const QWidget* widget) const
     return _settings.contains(key);
 }
 
+bool GuiSettings::widgetHasPersistentPosition(const QWidget* widget) const
+{
+    QString key = makeKey(KEY_LAST_WIDGET_POS, widget->objectName());
+    return _settings.contains(key);
+}
+
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
 {
     QString key = makeCompoundObjectKey(splitter->orientation() == Qt::Vertical

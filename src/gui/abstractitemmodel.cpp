@@ -116,10 +116,7 @@ int AbstractItemModel::rowCount(const QModelIndex &parent) const
 
 int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
-    // The column count is a property of the model, not of any parent -- the parameter is part
-    // of the QAbstractItemModel contract and this model has never consulted it.
     Q_UNUSED(parent)
-
 
     return qMax(1, _columnHeaders.count());
 }

@@ -39,13 +39,16 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     connect(mdiSubWindow, &MdiSubWindow::closing, this, &MdiWindow::onSubWindowClosing);
     mdiArea()->addSubWindow(mdiSubWindow);
 
-    // ⚠ Must be read before getLastWindowSize(), which MINTS the size key when it is absent --
-    // the very key this asks about.
-    bool hasStoredGeometry = GuiSettings::globalInstance()->widgetHasPersistentGeometry(mdiSubWindow);
+    // ⚠ The POSITION key decides this, never the size key. A window that has a stored position
+    // but no stored size -- moved but never resized -- reads as never-seen if the size is what
+    // is asked, and gets cascaded over: measured, a sub-window with 700,500 stored landed at
+    // 40,40 and its restore was discarded. widgetHasPersistentGeometry() asks the size question
+    // and is the wrong query here however well its name reads.
+    bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
 
     QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(mdiSubWindow, window->defaultSize());
     QSize size = GuiSettings::globalInstance()->getLastWindowSize(mdiSubWindow, window->defaultSize());
-    if(existing.count() > 0 && hasStoredGeometry == false) {
+    if(existing.count() > 0 && hasStoredPosition == false) {
         // position down and to the right a bit from the last existing
         static const int NewWindowOffset = 20;
         pos = QPoint(existing.last()->pos().x() + NewWindowOffset, existing.last()->pos().y() + NewWindowOffset);

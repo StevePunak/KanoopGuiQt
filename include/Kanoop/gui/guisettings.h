@@ -69,11 +69,25 @@ public:
     QSize getLastWindowSize(const QWidget* widget, const QSize& defaultSize = QSize());
 
     /**
-     * @brief Return whether any geometry has been saved for a widget.
+     * @brief Return whether a size has been saved for a widget.
      * @param widget Widget to check
-     * @return true if a saved position or size exists
+     * @return true if a saved size exists
+     *
+     * ⚠ Not usable as a test for "has this widget been placed before": getLastWindowSize()
+     * records the size it hands back, so this answers true after any read of the size, whether
+     * or not the widget was ever seen. Use widgetHasPersistentPosition() for that question.
      */
     bool widgetHasPersistentGeometry(const QWidget* widget) const;
+
+    /**
+     * @brief Return whether a position has been saved for a widget.
+     * @param widget Widget to check
+     * @return true if a saved position exists
+     *
+     * ⚠ Mints nothing, and callers depend on that -- this is the query a placement decision can
+     * be keyed on. getLastWindowPosition() computes a default rather than recording one.
+     */
+    bool widgetHasPersistentPosition(const QWidget* widget) const;
 
     /**
      * @brief Save the current state of a QSplitter.
