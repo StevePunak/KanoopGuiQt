@@ -35,6 +35,8 @@ private slots:
     void aSeparatorIndexPastTheLastOneFindsNothing();
     void aSeparatorWithNothingBehindItFindsNothing();
 
+    void theStaticWalkersRefuseANullMenu();
+
     void theActionAfterANamedOneIsFound();
     void theNamedActionIsMatchedWithItsAcceleratorAndCaseFolded();
     void anActionWithNothingBehindItFindsNothing();
@@ -141,6 +143,19 @@ void TstStandardMenus::aSeparatorWithNothingBehindItFindsNothing()
 
     const StandardMenus menus({ _trailing });
     QCOMPARE(menus.firstAfterSeparator(StandardMenus::Edit), nullptr);
+}
+
+void TstStandardMenus::theStaticWalkersRefuseANullMenu()
+{
+    // ⚠ menu() answers nullptr for a menu the window does not have, and chaining it straight
+    // into a static walker is the obvious way to call one -- so a null menu arrives here as a
+    // matter of course rather than as misuse. The member overloads already answer nullptr for
+    // it; these must agree rather than dereference it.
+    const StandardMenus menus({ _file });
+    QCOMPARE(menus.menu(StandardMenus::Help), nullptr);
+
+    QCOMPARE(StandardMenus::firstAfterSeparator(menus.menu(StandardMenus::Help)), nullptr);
+    QCOMPARE(StandardMenus::firstAfterText(menus.menu(StandardMenus::Help), "anything"), nullptr);
 }
 
 void TstStandardMenus::theActionAfterANamedOneIsFound()

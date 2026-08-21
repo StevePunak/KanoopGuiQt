@@ -4,16 +4,16 @@ StandardMenus::StandardMenus(const QList<QMenu*>& menus)
 {
     for(QMenu* menu : menus) {
         QString text = simplified(menu->title());
-        if(text.toLower() == "file") {
+        if(text == "file") {
             _menus.insert(File, menu);
         }
-        else if(text.toLower() == "edit") {
+        else if(text == "edit") {
             _menus.insert(Edit, menu);
         }
-        else if(text.toLower() == "help") {
+        else if(text == "help") {
             _menus.insert(Help, menu);
         }
-        else if(text.toLower() == "window") {
+        else if(text == "window") {
             _menus.insert(Window, menu);
         }
     }
@@ -33,6 +33,12 @@ QAction* StandardMenus::firstAfterText(Menu menuType, const QString& text, int n
 
 QAction* StandardMenus::firstAfterSeparator(const QMenu* menu, int number)
 {
+    // ⚠ The member overloads answer nullptr for a menu the window does not have, so a caller
+    // chaining menu() straight into one of these hands it a null menu as a matter of course.
+    if(menu == nullptr) {
+        return nullptr;
+    }
+
     int count = -1;
     for(int i = 0;i < menu->actions().count();i++) {
         QAction* action = menu->actions().at(i);
@@ -45,10 +51,15 @@ QAction* StandardMenus::firstAfterSeparator(const QMenu* menu, int number)
 
 QAction* StandardMenus::firstAfterText(const QMenu* menu, const QString& text, int number)
 {
+    if(menu == nullptr) {
+        return nullptr;
+    }
+
+    const QString wanted = simplified(text);
     int count = -1;
     for(int i = 0;i < menu->actions().count();i++) {
         QAction* action = menu->actions().at(i);
-        if(simplified(text) == simplified(action->text()) && ++count == number) {
+        if(wanted == simplified(action->text()) && ++count == number) {
             return i < menu->actions().count() - 1 ? menu->actions().at(i + 1) : nullptr;
         }
     }

@@ -44,7 +44,7 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     // is asked, and gets cascaded over: measured, a sub-window with 700,500 stored landed at
     // 40,40 and its restore was discarded. widgetHasPersistentGeometry() asks the size question
     // and is the wrong query here however well its name reads.
-    bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
+    const bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
 
     QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(mdiSubWindow, window->defaultSize());
     QSize size = GuiSettings::globalInstance()->getLastWindowSize(mdiSubWindow, window->defaultSize());
