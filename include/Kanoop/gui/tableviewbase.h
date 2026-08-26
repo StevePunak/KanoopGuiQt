@@ -142,8 +142,14 @@ public:
 
     /**
      * @brief Assign a custom item delegate to the column of the given header type.
+     *
+     * The view takes ownership, reparenting the delegate to itself. One delegate may be
+     * assigned to several columns of the same view, and is destroyed once, with the view.
+     * It may not be shared with another view: a QObject has one parent, so registering it
+     * elsewhere hands ownership over and it dies with whichever view took it last.
+     *
      * @param type Column header type identifier
-     * @param delegate Delegate to install
+     * @param delegate Delegate to install; ownership passes to this view
      */
     void setColumnDelegate(int type, QStyledItemDelegate* delegate);
 

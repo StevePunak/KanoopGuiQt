@@ -79,7 +79,10 @@ TableViewBase::TableViewBase(QWidget *parent) :
 
 TableViewBase::~TableViewBase()
 {
-    qDeleteAll(_columnDelegates);
+    // The delegates are children of this view and die with it. They are deliberately not
+    // deleted here: one delegate is commonly registered against several columns, so the
+    // map holds the same pointer under more than one key and deleting its values would
+    // free it once per column.
 }
 
 void TableViewBase::setModel(QAbstractItemModel *model)
@@ -243,10 +246,22 @@ void TableViewBase::restoreVerticalHeaderState()
 void TableViewBase::setColumnDelegate(int type, QStyledItemDelegate *delegate)
 {
     QStyledItemDelegate* existing = _columnDelegates.value(type);
-    if(existing != nullptr) {
-        _columnDelegates.remove(type);
+    if(existing == delegate) {
+        return;
+    }
+
+    _columnDelegates.remove(type);
+
+    // A delegate is often shared across columns, so the one being replaced is only
+    // finished with when no other column still points at it.
+    if(existing != nullptr && _columnDelegates.values().contains(existing) == false) {
         existing->deleteLater();
     }
+
+    // The view owns its delegates through the object tree, and owns them once.
+    // setItemDelegateForColumn() does not take ownership.
+    delegate->setParent(this);
+
     int column = sourceModel()->columnForHeader(type);
     if(column != -1) {
         _columnDelegates.insert(type, delegate);

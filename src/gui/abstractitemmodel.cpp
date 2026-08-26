@@ -43,7 +43,6 @@ void AbstractItemModel::clear()
 
 QModelIndex AbstractItemModel::index(int row, int column, const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL3(), QString("%1  row: %2  col: %3  parent: [%4]").arg(__FUNCTION__).arg(row).arg(column).arg(toString(parent)));
     QModelIndex result;
     if(hasIndex(row, column, parent)) {
         if(parent.isValid() == false) {
@@ -87,7 +86,6 @@ QModelIndex AbstractItemModel::sibling(int row, int column, const QModelIndex& i
 
 QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
 {
-    logText(LVL_DEBUG, LVL3(), QString("func: %1  child: [%2]").arg(__FUNCTION__).arg(toString(child)));
     QModelIndex result;
     if(child.isValid()) {
         AbstractModelItem* childItem = static_cast<AbstractModelItem*>(child.internalPointer());
@@ -98,16 +96,11 @@ QModelIndex AbstractItemModel::parent(const QModelIndex &child) const
             }
         }
     }
-    logText(LVL_DEBUG, LVL2(), QString("func: %1 for [%2] returns parent: [%3]")
-            .arg(__FUNCTION__)
-            .arg(toString(child))
-            .arg(toString(result)));
     return result;
 }
 
 int AbstractItemModel::rowCount(const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
     int result = 0;
     // We don't support children other than column 0
     if(parent.isValid()) {
@@ -118,21 +111,18 @@ int AbstractItemModel::rowCount(const QModelIndex &parent) const
     else {
         result = _rootItems.count();
     }
-    logText(LVL_DEBUG, LVL3(), QString("%1  returns %2").arg(__FUNCTION__).arg(result));
     return result;
 }
 
 int AbstractItemModel::columnCount(const QModelIndex &parent) const
 {
-    logText(LVL_DEBUG, LVL3(), QString("%1  parent: [%2]").arg(__FUNCTION__).arg(toString(parent)));
+    Q_UNUSED(parent)
 
     return qMax(1, _columnHeaders.count());
 }
 
 QVariant AbstractItemModel::data(const QModelIndex &index, int role) const
 {
-    logText(LVL_DEBUG, LVL3(), QString("%1  index: [%2]  role: %3").arg(__FUNCTION__).arg(toString(index)).arg(role));
-
     QVariant result;
 
     if(index.isValid() && index.internalPointer() != nullptr) {
@@ -219,8 +209,6 @@ bool AbstractItemModel::removeRows(int row, int count, const QModelIndex& parent
 bool AbstractItemModel::hasChildren(const QModelIndex& parent) const
 {
     bool result = false;
-    logText(LVL_DEBUG, LVL3(), QString("%1  index: [%2]").arg(__FUNCTION__).arg(toString(parent)));
-
     if(parent.isValid() && parent.internalPointer() != nullptr) {
         AbstractModelItem* parentItem = static_cast<AbstractModelItem*>(parent.internalPointer());
         result = parentItem->childCount() > 0;
