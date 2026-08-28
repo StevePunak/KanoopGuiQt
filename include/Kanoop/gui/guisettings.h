@@ -124,6 +124,10 @@ public:
      * @brief Restore header state using the model's column definitions as keys.
      * @param header Header view to restore
      * @param model Model providing column metadata for keying
+     *
+     * ⚠ A section's saved state is looked up by its index and accepted only while the stored
+     * header text still matches, so renaming OR reordering a column drops its saved width and
+     * visibility, and any single mismatch abandons order restore for the whole table.
      */
     void restoreLastHeaderState(QHeaderView* header, AbstractItemModel* model);
 
