@@ -45,10 +45,26 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     // but no stored size -- moved but never resized -- reads as never-seen if the size is what
     // is asked, and gets cascaded over. widgetHasPersistentGeometry() asks the size question
     // and is the wrong query here however well its name reads.
+    // ⚠ Both queries must be made before getLastWindowSize() below, which RECORDS the size it
+    // hands back and so answers true to its own question ever after. Moving either down beside
+    // the branch that uses it makes both of them describe this call rather than a previous one.
     const bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
+    const bool hasStoredSize = GuiSettings::globalInstance()->widgetHasPersistentGeometry(mdiSubWindow);
 
     QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(mdiSubWindow, window->defaultSize());
     QSize size = GuiSettings::globalInstance()->getLastWindowSize(mdiSubWindow, window->defaultSize());
+
+    const QString kindName = QString("%1%2").arg(window->geometryKindName(), MdiSubWindow::MdiSubWindowSuffix);
+
+    // Size is resolved independently of position. A window opened alongside others of its kind is
+    // offset from them and is still the size the kind was last left at.
+    if(hasStoredSize == false) {
+        QSize kindSize;
+        if(GuiSettings::globalInstance()->tryGetLastWindowSize(kindName, kindSize)) {
+            size = kindSize;
+        }
+    }
+
     if(hasStoredPosition == false) {
         if(existing.count() > 0) {
             // position down and to the right a bit from the last existing
@@ -58,14 +74,9 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
         else {
             // ⚠ getLastWindowPosition() has no MDI branch for a name it has never seen: it
             // returns a default-constructed QPoint rather than computing a placement.
-            const QString kindName = QString("%1%2").arg(window->geometryKindName(), MdiSubWindow::MdiSubWindowSuffix);
             QPoint kindPosition;
-            QSize kindSize;
             if(GuiSettings::globalInstance()->tryGetLastWindowPosition(kindName, kindPosition)) {
                 pos = kindPosition;
-                if(GuiSettings::globalInstance()->tryGetLastWindowSize(kindName, kindSize)) {
-                    size = kindSize;
-                }
             }
             else {
                 pos = topLeftForChildWindow(size);
