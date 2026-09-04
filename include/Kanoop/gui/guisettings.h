@@ -125,6 +125,18 @@ public:
     bool tryGetLastWindowSize(const QString& objectName, QSize& result) const;
 
     /**
+     * @brief List every object name that has a stored position or size.
+     * @return Object names, each appearing once
+     */
+    QStringList persistentGeometryNames() const;
+
+    /**
+     * @brief Remove the stored position and size for an object name.
+     * @param objectName Name whose geometry to drop; an empty name is ignored
+     */
+    void removePersistentGeometry(const QString& objectName);
+
+    /**
      * @brief Save the current state of a QSplitter.
      * @param splitter Splitter whose state to save
      */
