@@ -40,6 +40,13 @@ protected:
     virtual MdiSubWindow* openSubWindow(MainWindowBase* window, int type);
 
     /**
+     * @brief Compute a top-left that centres a window of the given size in the MDI area.
+     * @param windowSize Size of the window to be placed
+     * @return Centred top-left, clamped to the area origin
+     */
+    QPoint topLeftForChildWindow(const QSize& windowSize);
+
+    /**
      * @brief Close all open sub-windows of the given type.
      * @param type Application-defined sub-window type integer
      */

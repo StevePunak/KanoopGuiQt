@@ -1,6 +1,7 @@
 #include "mdisubwindow.h"
 
 #include "guisettings.h"
+#include "mainwindowbase.h"
 
 #include <QMenu>
 #include <QMoveEvent>
@@ -17,8 +18,12 @@ MdiSubWindow::MdiSubWindow(QWidget* parent) :
 void MdiSubWindow::moveEvent(QMoveEvent* event)
 {
     // Log::logText(LVL_DEBUG, QString("%1: move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
-    if(GuiSettings::globalInstance() != nullptr) {
+    if(GuiSettings::globalInstance() != nullptr && _formLoadComplete && isMaximized() == false) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
+        const QString kindName = geometryKindObjectName();
+        if(kindName.isEmpty() == false) {
+            GuiSettings::globalInstance()->setLastWindowPosition(kindName, event->pos());
+        }
     }
     QMdiSubWindow::moveEvent(event);
 }
@@ -26,10 +31,23 @@ void MdiSubWindow::moveEvent(QMoveEvent* event)
 void MdiSubWindow::resizeEvent(QResizeEvent* event)
 {
     // Log::logText(LVL_DEBUG, QString("%1: resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
-    if(GuiSettings::globalInstance() != nullptr) {
+    if(GuiSettings::globalInstance() != nullptr && _formLoadComplete && isMaximized() == false) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
+        const QString kindName = geometryKindObjectName();
+        if(kindName.isEmpty() == false) {
+            GuiSettings::globalInstance()->setLastWindowSize(kindName, event->size());
+        }
     }
     QMdiSubWindow::resizeEvent(event);
+}
+
+QString MdiSubWindow::geometryKindObjectName() const
+{
+    MainWindowBase* child = qobject_cast<MainWindowBase*>(widget());
+    if(child == nullptr) {
+        return QString();
+    }
+    return QString("%1%2").arg(child->geometryKindName(), MdiSubWindowSuffix);
 }
 
 void MdiSubWindow::showEvent(QShowEvent* event)

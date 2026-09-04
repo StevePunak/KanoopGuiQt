@@ -21,6 +21,13 @@ public:
     explicit MdiSubWindow(QWidget* parent = nullptr);
 
     /**
+     * ⚠ MdiWindow::openSubWindow() builds every sub-window's object name as the child window's
+     * name plus this suffix, and geometry is keyed on that name. Changing it orphans every
+     * stored sub-window position and size.
+     */
+    static constexpr const char* MdiSubWindowSuffix = "-mdiSub";
+
+    /**
      * @brief Return the application-defined sub-window type integer.
      * @return Sub-window type value
      */
@@ -37,10 +44,16 @@ private:
     virtual void moveEvent(QMoveEvent* event) override;
     /** @brief Persist size on resize. */
     virtual void resizeEvent(QResizeEvent* event) override;
-    /** @brief Restore geometry and mark form load complete on first show. */
+    /** @brief Mark form load complete on first show. */
     virtual void showEvent(QShowEvent *event) override;
     /** @brief Emit closing() before the window closes. */
     virtual void closeEvent(QCloseEvent* event) override;
+
+    /**
+     * @brief The name under which geometry shared by this window's kind is keyed.
+     * @return The child's kind name plus the sub-window suffix, or empty when there is no child
+     */
+    QString geometryKindObjectName() const;
 
     bool _formLoadComplete = false;
     int _type = 0;

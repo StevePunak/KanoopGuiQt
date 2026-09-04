@@ -90,6 +90,26 @@ bool GuiSettings::widgetHasPersistentPosition(const QWidget* widget) const
     return _settings.contains(key);
 }
 
+bool GuiSettings::tryGetLastWindowPosition(const QString& objectName, QPoint& result) const
+{
+    QString key = makeKey(KEY_LAST_WIDGET_POS, objectName);
+    if(_settings.contains(key) == false) {
+        return false;
+    }
+    result = _settings.value(key).toPoint();
+    return true;
+}
+
+bool GuiSettings::tryGetLastWindowSize(const QString& objectName, QSize& result) const
+{
+    QString key = makeKey(KEY_LAST_WIDGET_SIZE, objectName);
+    if(_settings.contains(key) == false) {
+        return false;
+    }
+    result = _settings.value(key).toSize();
+    return true;
+}
+
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
 {
     QString key = makeCompoundObjectKey(splitter->orientation() == Qt::Vertical
