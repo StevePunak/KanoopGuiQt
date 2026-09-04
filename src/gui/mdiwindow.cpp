@@ -5,6 +5,8 @@
 #include <QMdiArea>
 #include "guisettings.h"
 
+#include <algorithm>
+
 MdiWindow::MdiWindow(const QString& logPrefix, QWidget* parent) :
     MainWindowBase(logPrefix, parent)
 {
@@ -33,7 +35,7 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
 
     // create the new window
     MdiSubWindow* mdiSubWindow = new MdiSubWindow;
-    mdiSubWindow->setObjectName(QString("%1-mdiSub").arg(window->objectName()));
+    mdiSubWindow->setObjectName(QString("%1%2").arg(window->objectName(), MdiSubWindow::MdiSubWindowSuffix));
     mdiSubWindow->setWidget(window);
     mdiSubWindow->setType(type);
     connect(mdiSubWindow, &MdiSubWindow::closing, this, &MdiWindow::onSubWindowClosing);
@@ -43,14 +45,43 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     // but no stored size -- moved but never resized -- reads as never-seen if the size is what
     // is asked, and gets cascaded over. widgetHasPersistentGeometry() asks the size question
     // and is the wrong query here however well its name reads.
+    // ⚠ Both queries must be made before getLastWindowSize() below, which RECORDS the size it
+    // hands back and so answers true to its own question ever after. Moving either down beside
+    // the branch that uses it makes both of them describe this call rather than a previous one.
     const bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
+    const bool hasStoredSize = GuiSettings::globalInstance()->widgetHasPersistentGeometry(mdiSubWindow);
 
     QPoint pos = GuiSettings::globalInstance()->getLastWindowPosition(mdiSubWindow, window->defaultSize());
     QSize size = GuiSettings::globalInstance()->getLastWindowSize(mdiSubWindow, window->defaultSize());
-    if(existing.count() > 0 && hasStoredPosition == false) {
-        // position down and to the right a bit from the last existing
-        static const int NewWindowOffset = 20;
-        pos = QPoint(existing.last()->pos().x() + NewWindowOffset, existing.last()->pos().y() + NewWindowOffset);
+
+    const QString kindName = QString("%1%2").arg(window->geometryKindName(), MdiSubWindow::MdiSubWindowSuffix);
+
+    // Size is resolved independently of position. A window opened alongside others of its kind is
+    // offset from them and is still the size the kind was last left at.
+    if(hasStoredSize == false) {
+        QSize kindSize;
+        if(GuiSettings::globalInstance()->tryGetLastWindowSize(kindName, kindSize)) {
+            size = kindSize;
+        }
+    }
+
+    if(hasStoredPosition == false) {
+        if(existing.count() > 0) {
+            // position down and to the right a bit from the last existing
+            static const int NewWindowOffset = 20;
+            pos = QPoint(existing.last()->pos().x() + NewWindowOffset, existing.last()->pos().y() + NewWindowOffset);
+        }
+        else {
+            // ⚠ getLastWindowPosition() has no MDI branch for a name it has never seen: it
+            // returns a default-constructed QPoint rather than computing a placement.
+            QPoint kindPosition;
+            if(GuiSettings::globalInstance()->tryGetLastWindowPosition(kindName, kindPosition)) {
+                pos = kindPosition;
+            }
+            else {
+                pos = topLeftForChildWindow(size);
+            }
+        }
     }
     if(window->persistPosition()) {
         mdiSubWindow->move(pos);
@@ -64,6 +95,16 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     window->show();
 
     return mdiSubWindow;
+}
+
+QPoint MdiWindow::topLeftForChildWindow(const QSize& windowSize)
+{
+    if(mdiArea() == nullptr) {
+        return QPoint();
+    }
+    const QSize areaSize = mdiArea()->size();
+    return QPoint(std::max((areaSize.width() / 2) - (windowSize.width() / 2), 0),
+                  std::max((areaSize.height() / 2) - (windowSize.height() / 2), 0));
 }
 
 void MdiWindow::closeSubWindows(int type)

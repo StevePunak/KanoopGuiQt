@@ -90,6 +90,58 @@ bool GuiSettings::widgetHasPersistentPosition(const QWidget* widget) const
     return _settings.contains(key);
 }
 
+bool GuiSettings::tryGetLastWindowPosition(const QString& objectName, QPoint& result) const
+{
+    QString key = makeKey(KEY_LAST_WIDGET_POS, objectName);
+    if(_settings.contains(key) == false) {
+        return false;
+    }
+    result = _settings.value(key).toPoint();
+    return true;
+}
+
+bool GuiSettings::tryGetLastWindowSize(const QString& objectName, QSize& result) const
+{
+    QString key = makeKey(KEY_LAST_WIDGET_SIZE, objectName);
+    if(_settings.contains(key) == false) {
+        return false;
+    }
+    result = _settings.value(key).toSize();
+    return true;
+}
+
+QStringList GuiSettings::persistentGeometryNames() const
+{
+    const QString positionPrefix = QString("%1/").arg(KEY_LAST_WIDGET_POS);
+    const QString sizePrefix = QString("%1/").arg(KEY_LAST_WIDGET_SIZE);
+
+    QStringList result;
+    for(const QString& key : _settings.allKeys()) {
+        QString objectName;
+        if(key.startsWith(positionPrefix)) {
+            objectName = key.mid(positionPrefix.length());
+        }
+        else if(key.startsWith(sizePrefix)) {
+            objectName = key.mid(sizePrefix.length());
+        }
+        if(objectName.isEmpty() == false && result.contains(objectName) == false) {
+            result.append(objectName);
+        }
+    }
+    return result;
+}
+
+void GuiSettings::removePersistentGeometry(const QString& objectName)
+{
+    // ⚠ An empty name makes the key "widget_pos/", which QSettings collapses onto the group name
+    // "widget_pos" -- removing that drops every stored position in the application.
+    if(objectName.isEmpty()) {
+        return;
+    }
+    removeKey(makeKey(KEY_LAST_WIDGET_POS, objectName));
+    removeKey(makeKey(KEY_LAST_WIDGET_SIZE, objectName));
+}
+
 void GuiSettings::saveLastSplitterState(QSplitter *splitter)
 {
     QString key = makeCompoundObjectKey(splitter->orientation() == Qt::Vertical
