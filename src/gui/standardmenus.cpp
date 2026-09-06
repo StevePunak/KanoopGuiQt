@@ -33,8 +33,6 @@ QAction* StandardMenus::firstAfterText(Menu menuType, const QString& text, int n
 
 QAction* StandardMenus::firstAfterSeparator(const QMenu* menu, int number)
 {
-    // ⚠ The member overloads answer nullptr for a menu the window does not have, so a caller
-    // chaining menu() straight into one of these hands it a null menu as a matter of course.
     if(menu == nullptr) {
         return nullptr;
     }

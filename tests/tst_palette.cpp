@@ -87,7 +87,7 @@ private slots:
     void defaultConstructor_isValid()
     {
         Palette p;
-        // Should not crash; palette should be usable
+        // Smoke test - construct a Palette and read a colour.
         QColor c = p.color(QPalette::Base);
         Q_UNUSED(c)
     }

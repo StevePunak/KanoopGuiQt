@@ -83,8 +83,6 @@ void TstStandardMenus::aTitleResolvesWithItsAcceleratorAndCaseFolded()
 
 void TstStandardMenus::aTitleTheSetDoesNotKnowIsIgnored()
 {
-    // A shell's own menus are not all conventional ones, and an unrecognised title must not
-    // become one of the four by position or by accident.
     QMenu tools("&Tools");
     const StandardMenus menus({ &tools });
 

@@ -183,9 +183,7 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
     headerState.deserializeFromJson(jsonState);
 
     TableHeader::List headers = model->columnHeaders();
-    // visualIndex -> logical section, built only if every section matches the saved
-    // state. A partial or mismatched map means the column set changed since the state
-    // was saved, so the persisted order is not safe to apply and we leave order alone.
+    // visualIndex -> logical section. Built only if every section matches the saved state.
     QMap<int, int> logicalAtVisual;
     bool orderComplete = true;
     for(int section = 0;section < headers.count();section++) {
@@ -193,9 +191,7 @@ void GuiSettings::restoreLastHeaderState(QHeaderView *header, AbstractItemModel 
         QString sectionText = tableHeader.text();
         HeaderState::SectionState sectionState = headerState.getSection(section);
         if(sectionState.isValid() && sectionState.text() == sectionText) {
-            // A stretch section derives its width from the layout, so restoring a persisted
-            // width onto it would defeat the stretch until the next layout pass and can force
-            // horizontal scrolling. Only restore widths on sections the user actually sizes.
+            // A stretch section's width comes from the layout, so a persisted width does not apply to it.
             bool stretchSection = header->sectionResizeMode(section) == QHeaderView::Stretch ||
                                   (header->stretchLastSection() && section == header->count() - 1);
             if(stretchSection == false) {

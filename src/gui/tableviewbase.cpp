@@ -51,11 +51,7 @@ TableViewBase::TableViewBase(QWidget *parent) :
     // Enable context menu on header
     horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    // Pin a minimum header height. When every column is hidden the header would
-    // otherwise collapse to zero pixels, so the right-click lands on the body
-    // instead of the header and the "Column Settings" menu becomes unreachable --
-    // leaving no way to restore the hidden columns. Derive the height from the
-    // style so it matches the natural header height on any platform/DPI.
+    // Floor the header height so the header stays hit-testable when every column is hidden.
     QStyleOptionHeader headerOption;
     headerOption.initFrom(horizontalHeader());
     horizontalHeader()->setMinimumHeight(
@@ -312,9 +308,6 @@ void TableViewBase::onHeaderContextMenuRequested(const QPoint &pos)
 {
     _contextMenuPoint = pos;
 
-    // Only offer "Hide Column" when the click is actually over a column -- on the
-    // empty part of the header (e.g. when all columns are hidden) it has nothing
-    // to act on, and the menu is only there so the user can restore columns.
     _actionHideCol->setVisible(horizontalHeader()->logicalIndexAt(pos) >= 0);
 
     QMenu menu;
