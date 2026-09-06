@@ -50,7 +50,11 @@ signals:
     void closing();
 
 public slots:
-    /** @brief Called when application preferences change; override to react. */
+    /**
+     * @brief Preferences-change hook.  The default implementation applies the GuiSettings
+     *        font size to this widget, so an override must call the base implementation
+     *        to keep it.
+     */
     virtual void onPreferencesChanged();
 };
 

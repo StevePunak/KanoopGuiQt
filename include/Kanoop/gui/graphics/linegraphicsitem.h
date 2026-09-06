@@ -8,8 +8,7 @@ class Line;
 /**
  * @brief QGraphicsLineItem with an application-defined type integer and appearance helpers.
  *
- * LineGraphicsItem stores a type integer (returned by type()) that allows
- * qgraphicsitem_cast<> and scene item-type filtering to work with custom types.
+ * LineGraphicsItem stores a type integer, returned by type(), for scene item-type filtering.
  * It also provides helpers for changing pen width, color, and line length.
  */
 class LIBKANOOPGUI_EXPORT LineGraphicsItem : public QGraphicsLineItem
@@ -38,7 +37,7 @@ public:
 
     /**
      * @brief Set the pen width.
-     * @param width Pen width in scene units
+     * @param width Pen width in scene units, truncated to an integer by QPen::setWidth()
      */
     void setWidth(double width);
 
@@ -49,8 +48,8 @@ public:
     void setColor(const QColor& color);
 
     /**
-     * @brief Return the bounding rectangle (expanded to account for pen width).
-     * @return Bounding rect in item coordinates
+     * @brief Return the rectangle used for painting and hit-testing.
+     * @return Rect in item coordinates, a fixed 5 units wide about the start point
      */
     virtual QRectF boundingRect() const override;
 
@@ -61,8 +60,8 @@ public:
     virtual QPainterPath shape() const override;
 
     /**
-     * @brief Set the length of the line, extending from its current start point.
-     * @param length New length in scene units
+     * @brief Make the line vertical by moving its end point to the start point's x.
+     * @param length End y coordinate plus one, in scene units
      */
     void setLength(double length);
 

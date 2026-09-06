@@ -7,11 +7,12 @@ class QMdiSubWindow;
 class MdiSubWindow;
 
 /**
- * @brief MainWindowBase subclass that manages an embedded QMdiArea.
+ * @brief MainWindowBase subclass that opens sub-windows in the QMdiArea the host
+ *        installs as the central widget.
  *
  * MdiWindow provides helpers for opening, closing, and finding MdiSubWindow
- * instances by type, and receives a subWindowClosing() callback when any
- * sub-window signals that it is about to close.
+ * instances by type, and receives a subWindowClosing() callback when a
+ * sub-window opened through openSubWindow() signals that it is about to close.
  */
 class LIBKANOOPGUI_EXPORT MdiWindow : public MainWindowBase
 {
@@ -35,7 +36,7 @@ protected:
      * @brief Open a new MdiSubWindow wrapping the given MainWindowBase.
      * @param window Content window to host
      * @param type Application-defined sub-window type integer
-     * @return Pointer to the created MdiSubWindow
+     * @return Pointer to the created MdiSubWindow, or nullptr when no MDI area is set
      */
     virtual MdiSubWindow* openSubWindow(MainWindowBase* window, int type);
 
@@ -60,8 +61,9 @@ protected:
     QList<MdiSubWindow*> findMdiSubWindows(int type) const;
 
     /**
-     * @brief Return the embedded QMdiArea.
-     * @return Pointer to the QMdiArea
+     * @brief Return the host's QMdiArea.
+     * @return The central widget cast to QMdiArea, or nullptr when the host has not
+     *         installed one
      */
     QMdiArea* mdiArea();
 

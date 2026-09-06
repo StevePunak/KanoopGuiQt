@@ -44,10 +44,8 @@ public:
     /**
      * @brief Contributes this window's commands to the shell's menus.
      *
-     * ⚠ The HOST calls this, on the sub-window it is activating. MdiWindow does not --
-     * it neither tracks which sub-window is active nor calls either hook, so a shell that
-     * overrides these and waits to be asked is never asked and contributes nothing. A
-     * shell wires them to its own activation change.
+     * ⚠ A host must call these itself, on the sub-window it is activating. MdiWindow
+     * tracks no active sub-window and calls neither hook.
      *
      * @param menus The shell's standard menus
      */
@@ -205,7 +203,11 @@ private:
 signals:
 
 public slots:
-    /** @brief Called when application preferences change; override to react. */
+    /**
+     * @brief Preferences-change hook.  The default implementation applies the GuiSettings
+     *        font size to this widget, so an override must call the base implementation
+     *        to keep it.
+     */
     virtual void onPreferencesChanged();
 
 private slots:

@@ -10,8 +10,7 @@ class Rectangle;
 /**
  * @brief QGraphicsRectItem with an application-defined type integer and center-point helpers.
  *
- * RectangleGraphicsItem stores a type integer (returned by type()) that allows
- * qgraphicsitem_cast<> and scene item-type filtering to work with custom types.
+ * RectangleGraphicsItem stores a type integer, returned by type(), for scene item-type filtering.
  * It also provides centerPoint() and sceneCenterPoint() convenience accessors.
  */
 class LIBKANOOPGUI_EXPORT RectangleGraphicsItem : public QGraphicsRectItem
@@ -45,13 +44,14 @@ public:
     Point centerPoint() const;
 
     /**
-     * @brief Return the center of the item's bounding rect in scene coordinates.
-     * @return Center point in scene coordinates
+     * @brief Map the center of a rect of the item's size, placed at the item origin, into
+     *        scene coordinates.
+     * @return Center point in scene coordinates.  It differs from mapToScene(centerPoint())
+     *         by rect().topLeft().
      */
     Point sceneCenterPoint() const;
 
 protected:
-    /** @brief Handle graphics item change notifications. */
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
 private:

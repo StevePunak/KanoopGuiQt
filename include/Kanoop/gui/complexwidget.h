@@ -36,7 +36,10 @@ private:
 protected:
     /** @brief Perform base-class initialization; call after building the UI. */
     void initializeBase();
-    /** @brief Connect all child input widget signals to validate(). */
+    /**
+     * @brief Connect the child QLineEdit, QComboBox, QRadioButton, QCheckBox and QSpinBox
+     *        signals to validate().
+     */
     void connectValidationSignals();
 
 protected slots:
@@ -58,7 +61,11 @@ private:
     void connectSpinBoxSignals();
 
 public slots:
-    /** @brief Called when application preferences change; override to react. */
+    /**
+     * @brief Preferences-change hook.  The default implementation applies the GuiSettings
+     *        font size to this widget, so an override must call the base implementation
+     *        to keep it.
+     */
     virtual void onPreferencesChanged();
 
 private slots:

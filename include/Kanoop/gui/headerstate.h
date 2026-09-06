@@ -6,9 +6,10 @@
 #include <Kanoop/gui/libkanoopgui.h>
 
 /**
- * @brief Serializable snapshot of a QHeaderView's section sizes and visibility.
+ * @brief Serializable snapshot of a QHeaderView's section sizes, order and visibility.
  *
- * HeaderState captures per-section metadata (index, label, pixel width, and visibility)
+ * HeaderState captures per-section metadata (logical index, label, pixel width, visibility,
+ * and visual index)
  * so that a header view layout can be saved to JSON and restored later.
  */
 class LIBKANOOPGUI_EXPORT HeaderState : public ISerializableToJson,
