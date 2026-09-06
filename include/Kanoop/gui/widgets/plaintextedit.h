@@ -7,9 +7,10 @@
 /**
  * @brief QPlainTextEdit subclass with HTML-formatted and color-styled append helpers.
  *
- * PlainTextEdit adds appendText() for appending plain text with optional
- * per-call foreground and background colors, and appendFormattedText() which
- * additionally accepts TextFlags for bold/strong formatting.
+ * PlainTextEdit adds appendText() for appending text with optional per-call
+ * foreground and background colors, and appendFormattedText() which additionally
+ * accepts TextFlags for bold/strong formatting.  The text is inserted as HTML and
+ * is not escaped.
  */
 class LIBKANOOPGUI_EXPORT PlainTextEdit : public QPlainTextEdit
 {
@@ -43,9 +44,9 @@ public:
 
     /**
      * @brief Append a line of text with optional per-call colors.
-     * @param text Text to append
-     * @param foregroundColor Text color (invalid QColor = default)
-     * @param backgroundColor Background color (invalid QColor = default)
+     * @param text Text to append (not HTML-escaped)
+     * @param foregroundColor Text color; an invalid QColor emits no colour styling at all
+     * @param backgroundColor Background color; emitted only when @p foregroundColor is also valid
      */
     void appendText(const QString& text, const QColor& foregroundColor = QColor(), const QColor& backgroundColor = QColor());
 
@@ -53,8 +54,8 @@ public:
      * @brief Append a formatted line of text with flags and optional colors.
      * @param text Text to append
      * @param flags Combination of TextFlag values
-     * @param foregroundColor Text color (invalid QColor = default)
-     * @param backgroundColor Background color (invalid QColor = default)
+     * @param foregroundColor Text color; an invalid QColor emits no colour styling at all
+     * @param backgroundColor Background color; emitted only when @p foregroundColor is also valid
      */
     void appendFormattedText(const QString& text, TextFlags flags, const QColor& foregroundColor = QColor(), const QColor& backgroundColor = QColor());
 };
