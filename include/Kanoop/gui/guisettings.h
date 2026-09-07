@@ -89,6 +89,53 @@ public:
     bool widgetHasPersistentPosition(const QWidget* widget) const;
 
     /**
+     * @brief Persist a position under an explicit object name.
+     * @param objectName Name to key on
+     * @param pos Position to save
+     */
+    void setLastWindowPosition(const QString& objectName, const QPoint& pos) { _settings.setValue(makeKey(KEY_LAST_WIDGET_POS, objectName), pos); }
+
+    /**
+     * @brief Persist a size under an explicit object name.
+     * @param objectName Name to key on
+     * @param size Size to save
+     */
+    void setLastWindowSize(const QString& objectName, const QSize& size) { _settings.setValue(makeKey(KEY_LAST_WIDGET_SIZE, objectName), size); }
+
+    /**
+     * @brief Read a position stored under an explicit object name.
+     * @param objectName Name to look up
+     * @param result Receives the stored position; untouched when none is stored
+     * @return true when a position was stored under this name
+     *
+     * ⚠ Mints nothing, and reports absence separately from the value -- a stored @Point(0 0) and
+     * a name never seen are different answers here.
+     */
+    bool tryGetLastWindowPosition(const QString& objectName, QPoint& result) const;
+
+    /**
+     * @brief Read a size stored under an explicit object name.
+     * @param objectName Name to look up
+     * @param result Receives the stored size; untouched when none is stored
+     * @return true when a size was stored under this name
+     *
+     * ⚠ Mints nothing, unlike getLastWindowSize(), which records the size it hands back.
+     */
+    bool tryGetLastWindowSize(const QString& objectName, QSize& result) const;
+
+    /**
+     * @brief List every object name that has a stored position or size.
+     * @return Object names, each appearing once
+     */
+    QStringList persistentGeometryNames() const;
+
+    /**
+     * @brief Remove the stored position and size for an object name.
+     * @param objectName Name whose geometry to drop; an empty name is ignored
+     */
+    void removePersistentGeometry(const QString& objectName);
+
+    /**
      * @brief Save the current state of a QSplitter.
      * @param splitter Splitter whose state to save
      */

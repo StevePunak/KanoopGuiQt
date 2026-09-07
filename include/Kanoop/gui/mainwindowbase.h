@@ -117,6 +117,15 @@ public:
      */
     void setDefaultSize(int width, int height) { _defaultSize = QSize(width, height); }
 
+    /**
+     * @brief The name under which geometry shared by every window of this kind is persisted.
+     * @return A name identifying the window's kind
+     *
+     * ⚠ Returns objectName(), so a window whose object name carries a per-instance identity has
+     * a per-kind key identical to its per-instance one until it overrides this.
+     */
+    virtual QString geometryKindName() const { return objectName(); }
+
 public slots:
     /**
      * @brief Show a coloured status message with an optional timeout.

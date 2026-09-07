@@ -158,8 +158,8 @@ public slots:
     void clear();
 
 private:
-    AbstractItemModel* _sourceModel;
-    QSortFilterProxyModel* _proxyModel;
+    AbstractItemModel* _sourceModel = nullptr;
+    QSortFilterProxyModel* _proxyModel = nullptr;
     QMap<int, QStyledItemDelegate*> _columnDelegates;
 
     QAction* _actionColSettings = nullptr;
