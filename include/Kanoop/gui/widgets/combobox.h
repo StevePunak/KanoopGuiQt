@@ -7,7 +7,7 @@
 /**
  * @brief QComboBox subclass with bold font helpers and keyboard-commit signals.
  *
- * ComboBox emits accept() when the user presses Enter/Return, and lostFocus()
+ * ComboBox emits accept() when the user presses Return, and lostFocus()
  * when the widget loses keyboard focus.  Individual rows or the entire widget
  * can have their font weight changed to bold.
  */
@@ -22,7 +22,8 @@ public:
     explicit ComboBox(QWidget *parent = nullptr);
 
     /**
-     * @brief Set the font weight of all items in the combo box.
+     * @brief Set the font weight of the combo box widget.  Rows given their own font by
+     *        setRowBold() keep it.
      * @param bold true for bold, false for normal weight
      */
     void setBold(bool bold);
@@ -39,7 +40,7 @@ private:
     virtual void focusOutEvent(QFocusEvent* event) override;
 
 signals:
-    /** @brief Emitted when the user presses Enter/Return to accept the current value. */
+    /** @brief Emitted when the user presses Return to accept the current value. */
     void accept();
     /** @brief Emitted when the widget loses keyboard focus. */
     void lostFocus();

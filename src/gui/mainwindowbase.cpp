@@ -165,7 +165,7 @@ void MainWindowBase::onPreferencesChanged()
 
     // Force all child widgets to update their fonts
     for (QWidget* widget : findChildren<QWidget*>()) {
-        if (widget != this) { // Don't set font on self again
+        if (widget != this) {
             widget->setFont(newFont);
         }
     }

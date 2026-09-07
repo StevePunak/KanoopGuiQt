@@ -78,15 +78,17 @@ public:
     /** @brief Return the icon for this item. */
     virtual QIcon icon() const { return _icon; }
     /**
-     * @brief Return display or decoration data for a model index.
+     * @brief Return decoration, entity, UUID and metadata role data for a model index.
+     *        Qt::DisplayRole is not handled here; subclasses supply display values.
      * @param index Model index being queried
      * @param role Qt item data role
      * @return Data for the given role
      */
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     /**
-     * @brief Update this item's data from new entity metadata.
-     * @param metadata New metadata to apply
+     * @brief Copy the KANOOP::DataRole value out of the supplied metadata, when this item
+     *        already carries that role.
+     * @param metadata Metadata to read the DataRole value from
      */
     virtual void updateFromMetadata(const EntityMetadata& metadata);
     /**
@@ -193,8 +195,10 @@ public:
 
     // Model Properties and Methods
     /**
-     * @brief Return the row index of this item within its parent's children.
-     * @return Row index, or 0 if this item has no parent
+     * @brief Return the row index of this item within its parent's children, or within the
+     *        model's root items when it has no parent.
+     * @return Row index, or -1 when the item is not found in that list.  0 when the item has
+     *         neither a parent nor a model.
      */
     int row() const;
 
@@ -204,7 +208,8 @@ public:
     /**
      * @brief Return the child item at the given row.
      * @param row Row index
-     * @return Child item pointer, or nullptr if row is out of range
+     * @return Child item pointer, or nullptr when row is at or beyond the child count.
+     *         A negative row is not checked.
      */
     AbstractModelItem* child(int row) const;
 
@@ -212,7 +217,10 @@ public:
     List children() const { return _children; }
     /** @brief Return a mutable reference to the child items list. */
     List& childrenRef() { return _children; }
-    /** @brief Return the list of sibling items (all children of this item's parent). */
+    /**
+     * @brief Return the other children of this item's parent.  This item is excluded, and
+     * an item with no parent gets an empty list.
+     */
     List siblings() const;
 
     /**

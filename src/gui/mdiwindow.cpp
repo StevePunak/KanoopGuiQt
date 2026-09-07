@@ -41,13 +41,8 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     connect(mdiSubWindow, &MdiSubWindow::closing, this, &MdiWindow::onSubWindowClosing);
     mdiArea()->addSubWindow(mdiSubWindow);
 
-    // ⚠ The POSITION key decides this, never the size key. A window that has a stored position
-    // but no stored size -- moved but never resized -- reads as never-seen if the size is what
-    // is asked, and gets cascaded over. widgetHasPersistentGeometry() asks the size question
-    // and is the wrong query here however well its name reads.
-    // ⚠ Both queries must be made before getLastWindowSize() below, which RECORDS the size it
-    // hands back and so answers true to its own question ever after. Moving either down beside
-    // the branch that uses it makes both of them describe this call rather than a previous one.
+    // ⚠ Queried on the position key. GuiSettings::getLastWindowSize() mints its key when
+    // absent, so a size query always answers yes.
     const bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
     const bool hasStoredSize = GuiSettings::globalInstance()->widgetHasPersistentGeometry(mdiSubWindow);
 

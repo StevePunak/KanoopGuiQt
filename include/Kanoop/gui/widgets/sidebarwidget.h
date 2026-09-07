@@ -13,7 +13,8 @@ class SidebarPaintDelegate;
  *
  * SidebarWidget displays a vertical list of named, optionally-iconed navigation
  * entries.  Each entry is keyed by an entity metadata type integer.  Clicking an
- * entry emits itemClicked() with the entity type.  Spacing, icon size, and content
+ * entry emits itemClicked() with the entity type; an entry of type 0 emits nothing.
+ * Spacing, icon size, and content
  * margins are all adjustable.
  */
 class LIBKANOOPGUI_EXPORT SidebarWidget : public QListView

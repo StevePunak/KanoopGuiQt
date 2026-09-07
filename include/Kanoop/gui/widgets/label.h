@@ -49,14 +49,16 @@ public:
     void setFontPixelSize(int size);
 
     /**
-     * @brief Return the current foreground color.
-     * @return Foreground (text) color
+     * @brief Return the foreground color last set on this label.
+     * @return Foreground (text) color.  Until one is set explicitly this is the palette
+     *         colour sampled at construction, while the label paints from the live palette.
      */
     QColor foregroundColor() const { return _foregroundColor; }
 
     /**
-     * @brief Return the current background color.
-     * @return Background color
+     * @brief Return the background color last set on this label.
+     * @return Background color.  Until one is set explicitly this is the palette colour
+     *         sampled at construction, while the label paints from the live palette.
      */
     QColor backgroundColor() const { return _backgroundColor; }
 
@@ -74,9 +76,9 @@ public slots:
     void setBackgroundColor(const QColor& color);
 
 public:
-    /** @brief Reset the foreground color to the palette default. */
+    /** @brief Clear the explicit foreground color so the label paints from the palette. */
     void setDefaultForegroundColor();
-    /** @brief Reset the background color to the palette default. */
+    /** @brief Clear the explicit background color so the label paints from the palette. */
     void setDefaultBackgroundColor();
 
 protected:

@@ -29,8 +29,8 @@ public:
 
     /**
      * @brief Append an opening &lt;p&gt; tag with optional foreground and background colors.
-     * @param color Foreground text color (invalid QColor = none)
-     * @param backgroundColor Background color (invalid QColor = none)
+     * @param color Foreground text color; an invalid QColor emits no colour styling at all
+     * @param backgroundColor Background color; emitted only when @p color is also valid
      */
     void startParagraph(const QColor& color = QColor(), const QColor& backgroundColor = QColor());
 

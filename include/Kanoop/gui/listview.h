@@ -11,8 +11,8 @@ class AbstractItemModel;
 /**
  * @brief QListView subclass that integrates with AbstractItemModel and adds UUID-based navigation.
  *
- * ListView automatically wraps the source model in a QSortFilterProxyModel and
- * provides helpers for locating and selecting items by UUID.
+ * ListView adopts a caller-supplied QSortFilterProxyModel, unwrapping it to reach the
+ * source model, and provides helpers for locating and selecting items by UUID.
  */
 class LIBKANOOPGUI_EXPORT ListView : public QListView,
                                      public LoggingBaseClass

@@ -238,9 +238,10 @@ public:
     };
 
     /**
-     * @brief Look up the string name for a header type integer.
+     * @brief Look up the string name registered for a header type integer.
      * @param type Header type integer
-     * @return Registered name string, or empty string if not found
+     * @return The registered name.  The queried map is a const empty map, so the result is
+     *         an empty string.
      */
     static QString typeToString(int type) { return _TableHeaderTypeToStringMap.value(type); }
 

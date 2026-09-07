@@ -9,8 +9,8 @@
  * @brief Qt Designer plugin collection exposing KanoopGuiQt custom widgets.
  *
  * WidgetPluginCollection implements QDesignerCustomWidgetCollectionInterface so
- * that all custom KanoopGuiQt widgets are registered with Qt Designer as a
- * single plugin.  The list of widgets is populated in the constructor.
+ * that PlayPauseButton, PushButton, Label and CheckBox are registered with Qt
+ * Designer as a single plugin.  The list of widgets is populated in the constructor.
  */
 class LIBKANOOPGUI_EXPORT WidgetPluginCollection : public QObject,
                                public QDesignerCustomWidgetCollectionInterface

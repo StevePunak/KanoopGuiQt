@@ -287,7 +287,7 @@ protected:
     void deleteColumnHeader(int section);
 
     /**
-     * @brief Append a row header with optional display text.
+     * @brief Store a row header, keyed by the current column-header count.
      * @param type Row type identifier
      * @param value Optional display text
      */
@@ -311,17 +311,12 @@ protected:
     void setColumnHeaderEntityMetadata(int type, const EntityMetadata& metadata);
 
     /**
-     * @brief Retrieve the EntityMetadata for a column header type.
-     * @param type Column type identifier
+     * @brief Retrieve the EntityMetadata for the column header at the given index.
+     * @param type Column index into the column-header map
      * @return Associated EntityMetadata
      */
     EntityMetadata columnEntityMetadata(int type) const;
 
-    /**
-     * @brief Set the text color for all cells in the column of the given type.
-     * @param type Column type identifier
-     * @param color Text color to apply
-     */
     void setColumnTextColor(int type, const QColor& color);
 
     /**
@@ -362,7 +357,7 @@ protected:
      */
     void updateItemsAtIndexes(const QModelIndexList& indexes, const EntityMetadata &metadata);
 
-    /** @brief Emit dataChanged for the entire model. */
+    /** @brief Emit dataChanged over the top-level rows and columns. */
     void refreshAll();
 
     /**

@@ -7,8 +7,8 @@
 /**
  * @brief QCheckBox subclass with an optional read-only mode.
  *
- * CheckBox exposes a readOnly property.  When set, mouse press events are
- * suppressed so that the check state cannot be changed by the user.
+ * CheckBox exposes a readOnly property.  When set, mouse press events are ignored.
+ * Keyboard and mnemonic activation still change the check state.
  */
 class LIBKANOOPGUI_EXPORT CheckBox : public QCheckBox
 {
@@ -31,7 +31,7 @@ public:
 
     /**
      * @brief Return whether the checkbox is read-only.
-     * @return true if user interaction is suppressed
+     * @return true if mouse presses are ignored
      */
     bool isReadOnly() const { return _readOnly; }
 

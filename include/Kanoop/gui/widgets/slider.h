@@ -7,8 +7,8 @@
 /**
  * @brief QSlider subclass with an optional read-only mode.
  *
- * Slider exposes a readOnly property.  When set, mouse press events are
- * suppressed so that the slider value cannot be changed by the user.
+ * Slider exposes a readOnly property.  When set, mouse press events are ignored.
+ * Keyboard and wheel input still change the value.
  */
 class LIBKANOOPGUI_EXPORT Slider : public QSlider
 {
@@ -29,7 +29,8 @@ public:
 
     /**
      * @brief Return whether the slider is read-only.
-     * @return true if user interaction is suppressed
+     * @return true if mouse presses are ignored.  Keyboard and wheel input still change
+     *         the value.
      */
     bool isReadOnly() const { return _readOnly; }
 

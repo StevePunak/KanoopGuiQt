@@ -36,9 +36,7 @@ private slots:
 
     void standardImages_areRegistered()
     {
-        // Standard images should have been auto-registered via static init.
-        // We can't verify they load (no actual resource files in test context),
-        // but getPixmap should not crash for any standard image ID.
+        // getPixmap must not crash for any standard image ID.
         QPixmap pm;
         pm = Resources::getPixmap(Resources::Play);
         pm = Resources::getPixmap(Resources::Pause);
