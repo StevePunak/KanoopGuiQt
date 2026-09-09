@@ -88,7 +88,7 @@ void ButtonLabel::setBackgroundColor(const QColor& color)
 void ButtonLabel::relayout()
 {
     while(_layout->count() > 0) {
-        _layout->takeAt(0);
+        delete _layout->takeAt(0);
     }
 
     if(_buttonAlignment == Qt::AlignRight) {
