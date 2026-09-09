@@ -67,7 +67,7 @@ void ToastManager::performLayout()
 
 bool ToastManager::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == _parentWidget || event->type() == QEvent::Resize) {
+    if(watched == _parentWidget && event->type() == QEvent::Resize) {
         performLayout();
     }
     return false;
