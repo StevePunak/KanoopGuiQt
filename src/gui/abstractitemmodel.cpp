@@ -366,8 +366,7 @@ TableHeader::List AbstractItemModel::columnHeaders() const
 
 AbstractModelItem* AbstractItemModel::insertRootItem(int row, AbstractModelItem* item)
 {
-    QModelIndex insertIndex = index(row, 0, QModelIndex());
-    beginInsertRows(insertIndex, row, row);
+    beginInsertRows(QModelIndex(), row, row);
     _rootItems.insert(row, item);
     endInsertRows();
     return item;
