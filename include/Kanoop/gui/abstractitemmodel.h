@@ -331,13 +331,15 @@ protected:
     void deleteRootItem(AbstractModelItem* item);
 
     /**
-     * @brief Delete all root items with the given UUID.
+     * @brief Delete all root items with the given UUID.  Items at deeper levels which
+     *        carry the same UUID are left in place.
      * @param uuid UUID to match
      */
     void deleteRootItems(const QUuid& uuid);
 
     /**
-     * @brief Delete all root items matching the given EntityMetadata.
+     * @brief Delete all root items matching the given EntityMetadata.  Items at deeper
+     *        levels which match are left in place.
      * @param metadata Metadata to match
      */
     void deleteRootItems(const EntityMetadata& metadata);
