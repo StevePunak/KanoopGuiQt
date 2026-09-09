@@ -317,6 +317,11 @@ protected:
      */
     EntityMetadata columnEntityMetadata(int type) const;
 
+    /**
+     * @brief Set the text colour for the column with the given header type.
+     * @param type Column header type to find
+     * @param color New text colour for every cell in that column
+     */
     void setColumnTextColor(int type, const QColor& color);
 
     /**
@@ -398,6 +403,13 @@ protected:
      * @param rowIndex Row index whose data changed
      */
     void emitRowChanged(const QModelIndex &rowIndex);
+
+    /**
+     * @brief Emit dataChanged for one column, under parent and every descendant of it.
+     * @param parent Index to start from; an invalid index covers the whole model
+     * @param column Column to mark changed
+     */
+    void emitColumnChanged(const QModelIndex& parent, int column);
 
 public:
     /**

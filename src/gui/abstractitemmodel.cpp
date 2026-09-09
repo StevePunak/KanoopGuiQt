@@ -609,6 +609,28 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
     emit dataChanged(firstColIndex, lastColIndex);
 }
 
+void AbstractItemModel::emitColumnChanged(const QModelIndex& parent, int column)
+{
+    int rows = rowCount(parent);
+    if(rows == 0) {
+        return;
+    }
+    emit dataChanged(index(0, column, parent), index(rows - 1, column, parent), { Qt::ForegroundRole });
+    for(int row = 0;row < rows;row++) {
+        emitColumnChanged(index(row, 0, parent), column);
+    }
+}
+
+void AbstractItemModel::setColumnTextColor(int type, const QColor &color)
+{
+    _columnHeaders.setTextColorForType(type, color);
+
+    int col = columnForHeader(type);
+    if(col != -1) {
+        emitColumnChanged(QModelIndex(), col);
+    }
+}
+
 QString AbstractItemModel::toString(const QModelIndex &index, bool includeText)
 {
     QString result = QString("row: %1  col: %2  ptr: 0x%3")
