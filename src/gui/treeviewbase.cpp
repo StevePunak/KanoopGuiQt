@@ -304,7 +304,8 @@ void TreeViewBase::setModel(QAbstractItemModel* model)
     }
     else {
         _proxyModel = proxyModel;
-        _sourceModel = static_cast<AbstractItemModel*>(_proxyModel->sourceModel());
+        _sourceModel = dynamic_cast<AbstractItemModel*>(_proxyModel->sourceModel());
+        Q_ASSERT(_sourceModel);
         QTreeView::setModel(_proxyModel);
     }
     connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &TreeViewBase::onCurrentSelectionChanged);
