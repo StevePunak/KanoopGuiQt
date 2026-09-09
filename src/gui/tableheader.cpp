@@ -12,15 +12,8 @@
 
 #include <QJsonDocument>
 
-const TableHeader::TableHeaderTypeToStringMap TableHeader::_TableHeaderTypeToStringMap;
-
 TableHeader::TableHeader(int type, Qt::Orientation orientation) :
-    _type(type), _text(_TableHeaderTypeToStringMap.value(type)), _orientation(orientation) {}
+    _type(type), _orientation(orientation) {}
 
 TableHeader::TableHeader(int type, const QString &text, Qt::Orientation orientation) :
-    _type(type), _text(text), _orientation(orientation)
-{
-    if(_text.isEmpty()) {
-        _text = _TableHeaderTypeToStringMap.value(type);
-    }
-}
+    _type(type), _text(text), _orientation(orientation) {}
