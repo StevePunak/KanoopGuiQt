@@ -64,7 +64,7 @@ public:
     void setIconAlignment(Qt::Alignment alignment);
 
 private:
-    void createLayout(const QString& text, const QIcon& icon);
+    void createLayout();
 
     QLabel* _label = nullptr;
     QLabel* _iconLabel = nullptr;
