@@ -401,9 +401,7 @@ void AbstractItemModel::appendRootItems(QList<AbstractModelItem*> items)
 
 void AbstractItemModel::appendColumnHeader(int type, const QString &text)
 {
-    QString headerText = text.isEmpty() ? TableHeader::typeToString(type) : text;
-
-    TableHeader header(type, headerText, Qt::Horizontal);
+    TableHeader header(type, text, Qt::Horizontal);
     int col = _columnHeaders.count();
     beginInsertColumns(QModelIndex(), col, col);
     _columnHeaders.insert(col, header);
@@ -454,9 +452,7 @@ void AbstractItemModel::deleteColumnHeader(int section)
 
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
 {
-    QString text = value.isEmpty() ? TableHeader::typeToString(type) : value;
-
-    TableHeader header(type, text, Qt::Vertical);
+    TableHeader header(type, value, Qt::Vertical);
     _rowHeaders.insert(_columnHeaders.count(), header);
 }
 
