@@ -16,8 +16,9 @@ class LIBKANOOPGUI_EXPORT HtmlUtil
 public:
     /**
      * @brief Return an opening &lt;p&gt; tag with optional inline color styles.
-     * @param color Foreground text color; an invalid QColor emits no colour styling at all
-     * @param backgroundColor Background color; emitted only when @p color is also valid
+     * @param color Foreground text color; an invalid QColor emits no color declaration
+     * @param backgroundColor Background color; an invalid QColor emits no background-color
+     *        declaration.  The two parameters are independent.
      * @return HTML string for the opening paragraph tag
      */
     static QString startParagraph(const QColor& color = QColor(), const QColor& backgroundColor = QColor());
