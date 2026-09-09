@@ -2,6 +2,7 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLayout>
 
 
 
@@ -44,6 +45,11 @@ QIcon IconLabel::icon() const
 void IconLabel::setIcon(const QIcon& icon)
 {
     _iconLabel->setPixmap(icon.pixmap(_iconLabel->size()));
+}
+
+void IconLabel::setIconAlignment(Qt::Alignment alignment)
+{
+    layout()->setAlignment(_iconLabel, alignment);
 }
 
 void IconLabel::createLayout()
