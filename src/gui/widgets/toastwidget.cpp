@@ -18,6 +18,7 @@ const QColor ToastWidget::DefaultMessageForeground      = Colors::black;
 const QColor ToastWidget::DefaultMessageBackground      = Colors::lightgreen;
 const QColor ToastWidget::DefaultErrorForeground        = Colors::white;
 const QColor ToastWidget::DefaultErrorBackground        = Colors::red;
+const int ToastWidget::DefaultWidth                     = 300;
 
 ToastWidget::ToastWidget(const QString& text, const QColor& backgroundColor, const QColor& foregroundColor, const TimeSpan& beginFadeTime, const TimeSpan& fadeTime, QWidget* parent) :
     QFrame(parent),

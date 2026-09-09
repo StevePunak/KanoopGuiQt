@@ -37,6 +37,7 @@ public:
     static const QColor DefaultMessageBackground;
     static const QColor DefaultErrorForeground;
     static const QColor DefaultErrorBackground;
+    static const int DefaultWidth;
 
 signals:
     void complete();
