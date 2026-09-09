@@ -61,6 +61,11 @@ public:
      */
     void setIcon(const QIcon& icon);
 
+    /**
+     * @brief Set how the icon sits within the cell the layout gives it.
+     * @param alignment Alignment flags; a default-constructed Qt::Alignment lets the
+     *        icon fill its cell, which is the behaviour when this is never called
+     */
     void setIconAlignment(Qt::Alignment alignment);
 
 private:
