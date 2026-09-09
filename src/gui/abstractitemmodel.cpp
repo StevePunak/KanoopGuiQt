@@ -528,8 +528,7 @@ void AbstractItemModel::deleteRootItems(const QUuid &uuid)
     QModelIndexList indexes = indexesOfEntityUuid(uuid);
     for(const QModelIndex& index : indexes) {
         // The search is recursive, so an entry may already have been freed along with an
-        // earlier root that owned it.  Take the pointer and test it against _rootItems -
-        // never call index.parent() or index.row() here.
+        // earlier root that owned it - never call index.parent() or index.row() here.
         AbstractModelItem* item = static_cast<AbstractModelItem*>(index.internalPointer());
         if(_rootItems.contains(item)) {
             deleteRootItem(item);
@@ -542,8 +541,7 @@ void AbstractItemModel::deleteRootItems(const EntityMetadata &metadata)
     QModelIndexList indexes = indexesOfEntity(metadata.type(), metadata.data(KANOOP::DataRole), KANOOP::DataRole);
     for(const QModelIndex& index : indexes) {
         // The search is recursive, so an entry may already have been freed along with an
-        // earlier root that owned it.  Take the pointer and test it against _rootItems -
-        // never call index.parent() or index.row() here.
+        // earlier root that owned it - never call index.parent() or index.row() here.
         AbstractModelItem* item = static_cast<AbstractModelItem*>(index.internalPointer());
         if(_rootItems.contains(item)) {
             deleteRootItem(item);
