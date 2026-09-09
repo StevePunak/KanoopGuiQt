@@ -375,9 +375,8 @@ AbstractModelItem* AbstractItemModel::insertRootItem(int row, AbstractModelItem*
 AbstractModelItem *AbstractItemModel::appendRootItem(AbstractModelItem *item)
 {
     int row = rowCount(QModelIndex());
-    QModelIndex insertIndex = index(row, 0, QModelIndex());
 
-    beginInsertRows(insertIndex, row, row);
+    beginInsertRows(QModelIndex(), row, row);
     _rootItems.append(item);
     endInsertRows();
 
@@ -392,9 +391,8 @@ void AbstractItemModel::appendRootItems(QList<AbstractModelItem*> items)
 
     int firstRow = rowCount(QModelIndex());
     int lastRow = firstRow + items.count() - 1;
-    QModelIndex insertIndex = index(firstRow, 0, QModelIndex());
 
-    beginInsertRows(insertIndex, firstRow, lastRow);
+    beginInsertRows(QModelIndex(), firstRow, lastRow);
     _rootItems.append(items);
     endInsertRows();
 }
