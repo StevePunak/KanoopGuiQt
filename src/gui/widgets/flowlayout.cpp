@@ -35,7 +35,11 @@ void FlowLayout::clear()
 {
     while(count() > 0) {
         QLayoutItem* item = takeAt(0);
-        delete item->widget();
+        QWidget* widget = item->widget();
+        // Item before widget: ~QWidgetItemV2 dereferences its widget, and QWidget's
+        // destructor clears that back-pointer only on the item Qt registered for it.
+        delete item;
+        delete widget;
     }
 }
 
