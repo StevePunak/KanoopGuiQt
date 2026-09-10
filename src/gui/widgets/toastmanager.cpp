@@ -38,8 +38,6 @@ void ToastManager::displayToast(const QString& text, const QColor& backgroundCol
     connect(toast, &ToastWidget::complete, this, &ToastManager::closeToast);
     _toasts.append(toast);
 
-    // QWidget::setFixedSize warns and clamps a negative width to zero, and by then the
-    // text has already been wrapped at one pixel.
     const int width = _size.width() > 0 ? _size.width() : ToastWidget::DefaultWidth;
 
     QFontMetrics fm(toast->font());
