@@ -1,5 +1,6 @@
 #include "widgets/checkbox.h"
 
+#include <QKeyEvent>
 #include <QMouseEvent>
 
 
@@ -20,6 +21,26 @@ void CheckBox::mousePressEvent(QMouseEvent* event)
     }
     else {
         QCheckBox::mousePressEvent(event);
+    }
+}
+
+void CheckBox::keyPressEvent(QKeyEvent* event)
+{
+    if(_readOnly) {
+        event->ignore();
+    }
+    else {
+        QCheckBox::keyPressEvent(event);
+    }
+}
+
+void CheckBox::keyReleaseEvent(QKeyEvent* event)
+{
+    if(_readOnly) {
+        event->ignore();
+    }
+    else {
+        QCheckBox::keyReleaseEvent(event);
     }
 }
 

@@ -8,8 +8,11 @@ QString HtmlUtil::startParagraph(const QColor& color, const QColor& backgroundCo
     QString result;
     QTextStream output(&result);
     output << "<p";
-    if(color.isValid()) {
-        output << " style=\"color: " << color.name(QColor::HexArgb) << ';';
+    if(color.isValid() || backgroundColor.isValid()) {
+        output << " style=\"";
+        if(color.isValid()) {
+            output << "color: " << color.name(QColor::HexArgb) << ';';
+        }
         if(backgroundColor.isValid()) {
             output << "background-color: " << backgroundColor.name(QColor::HexArgb) << ';';
         }

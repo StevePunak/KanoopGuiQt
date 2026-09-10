@@ -11,16 +11,40 @@ Frame::Frame(QWidget *parent) :
 void Frame::setForegroundColor(const QColor& color)
 {
     _foregroundColor = color;
-    StyleSheet<QFrame> ss;
-    ss.setProperty(SP_Color, color);
-    setStyleSheet(ss.toString());
+    _foregroundExplicitlySet = true;
+    applyStylesheet();
 }
 
 void Frame::setBackgroundColor(const QColor& color)
 {
     _backgroundColor = color;
+    _backgroundExplicitlySet = true;
+    applyStylesheet();
+}
+
+void Frame::setDefaultForegroundColor()
+{
+    _foregroundColor = QColor();
+    _foregroundExplicitlySet = false;
+    applyStylesheet();
+}
+
+void Frame::setDefaultBackgroundColor()
+{
+    _backgroundColor = QColor();
+    _backgroundExplicitlySet = false;
+    applyStylesheet();
+}
+
+void Frame::applyStylesheet()
+{
     StyleSheet<QFrame> ss;
-    ss.setProperty(SP_BackgroundColor, color);
+    if(_foregroundExplicitlySet) {
+        ss.setProperty(SP_Color, _foregroundColor);
+    }
+    if(_backgroundExplicitlySet) {
+        ss.setProperty(SP_BackgroundColor, _backgroundColor);
+    }
     setStyleSheet(ss.toString());
 }
 

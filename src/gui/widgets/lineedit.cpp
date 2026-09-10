@@ -15,15 +15,41 @@ LineEdit::LineEdit(const QString& text, QWidget* parent) :
 
 void LineEdit::setForegroundColor(const QColor& color)
 {
-    StyleSheet<QLineEdit> ss;
-    ss.setProperty(SP_Color, color);
-    setStyleSheet(ss.toString());
+    _foregroundColor = color;
+    _foregroundExplicitlySet = true;
+    applyStylesheet();
 }
 
 void LineEdit::setBackgroundColor(const QColor& color)
 {
+    _backgroundColor = color;
+    _backgroundExplicitlySet = true;
+    applyStylesheet();
+}
+
+void LineEdit::setDefaultForegroundColor()
+{
+    _foregroundColor = QColor();
+    _foregroundExplicitlySet = false;
+    applyStylesheet();
+}
+
+void LineEdit::setDefaultBackgroundColor()
+{
+    _backgroundColor = QColor();
+    _backgroundExplicitlySet = false;
+    applyStylesheet();
+}
+
+void LineEdit::applyStylesheet()
+{
     StyleSheet<QLineEdit> ss;
-    ss.setProperty(SP_BackgroundColor, color);
+    if(_foregroundExplicitlySet) {
+        ss.setProperty(SP_Color, _foregroundColor);
+    }
+    if(_backgroundExplicitlySet) {
+        ss.setProperty(SP_BackgroundColor, _backgroundColor);
+    }
     setStyleSheet(ss.toString());
 }
 

@@ -317,6 +317,11 @@ protected:
      */
     EntityMetadata columnEntityMetadata(int type) const;
 
+    /**
+     * @brief Set the text colour for the column with the given header type.
+     * @param type Column header type to find
+     * @param color New text colour for every cell in that column
+     */
     void setColumnTextColor(int type, const QColor& color);
 
     /**
@@ -326,13 +331,15 @@ protected:
     void deleteRootItem(AbstractModelItem* item);
 
     /**
-     * @brief Delete all root items with the given UUID.
+     * @brief Delete all root items with the given UUID.  Items at deeper levels which
+     *        carry the same UUID are left in place.
      * @param uuid UUID to match
      */
     void deleteRootItems(const QUuid& uuid);
 
     /**
-     * @brief Delete all root items matching the given EntityMetadata.
+     * @brief Delete all root items matching the given EntityMetadata.  Items at deeper
+     *        levels which match are left in place.
      * @param metadata Metadata to match
      */
     void deleteRootItems(const EntityMetadata& metadata);
@@ -398,6 +405,13 @@ protected:
      * @param rowIndex Row index whose data changed
      */
     void emitRowChanged(const QModelIndex &rowIndex);
+
+    /**
+     * @brief Emit dataChanged for one column, under parent and every descendant of it.
+     * @param parent Index to start from; an invalid index covers the whole model
+     * @param column Column to mark changed
+     */
+    void emitColumnChanged(const QModelIndex& parent, int column);
 
 public:
     /**
