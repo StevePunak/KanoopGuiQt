@@ -137,11 +137,9 @@ void MainWindowBase::showEvent(QShowEvent *event)
                     geometryRect.moveTopLeft(centered);
                 }
 
-                // The restored size itself was never validated. It can exceed the current screen
-                // because it was saved on a larger monitor, or because the default size is simply
-                // bigger than a laptop panel. Nothing downstream bounds it and the overflow sits
-                // off-screen where it cannot be reached, so bound it here. The decoration comes
-                // from the widget which is actually moved, which is the parent when there is one.
+                // ⚠ frameDecoration must be measured on the same widget that resize() and move()
+                // are called on below. geometryRect was taken from that widget's geometry, so
+                // measuring this window instead gives the wrong frame whenever a parent exists.
                 QWidget* target = parent != nullptr ? parent : this;
                 QSize frameDecoration = (target->frameGeometry().size() - target->size()).expandedTo(QSize(0, 0));
                 geometryRect = boundToScreen(geometryRect, frameDecoration);
@@ -160,16 +158,14 @@ void MainWindowBase::showEvent(QShowEvent *event)
 
 QRect MainWindowBase::boundToScreen(const QRect& geometryRect, const QSize& frameDecoration)
 {
-    // Work in frame coordinates throughout. Fitting a client size into the work area and then
-    // pinning the frame origin to its top leaves the decoration hanging past the bottom edge.
+    // ⚠ Work in frame coordinates throughout. Fitting a client size into the work area and
+    // then pinning the frame origin to its top leaves the decoration past the bottom edge.
     QRect frameRect(geometryRect.topLeft(), geometryRect.size() + frameDecoration);
 
     QSize minimumFrameSize = _minimumRestoreSize.isValid()
                                  ? _minimumRestoreSize + frameDecoration
                                  : QSize();
 
-    // A window shrunk to a handful of pixels is fully visible and still unusable, so the floor is
-    // reason enough to correct a geometry which is otherwise entirely on screen.
     bool belowFloor = minimumFrameSize.isValid()
                       && frameRect.size().expandedTo(minimumFrameSize) != frameRect.size();
 
@@ -214,8 +210,8 @@ QRect MainWindowBase::boundRectToArea(const QRect& frameRect, const QRect& avail
 {
     QRect result = frameRect;
 
-    // The floor first, then the work area over the top of it. Capping last is what guarantees a
-    // floor can never force a window larger than the screen it is opening on.
+    // ⚠ Floor first, then cap to the work area. Capping last is what stops a floor forcing a
+    // window larger than the screen it opens on; swapping the two breaks small screens.
     QSize size = result.size();
     if(minimumFrameSize.isValid()) {
         size = size.expandedTo(minimumFrameSize);
@@ -223,8 +219,6 @@ QRect MainWindowBase::boundRectToArea(const QRect& frameRect, const QRect& avail
     size = size.boundedTo(available.size());
     result.setSize(size);
 
-    // Now that the size fits, slide the window back inside the work area if the restore point
-    // put part of it beyond an edge.
     QPoint topLeft = result.topLeft();
     topLeft.setX(std::min(topLeft.x(), available.right() - result.width() + 1));
     topLeft.setY(std::min(topLeft.y(), available.bottom() - result.height() + 1));

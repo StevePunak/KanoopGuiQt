@@ -214,18 +214,14 @@ protected:
     /**
      * @brief Bound a restored geometry so it lands entirely on a connected screen.
      *
-     * A persisted geometry carries no record of the screen it was saved on, so it can be larger
-     * than the current one, or positioned past its edge. Neither Qt nor this class bounds it
-     * otherwise, and the overflow is unreachable.
-     *
      * A geometry whose every pixel already falls on a connected screen is returned untouched, so
      * a deliberate multi-monitor layout is never disturbed.
      *
      * The restored rect is a hybrid of two coordinate systems - moveEvent persists QWidget::pos(),
-     * which for a window includes the frame, while resizeEvent persists QWidget::size(), which does
-     * not. frameDecoration reconciles them. It may legitimately be (0, 0): on X11 an invisible
-     * window has no frame yet, so the extents are unknown until after the first map. That yields
-     * the unreconciled bound rather than a wrong one.
+     * which for a window includes the frame, while resizeEvent persists QWidget::size(), which
+     * does not. frameDecoration reconciles them, and may legitimately be (0, 0): on X11 an
+     * invisible window has no frame yet, so the extents are unknown until after the first map.
+     * That yields the unreconciled bound.
      *
      * @param geometryRect Restored geometry to bound; frame origin with a client-area size
      * @param frameDecoration Size the window frame adds to the client area, or (0, 0) if unknown
@@ -258,8 +254,8 @@ private:
     /**
      * @brief Return the screen a restored geometry mostly occupies.
      *
-     * The screen under the top-left corner is not necessarily the one the window mostly sits on,
-     * so the largest intersection decides rather than a single point.
+     * Selection is by largest intersection, so a geometry straddling two monitors resolves to
+     * the one it mostly occupies.
      *
      * @param frameRect Restored geometry, in frame coordinates
      * @return Screen with the largest intersection, falling back to the primary screen
@@ -269,8 +265,8 @@ private:
     /**
      * @brief Return whether every pixel of a rectangle falls on a connected screen.
      *
-     * The union of several work areas can cover a rectangle that no single work area contains,
-     * so the test is against the union rather than against each screen in turn.
+     * The test is against the union of the work areas: several screens can jointly cover a
+     * rectangle that no single one of them contains.
      *
      * @param frameRect Rectangle to test, in frame coordinates
      * @return true when no part of the rectangle is unreachable

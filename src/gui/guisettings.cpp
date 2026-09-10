@@ -58,11 +58,11 @@ QPoint GuiSettings::getLastWindowPosition(QWidget* widget, const QSize &defaultS
                         screenGeometry.centerPoint().y() - (widgetSize.height() / 2));
     }
 
-    // An MDI subwindow is positioned in its area's client coordinates, where a negative value puts
-    // it off the viewport. A top-level window is positioned on the desktop, where a monitor placed
-    // left of or above the primary legitimately has negative coordinates - clamping those to zero
-    // drags the window onto the primary screen and silently discards the restore point.
-    // MainWindowBase and Dialog validate desktop positions against the connected screens instead.
+    // ⚠ The clamp holds only for an MDI subwindow, positioned in its area's client coordinates
+    // where a negative value is off the viewport. A top-level window is positioned on the desktop,
+    // where a monitor left of or above the primary legitimately has negative coordinates; clamping
+    // those drags the window onto the primary screen and discards the restore point.
+    // MainWindowBase::boundToScreen and Dialog::showEvent validate desktop positions instead.
     if(isMdiSubWindow == true) {
         result.setX(std::max(result.x(), 0));
         result.setY(std::max(result.y(), 0));
