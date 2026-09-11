@@ -26,9 +26,14 @@
  * interposition gives on Linux. A platform that binds each module to its own
  * allocator, as Windows does by giving every DLL its own CRT heap, leaves
  * QLayoutPrivate::createWidgetItem's allocation invisible here, and both leak
- * assertions below would then hold for any implementation. That is not a
- * hypothetical to be guarded with an #ifdef: counter_seesAllocationsMadeInsideQt
- * measures it, and the two leak cases refuse to run when it does not hold.
+ * assertions below would then hold for any implementation.
+ *
+ * MinGW has not been measured. The condition is therefore measured rather than
+ * guarded by an #ifdef: allocationCounter_seesAllocationsMadeInsideQt reports what
+ * this platform actually does, and every case that depends on it skips, naming the
+ * reason, when it does not hold. Do not convert those skips into failures. A red
+ * that nobody can fix is a red that stops being read, and the Windows job is the
+ * one that catches missing export macros, which Linux cannot see at all.
  *
  * NOT covered here: the secondary effect of the leak, where the orphaned item stays
  * registered as the widget's QWidgetPrivate::widgetItem and permanently disables the
@@ -175,13 +180,17 @@ private slots:
      *
      * This is the control the two leak cases actually depend on. Both of them assert
      * that a count did not grow, and a counter that cannot see Qt's allocations
-     * satisfies that for a fixed build and a broken one alike. Asserting it here
-     * makes a blind counter a failure that names its own cause rather than a silent
-     * pass.
+     * satisfies that for a fixed build and a broken one alike. Running it first puts
+     * the measured count in the log on every platform, so the skips below are
+     * attributable.
      */
     void allocationCounter_seesAllocationsMadeInsideQt()
     {
-        QVERIFY2(blocksSeenFromInsideQt() >= 1, BlindCounterMessage);
+        const long long seen = blocksSeenFromInsideQt();
+        if(seen < 1) {
+            QSKIP(BlindCounterMessage);
+        }
+        qInfo("one QLayout::addWidget accounted for %lld blocks", seen);
     }
 
     /**
