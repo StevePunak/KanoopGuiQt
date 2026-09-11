@@ -48,8 +48,8 @@ private slots:
 
         QCOMPARE(result.height(), 1040);
         QCOMPARE(result.bottom(), available.bottom());
-        // What actually reaches resize() is the client size, which is the frame less decoration.
-        QCOMPARE(result.height() - decoration.height(), 1009);
+        QCOMPARE(result.width(), frame.width());
+        QCOMPARE(result.topLeft(), frame.topLeft());
     }
 
     void rectPastRightAndBottomEdges_slidesBackInside()
