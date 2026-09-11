@@ -1,6 +1,7 @@
 #include <QTest>
 #include <QLabel>
 #include <QLayout>
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include <atomic>
@@ -18,10 +19,16 @@
  * the leak has no observable surface in the widget API.
  *
  * Rather than depend on valgrind, which cannot be a ctest dependency, this file
- * replaces the global allocation operators and counts live blocks. That makes the
- * leak observable in-process and portable. The counters are exact for every
- * allocation routed through the ordinary operator new / operator delete, which is
- * where QLayoutPrivate::createWidgetItem allocates.
+ * replaces the global allocation operators and counts live blocks.
+ *
+ * That counts the allocation under test only where the replacement in this
+ * executable preempts the one inside libQt6Widgets, which is what ELF symbol
+ * interposition gives on Linux. A platform that binds each module to its own
+ * allocator, as Windows does by giving every DLL its own CRT heap, leaves
+ * QLayoutPrivate::createWidgetItem's allocation invisible here, and both leak
+ * assertions below would then hold for any implementation. That is not a
+ * hypothetical to be guarded with an #ifdef: counter_seesAllocationsMadeInsideQt
+ * measures it, and the two leak cases refuse to run when it does not hold.
  *
  * NOT covered here: the secondary effect of the leak, where the orphaned item stays
  * registered as the widget's QWidgetPrivate::widgetItem and permanently disables the
@@ -95,6 +102,32 @@ long long liveBlocks()
     return g_liveBlocks.load(std::memory_order_relaxed);
 }
 
+/**
+ * @brief Count the blocks a single QLayout::addWidget allocates.
+ *
+ * Every allocation in the measured window happens inside Qt: addWidget builds a
+ * QWidgetItemV2 through QLayoutPrivate::createWidgetItem. The widget and the layout
+ * are created before the window opens, so nothing this translation unit allocates
+ * is included and the result reports only whether the counter reaches across the
+ * module boundary.
+ *
+ * @return Number of blocks the counter attributed to the call
+ */
+long long blocksSeenFromInsideQt()
+{
+    QWidget host;
+    QVBoxLayout* layout = new QVBoxLayout(&host);
+    QLabel* probe = new QLabel(QStringLiteral("probe"), &host);
+
+    const long long before = liveBlocks();
+    layout->addWidget(probe);
+    return liveBlocks() - before;
+}
+
+const char* BlindCounterMessage =
+    "the allocation counter does not see allocations made inside Qt, so the leak "
+    "assertions in this file cannot distinguish a fixed build from a broken one";
+
 void cycleButtonAlignment(ButtonLabel* label, int rounds)
 {
     for(int i = 0; i < rounds; i++) {
@@ -119,11 +152,11 @@ class TstLayoutItemOwnership : public QObject
 
 private slots:
     /**
-     * @brief Control for both leak assertions below.
+     * @brief The counter balances an allocation made in this translation unit.
      *
-     * "Nothing leaked" is a negative property and is equally true of a counter that
-     * never runs. This proves the counter sees an allocation whose only pointer is
-     * dropped, in the same process as the measurements.
+     * This is necessary and not sufficient. The replacement is trivially in effect
+     * for code compiled here, so this case passes on a platform where the counter is
+     * blind to the allocations actually under test.
      */
     void allocationCounter_seesADroppedAllocation()
     {
@@ -138,10 +171,28 @@ private slots:
     }
 
     /**
+     * @brief The counter sees an allocation made inside Qt.
+     *
+     * This is the control the two leak cases actually depend on. Both of them assert
+     * that a count did not grow, and a counter that cannot see Qt's allocations
+     * satisfies that for a fixed build and a broken one alike. Asserting it here
+     * makes a blind counter a failure that names its own cause rather than a silent
+     * pass.
+     */
+    void allocationCounter_seesAllocationsMadeInsideQt()
+    {
+        QVERIFY2(blocksSeenFromInsideQt() >= 1, BlindCounterMessage);
+    }
+
+    /**
      * @brief ButtonLabel::relayout destroys the items it takes out of the layout.
      */
     void buttonLabelRelayout_leaksNothing()
     {
+        if(blocksSeenFromInsideQt() < 1) {
+            QSKIP(BlindCounterMessage);
+        }
+
         QWidget parent;
         ButtonLabel label(QStringLiteral("hello"), &parent);
 
@@ -163,6 +214,10 @@ private slots:
      */
     void flowLayoutClear_leaksNothing()
     {
+        if(blocksSeenFromInsideQt() < 1) {
+            QSKIP(BlindCounterMessage);
+        }
+
         QWidget parent;
         FlowLayout* layout = new FlowLayout(&parent);
 
