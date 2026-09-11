@@ -37,9 +37,8 @@ private slots:
 
     void frameTallerThanWorkArea_bottomLandsOnWorkAreaBottom()
     {
-        // A 1920x1040 work area with a 31px title bar: the client height the caller persisted was
-        // the full 1040, so the frame is 1071 tall and overflows. Bounding the frame - not the
-        // client - is what keeps the bottom edge out from under the taskbar.
+        // A 1920x1040 work area with a 31px title bar. The caller persisted the client height as
+        // the full 1040, so the frame is 1071 tall and overflows.
         QRect available(0, 0, 1920, 1040);
         QSize decoration(0, 31);
         QRect frame(0, 0, 1920, 1040 + decoration.height());
@@ -90,8 +89,7 @@ private slots:
 
     void workAreaLeftOfPrimary_resultStaysOnThatMonitor()
     {
-        // A monitor placed left of the primary has negative coordinates. Bounding must be against
-        // that work area's own edges, never against zero, or the window is dragged to the primary.
+        // A monitor placed left of the primary has negative coordinates.
         QRect available(-2560, 0, 1707, 1019);
         QRect frame(-1727, 148, 1650, 763);
 
