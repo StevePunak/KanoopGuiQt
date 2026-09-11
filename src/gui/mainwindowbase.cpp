@@ -16,6 +16,7 @@
 #include <QMdiArea>
 #include <QMenu>
 #include <QMoveEvent>
+#include <QRegion>
 #include <QResizeEvent>
 #include <QScreen>
 #include <QSplitter>
@@ -25,6 +26,8 @@
 
 #include <Kanoop/geometry/point.h>
 #include <Kanoop/geometry/size.h>
+
+#include <algorithm>
 
 MainWindowBase::MainWindowBase(const QString &loggingCategory, QWidget *parent) :
     QMainWindow{parent},
@@ -134,14 +137,15 @@ void MainWindowBase::showEvent(QShowEvent *event)
                     geometryRect.moveTopLeft(centered);
                 }
 
-                if(parent != nullptr) {
-                    parent->resize(geometryRect.size());
-                    parent->move(geometryRect.topLeft());
-                }
-                else {
-                    resize(geometryRect.size());
-                    move(geometryRect.topLeft());
-                }
+                // ⚠ frameDecoration must be measured on the same widget that resize() and move()
+                // are called on below. geometryRect was taken from that widget's geometry, so
+                // measuring this window instead gives the wrong frame whenever a parent exists.
+                QWidget* target = parent != nullptr ? parent : this;
+                QSize frameDecoration = (target->frameGeometry().size() - target->size()).expandedTo(QSize(0, 0));
+                geometryRect = boundToScreen(geometryRect, frameDecoration);
+
+                target->resize(geometryRect.size());
+                target->move(geometryRect.topLeft());
             }
         }
         _formLoadComplete = true;
@@ -150,6 +154,111 @@ void MainWindowBase::showEvent(QShowEvent *event)
         }
     }
     QMainWindow::showEvent(event);
+}
+
+QRect MainWindowBase::boundToScreen(const QRect& geometryRect, const QSize& frameDecoration)
+{
+    // ⚠ Work in frame coordinates throughout. Fitting a client size into the work area and
+    // then pinning the frame origin to its top leaves the decoration past the bottom edge.
+    QRect frameRect(geometryRect.topLeft(), geometryRect.size() + frameDecoration);
+
+    QSize minimumFrameSize = _minimumRestoreSize.isValid()
+                                 ? _minimumRestoreSize + frameDecoration
+                                 : QSize();
+
+    bool belowFloor = minimumFrameSize.isValid()
+                      && frameRect.size().expandedTo(minimumFrameSize) != frameRect.size();
+
+    if(isFullyVisible(frameRect) == false || belowFloor) {
+        const QScreen* screen = screenForGeometry(frameRect);
+        if(screen != nullptr) {
+            QRect available = screen->availableGeometry();
+            QRect bounded = boundRectToArea(frameRect, available, minimumFrameSize);
+
+            if(bounded.size() != frameRect.size()) {
+                // Report client sizes - they are what the caller persisted and what it will restore.
+                QSize from = frameRect.size() - frameDecoration;
+                QSize to = bounded.size() - frameDecoration;
+                if(belowFloor) {
+                    logText(LVL_INFO, QString("Restored size %1 is below the minimum restore size %2 - raising to %3")
+                                          .arg(Size(from).toString())
+                                          .arg(Size(_minimumRestoreSize).toString())
+                                          .arg(Size(to).toString()));
+                }
+                else {
+                    logText(LVL_INFO, QString("Restored size %1 exceeds the available screen area %2 - bounding to %3")
+                                          .arg(Size(from).toString())
+                                          .arg(Size(available.size() - frameDecoration).toString())
+                                          .arg(Size(to).toString()));
+                }
+            }
+
+            if(bounded.topLeft() != frameRect.topLeft()) {
+                logText(LVL_INFO, QString("Restored position %1 puts the window outside the work area - moving to %2")
+                                      .arg(Point(frameRect.topLeft()).toString())
+                                      .arg(Point(bounded.topLeft()).toString()));
+            }
+
+            frameRect = bounded;
+        }
+    }
+
+    return QRect(frameRect.topLeft(), frameRect.size() - frameDecoration);
+}
+
+QRect MainWindowBase::boundRectToArea(const QRect& frameRect, const QRect& available, const QSize& minimumFrameSize)
+{
+    QRect result = frameRect;
+
+    // ⚠ Floor first, then cap to the work area. Capping last is what stops a floor forcing a
+    // window larger than the screen it opens on; swapping the two breaks small screens.
+    QSize size = result.size();
+    if(minimumFrameSize.isValid()) {
+        size = size.expandedTo(minimumFrameSize);
+    }
+    size = size.boundedTo(available.size());
+    result.setSize(size);
+
+    QPoint topLeft = result.topLeft();
+    topLeft.setX(std::min(topLeft.x(), available.right() - result.width() + 1));
+    topLeft.setY(std::min(topLeft.y(), available.bottom() - result.height() + 1));
+    topLeft.setX(std::max(topLeft.x(), available.left()));
+    topLeft.setY(std::max(topLeft.y(), available.top()));
+    result.moveTopLeft(topLeft);
+
+    return result;
+}
+
+QScreen* MainWindowBase::screenForGeometry(const QRect& frameRect)
+{
+    QScreen* result = nullptr;
+
+    qint64 largestArea = 0;
+    for(QScreen* screen : QGuiApplication::screens()) {
+        QRect intersection = screen->availableGeometry().intersected(frameRect);
+        if(intersection.isEmpty()) {
+            continue;
+        }
+        qint64 area = (qint64)intersection.width() * (qint64)intersection.height();
+        if(area > largestArea) {
+            largestArea = area;
+            result = screen;
+        }
+    }
+
+    if(result == nullptr) {
+        result = QGuiApplication::primaryScreen();
+    }
+    return result;
+}
+
+bool MainWindowBase::isFullyVisible(const QRect& frameRect)
+{
+    QRegion available;
+    for(const QScreen* screen : QGuiApplication::screens()) {
+        available += screen->availableGeometry();
+    }
+    return QRegion(frameRect).subtracted(available).isEmpty();
 }
 
 void MainWindowBase::onPreferencesChanged()
