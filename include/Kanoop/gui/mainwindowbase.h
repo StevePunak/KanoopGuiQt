@@ -214,8 +214,10 @@ protected:
     /**
      * @brief Bound a restored geometry so it lands entirely on a connected screen.
      *
-     * A geometry whose every pixel already falls on a connected screen is returned untouched, so
-     * a deliberate multi-monitor layout is never disturbed.
+     * A geometry that already falls entirely within the connected screens' work areas, and is
+     * no smaller than the minimum restore size, is returned untouched. When either condition
+     * fails, the geometry is fitted to the work area of the screen it mostly occupies, and
+     * raised to the floor when one is set.
      *
      * The restored rect is a hybrid of two coordinate systems - moveEvent persists QWidget::pos(),
      * which for a window includes the frame, while resizeEvent persists QWidget::size(), which
@@ -225,7 +227,7 @@ protected:
      *
      * @param geometryRect Restored geometry to bound; frame origin with a client-area size
      * @param frameDecoration Size the window frame adds to the client area, or (0, 0) if unknown
-     * @return The geometry, shrunk and/or moved as needed to fit
+     * @return The geometry, resized and/or moved as needed to fit
      */
     QRect boundToScreen(const QRect& geometryRect, const QSize& frameDecoration);
 
