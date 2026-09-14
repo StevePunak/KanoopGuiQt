@@ -7,9 +7,7 @@
 /**
  * @brief Minimal QObject subclass serving as a QObject base for graphics item mixins.
  *
- * QObjectGraphicsItem provides a QObject foundation that can be used alongside
- * QGraphicsItem subclasses to add signal/slot support without using QGraphicsObject
- * (which carries additional overhead).
+ * A plain QObject base for mixing signal/slot support into a QGraphicsItem subclass.
  */
 class LIBKANOOPGUI_EXPORT QObjectGraphicsItem : public QObject
 {

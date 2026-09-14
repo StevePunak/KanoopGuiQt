@@ -41,13 +41,15 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
     connect(mdiSubWindow, &MdiSubWindow::closing, this, &MdiWindow::onSubWindowClosing);
     mdiArea()->addSubWindow(mdiSubWindow);
 
-    // ⚠ The POSITION key decides this, never the size key. A window that has a stored position
-    // but no stored size -- moved but never resized -- reads as never-seen if the size is what
-    // is asked, and gets cascaded over. widgetHasPersistentGeometry() asks the size question
-    // and is the wrong query here however well its name reads.
-    // ⚠ Both queries must be made before getLastWindowSize() below, which RECORDS the size it
-    // hands back and so answers true to its own question ever after. Moving either down beside
-    // the branch that uses it makes both of them describe this call rather than a previous one.
+    // ⚠ The CASCADE decision is made on the position key. A window with a stored position but
+    // no stored size -- moved but never resized -- reads as never-seen when the size key is
+    // asked, and gets cascaded over the top of itself. hasStoredSize below asks the size
+    // question because it answers a different one; do not swap them.
+    //
+    // ⚠ Both queries must be taken before getLastWindowSize() runs below. That call RECORDS the
+    // size it hands back, so from then on a size query answers true to its own question ever
+    // after. Moving either query down beside the branch that uses it makes it describe this
+    // call instead of a previous one, which inverts its answer.
     const bool hasStoredPosition = GuiSettings::globalInstance()->widgetHasPersistentPosition(mdiSubWindow);
     const bool hasStoredSize = GuiSettings::globalInstance()->widgetHasPersistentGeometry(mdiSubWindow);
 

@@ -83,7 +83,10 @@ public:
     void setRestoreToParentScreen(bool value) { _restoreToParentScreen = value; }
 
 protected:
-    /** @brief Perform layout and button-box wiring; call from the subclass constructor. */
+    /**
+     * @brief Add the button box and status bar to the subclass layout and restore the state
+     *        of any child QSplitter; call from the subclass constructor.
+     */
     void performLayout();
 
     /**
@@ -93,7 +96,7 @@ protected:
     bool isValid() const { return _valid; }
 
     /**
-     * @brief Set the form validity state and update button enabling accordingly.
+     * @brief Set the form validity state.
      * @param value true if the form is valid
      */
     void setValid(bool value);
@@ -129,20 +132,20 @@ protected:
     bool formLoadComplete() const { return _formLoadComplete; }
 
     /**
-     * @brief Enable or disable the Apply button.
-     * @param value true to enable
+     * @brief Add or remove the Apply button.
+     * @param value true to include the button in the button box
      */
     void setApplyEnabled(bool value);
 
     /**
-     * @brief Enable or disable the Cancel button.
-     * @param value true to enable
+     * @brief Add or remove the Cancel button.
+     * @param value true to include the button in the button box
      */
     void setCancelEnabled(bool value);
 
     /**
-     * @brief Enable or disable the OK button.
-     * @param value true to enable
+     * @brief Add or remove the OK button.
+     * @param value true to include the button in the button box
      */
     void setOkEnabled(bool value);
 
@@ -158,19 +161,23 @@ protected:
      */
     void setLogHookEnabled(bool enabled);
 
-    /** @brief Connect all child input widget signals to the validation slots. */
+    /**
+     * @brief Connect the child QLineEdit, QTextEdit, QPlainTextEdit, QComboBox, QRadioButton,
+     *        QCheckBox and QSpinBox signals to the validation slots.
+     */
     void connectValidationSignals();
 
     /**
-     * @brief Enable or disable all input child widgets of a given widget.
+     * @brief Enable or disable the child QLineEdit, QTextEdit, QPlainTextEdit, QComboBox,
+     *        QCheckBox and QSpinBox widgets of a given widget.
      * @param widget Parent widget whose children to enable/disable
      * @param enabled true to enable
      */
     void setChildInputWidgetsEnabled(QWidget* widget, bool enabled);
 
     /**
-     * @brief Return the default text color from the current palette.
-     * @return Default text QColor
+     * @brief Return the palette's Text color.
+     * @return QPalette::Text color from the current palette
      */
     QColor defaultTextColor() const { return palette().color(QPalette::Text); }
 
@@ -233,7 +240,7 @@ protected:
     virtual void cancelClicked() {}
 
 protected slots:
-    /** @brief Update button enabling based on current validity and dirty state. */
+    /** @brief Call validate(), then update button enabling from its result and the dirty state. */
     virtual void enableAppropriateButtons();
 
 private:
@@ -308,7 +315,11 @@ signals:
     void itemUpdated(const EntityMetadata& metadata);
 
 public slots:
-    /** @brief Called when application preferences change; override to react. */
+    /**
+     * @brief Preferences-change hook.  The default implementation applies the GuiSettings
+     *        font size to this widget, so an override must call the base implementation
+     *        to keep it.
+     */
     virtual void onPreferencesChanged();
 
 protected slots:

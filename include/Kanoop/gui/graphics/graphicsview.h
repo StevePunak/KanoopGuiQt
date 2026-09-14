@@ -13,8 +13,8 @@
  *
  * GraphicsView installs itself as an event filter and handles wheel events for
  * zooming and mouse button press/move/release events for panning.  Both features
- * can be enabled or disabled at runtime.  scaleChanged() is emitted whenever the
- * view transform changes, and resized() is emitted on resize events.
+ * can be enabled or disabled at runtime.  scaleChanged() is emitted from
+ * setScaleFactor(), and resized() is emitted on resize events.
  */
 class LIBKANOOPGUI_EXPORT GraphicsView : public QGraphicsView,
                                          public LoggingBaseClass

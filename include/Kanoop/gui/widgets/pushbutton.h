@@ -63,9 +63,9 @@ public slots:
     void setForegroundColor(const QColor& color);
     /** @brief Set the background color and rebuild the stylesheet. */
     void setBackgroundColor(const QColor& color);
-    /** @brief Reset the foreground color to the palette default. */
+    /** @brief Set the foreground color to the palette's Text colour. */
     void setDefaultForegroundColor();
-    /** @brief Reset the background color to the palette default. */
+    /** @brief Set the background color to the palette's Window colour. */
     void setDefaultBackgroundColor();
 
 private:

@@ -22,7 +22,8 @@ public:
     explicit SpinnerWidget(QWidget* parent = nullptr);
 
     /**
-     * @brief Return the integer value painted in the center of the spinner.
+     * @brief Return the integer value painted in the center of the spinner when the text
+     *        is visible.
      * @return Current value
      */
     int value() const { return _value; }
@@ -47,8 +48,8 @@ public slots:
     void setSpinning(bool value);
 
     /**
-     * @brief Set the numeric value displayed in the center.
-     * @param value Integer to paint
+     * @brief Set the numeric value painted in the center when the text is visible.
+     * @param value Integer to paint; setTextVisible(true) is required before it appears
      */
     void setValue(int value) { _value = value; update(); }
 

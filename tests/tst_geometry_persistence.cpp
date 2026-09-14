@@ -16,9 +16,8 @@
  * The asymmetry between the two is invisible at every call site, and the two queries read as
  * interchangeable from their names. These tests pin which one records and which one does not.
  *
- * ⚠ What this does NOT cover: where a sub-window is actually placed. MdiWindow::openSubWindow()
- * consumes these queries, but which one it picks is not reachable from here -- that needs an MDI
- * area, a main window and an ini seeded with a position the cascade could never produce.
+ * ⚠ Which query MdiWindow::openSubWindow() picks, and where a sub-window is therefore placed,
+ * is not covered here.
  */
 class TstGeometryPersistence : public QObject
 {
@@ -76,8 +75,6 @@ private slots:
 
     void askingForTheLastSizeCreatesTheRecordThatAnswersTheQuestion()
     {
-        // ⚠⚠ The trap, stated as an assertion. The question is answered "yes" by the act of
-        // having asked something else -- so a caller that needs the answer must take it first.
         QWidget widget;
         QWidget* target = named(widget, "minted");
         QVERIFY(_settings->widgetHasPersistentGeometry(target) == false);
@@ -103,8 +100,7 @@ private slots:
 
     void aSizeThatWasActuallyStoredReadsAsStoredToo()
     {
-        // Without this the "yes" above could only ever be the minted artefact, and the query
-        // would be pinned as useless rather than as unable to tell the two apart.
+        // Positive control for the minted-key test above.
         QWidget widget;
         QWidget* target = named(widget, "genuinely-stored");
 
@@ -141,7 +137,7 @@ private slots:
 
     void aPositionThatWasActuallyStoredReadsAsStored()
     {
-        // Without this the "no" above could only ever mean the query never answers yes.
+        // Positive control for the test above.
         QWidget widget;
         QWidget* target = named(widget, "placed");
 

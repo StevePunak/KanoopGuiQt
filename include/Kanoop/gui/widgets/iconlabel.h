@@ -10,8 +10,6 @@ class QLabel;
  * @brief Composite widget showing a text label alongside an icon.
  *
  * IconLabel places a QLabel for text and a QLabel for a QIcon side by side.
- * The icon alignment within the layout can be controlled independently of the
- * text alignment.
  */
 class LIBKANOOPGUI_EXPORT IconLabel : public QWidget
 {
@@ -51,8 +49,9 @@ public:
     void setText(const QString& text);
 
     /**
-     * @brief Return the current icon.
-     * @return Icon displayed in the widget
+     * @brief Build a QIcon from the currently displayed pixmap.
+     * @return Icon built from the rasterised pixmap; the resolution variants of the icon
+     *         passed to setIcon() are gone.
      */
     QIcon icon() const;
 
@@ -62,10 +61,6 @@ public:
      */
     void setIcon(const QIcon& icon);
 
-    /**
-     * @brief Set the alignment of the icon within the layout.
-     * @param alignment Qt alignment flags
-     */
     void setIconAlignment(Qt::Alignment alignment);
 
 private:

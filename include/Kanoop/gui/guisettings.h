@@ -84,8 +84,7 @@ public:
      * @param widget Widget to check
      * @return true if a saved position exists
      *
-     * ⚠ Mints nothing, and callers depend on that -- this is the query a placement decision can
-     * be keyed on. getLastWindowPosition() computes a default rather than recording one.
+     * ⚠ Does not write the key it tests.
      */
     bool widgetHasPersistentPosition(const QWidget* widget) const;
 

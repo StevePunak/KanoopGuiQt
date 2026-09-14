@@ -75,7 +75,7 @@ public:
     static const int FirstUserResource = 100000;
 
 private:
-    /** @brief Register all StandardImage entries; called lazily on first use. */
+    /** @brief Register all StandardImage entries; runs once at static initialisation. */
     static bool registerStandardImages();
 
     class StandardImageToStringMap : public KANOOP::EnumToStringMap<StandardImage>

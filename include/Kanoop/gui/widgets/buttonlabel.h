@@ -13,7 +13,7 @@ class QLabel;
  *
  * ButtonLabel places a text label and a tool button side-by-side.  The button
  * can carry separate active and inactive icons and fires a clicked() signal.
- * Colors and alignment are customizable.
+ * The label's colors and alignment are customizable.
  */
 class LIBKANOOPGUI_EXPORT ButtonLabel : public QWidget
 {
@@ -46,8 +46,9 @@ public:
 
     /**
      * @brief Set the button icons for active and inactive states.
-     * @param activeIcon Icon shown when isActive() is true
-     * @param inactiveIcon Icon shown when isActive() is false (optional)
+     * @param activeIcon Icon applied to the button by this call, and shown again on every
+     *                   transition to active
+     * @param inactiveIcon Icon shown from the first transition to inactive (optional)
      */
     void setIcon(const QIcon& activeIcon, const QIcon& inactiveIcon = QIcon());
 
@@ -70,13 +71,13 @@ public:
     bool isActive() const { return _active; }
 
     /**
-     * @brief Set the foreground (text) color.
+     * @brief Set the foreground (text) color of the label.
      * @param color Foreground color
      */
     void setForegroundColor(const QColor& color);
 
     /**
-     * @brief Set the background color.
+     * @brief Set the background color of the label.
      * @param color Background color
      */
     void setBackgroundColor(const QColor& color);

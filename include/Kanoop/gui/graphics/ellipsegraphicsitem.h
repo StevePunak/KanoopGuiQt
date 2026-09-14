@@ -6,8 +6,7 @@
 /**
  * @brief QGraphicsEllipseItem with an application-defined type integer and appearance helpers.
  *
- * EllipseGraphicsItem stores a type integer (returned by type()) that allows
- * qgraphicsitem_cast<> and scene item-type filtering to work with custom types.
+ * EllipseGraphicsItem stores a type integer, returned by type(), for scene item-type filtering.
  */
 class LIBKANOOPGUI_EXPORT EllipseGraphicsItem : public QGraphicsEllipseItem
 {
@@ -27,13 +26,13 @@ public:
 
     /**
      * @brief Set the pen width of the ellipse outline.
-     * @param width Pen width in scene units
+     * @param width Pen width in scene units, truncated to an integer by QPen::setWidth()
      */
     void setWidth(double width);
 
     /**
-     * @brief Set the fill and outline color.
-     * @param color Color to apply to the brush and pen
+     * @brief Set the outline color.
+     * @param color Color applied to the pen
      */
     void setColor(const QColor& color);
 

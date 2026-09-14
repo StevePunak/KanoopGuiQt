@@ -13,8 +13,7 @@ class QPushButton;
  * PlayPauseButton displays a QPushButton whose icon switches between
  * iconWhilePlaying and iconWhilePaused according to the current playing state.
  * An optional text label can be shown alongside the button with configurable
- * alignment.  The playing property is fully bindable and notifies via
- * playingChanged().
+ * alignment.  The playing property notifies via playingChanged().
  */
 class LIBKANOOPGUI_EXPORT PlayPauseButton : public QWidget
 {
@@ -110,13 +109,15 @@ public slots:
     void setTextAlignment(Qt::Alignment value);
 
     /**
-     * @brief Set the icon displayed while in the playing state.
+     * @brief Set the icon for the playing state.  It reaches the button the next time the
+     *        playing state is set.
      * @param value New playing icon
      */
     void setIconWhilePlaying(const QIcon& value) { _iconWhilePlaying = value; }
 
     /**
-     * @brief Set the icon displayed while in the paused state.
+     * @brief Set the icon for the paused state.  It reaches the button the next time the
+     *        playing state is set.
      * @param value New paused icon
      */
     void setIconWhilePaused(const QIcon& value) { _iconWhilePaused = value; }
@@ -141,8 +142,8 @@ signals:
      */
     void playingChanged(bool playing);
     /**
-     * @brief Emitted when the text label text changes.
-     * @param playing New playing state at time of text change
+     * @brief Notifier declared for the text property.
+     * @param playing The signal's declared argument
      */
     void textChanged(bool playing);
 

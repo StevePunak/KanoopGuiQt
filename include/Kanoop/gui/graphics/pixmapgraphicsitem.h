@@ -7,8 +7,7 @@
 /**
  * @brief QGraphicsPixmapItem with an application-defined type integer.
  *
- * PixmapGraphicsItem stores a type integer (returned by type()) that allows
- * qgraphicsitem_cast<> and scene item-type filtering to work with custom types.
+ * PixmapGraphicsItem stores a type integer, returned by type(), for scene item-type filtering.
  */
 class LIBKANOOPGUI_EXPORT PixmapGraphicsItem : public QGraphicsPixmapItem
 {
@@ -27,7 +26,6 @@ public:
     virtual int type() const override { return _type; }
 
 protected:
-    /** @brief Handle graphics item change notifications. */
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
 private:

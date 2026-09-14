@@ -47,7 +47,8 @@ public:
 
     /**
      * @brief Show or hide the panel at the given index.
-     * @param index Zero-based index of the panel
+     * @param index Zero-based index into the child AccordionItems in construction order.
+     *              The other index-taking methods in this class use the layout index.
      * @param visible true to show, false to hide
      */
     void setItemVisible(int index, bool visible);
@@ -77,7 +78,7 @@ public:
 
     /**
      * @brief Return whether all panels are currently expanded.
-     * @return true if every panel is expanded
+     * @return true if every panel is expanded.  false when there are no panels.
      */
     bool areAllExpanded() const;
 
@@ -115,7 +116,11 @@ private:
     AccordionItem* findItemForWidget(QWidget* widget) const;
 
 public slots:
-    /** @brief Called when application preferences change; reapplies styling. */
+    /**
+     * @brief Preferences-change hook.  The default implementation applies the GuiSettings
+     *        font size to this widget, so an override must call the base implementation
+     *        to keep it.
+     */
     virtual void onPreferencesChanged();
 };
 

@@ -83,9 +83,7 @@ private slots:
         QCOMPARE(s.visualIndex(), 0);
     }
 
-    // States persisted before column-order support lack the "visualIndex" key.
-    // They must deserialize with visualIndex defaulted to the logical section so
-    // the restored order is an identity and existing layouts are left untouched.
+    // Legacy states lack the "visualIndex" key and must default it to the logical section.
     void deserialize_withoutVisualIndex_defaultsToSection()
     {
         const QByteArray legacyJson =

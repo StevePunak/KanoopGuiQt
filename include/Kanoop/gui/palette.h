@@ -11,7 +11,7 @@
  * Palette forwards all QPalette constructors and adds:
  * - fusionLight() / fusionDark() factory methods for standard Fusion-style palettes
  * - toVariant() / fromVariant() for QVariant round-trips
- * - String lookup helpers for ColorRole and ColorGroup enum values
+ * - String lookup helpers for ColorRole enum values
  * - debugDumpPalette() for diagnostic output
  */
 class LIBKANOOPGUI_EXPORT Palette : public QPalette
@@ -125,7 +125,8 @@ public:
     /**
      * @brief Look up a colour role by its string name.
      * @param value Colour role name string
-     * @return Matching QPalette::ColorRole, or NoRole if not found
+     * @return Matching QPalette::ColorRole.  An unrecognised name yields
+     *         QPalette::WindowText, which is enum value 0.
      */
     static ColorRole getColorRole(const QString& value) { return _ColorRoleToStringMap.getType(value); }
 

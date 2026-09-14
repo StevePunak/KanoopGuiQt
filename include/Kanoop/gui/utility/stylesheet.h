@@ -77,11 +77,10 @@ public:
                            const QGradientStops& stops);
 
     /**
-     * @brief Set all four border properties at once using the dome highlight/shadow convention.
+     * @brief Set all four border properties at once.
      *
      * Top and left edges receive @p topLeft (highlight); bottom and right receive
-     * @p bottomRight (shadow). This matches the standard glassy-dome button style
-     * used throughout the UI.
+     * @p bottomRight (shadow).
      *
      * @param topLeft     CSS border value for the top and left edges
      * @param bottomRight CSS border value for the bottom and right edges
@@ -119,8 +118,8 @@ public:
     void setPseudoStates(const QList<StyleSheetPseudoState>& values) { _pseudoStates = values; }
 
     /**
-     * @brief Set the sub-control selector string (e.g., "::handle").
-     * @param value Sub-control string
+     * @brief Set the sub-control selector string (e.g., "handle").
+     * @param value Sub-control name; toString() writes the "::" separator
      */
     void setSubControl(const QString& value) { _subControl = value; }
 
@@ -137,7 +136,7 @@ public:
     QString toString() const;
 
 
-    /** @brief CSS selector class name (set from T::metaObject()->className()). */
+    /** @brief CSS selector class name (set from T::staticMetaObject.className()). */
     QString _typeName;
 
     /** @brief Accumulated property/value pairs for the stylesheet rule. */

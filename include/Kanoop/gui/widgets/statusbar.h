@@ -53,7 +53,10 @@ public:
      */
     void showAnimatedProgressMessage(const QString &text, const QColor& textColor = QColor());
 
-    /** @brief Stop the animated progress message and clear the status bar. */
+    /**
+     * @brief Stop the animated progress message.  The last frame and its colour stay on
+     *        screen.
+     */
     void stopAnimation();
 
     /**

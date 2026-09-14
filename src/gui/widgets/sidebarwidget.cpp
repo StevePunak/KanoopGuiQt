@@ -34,8 +34,8 @@ void SidebarWidget::resizeEvent(QResizeEvent *event)
 {
     QListView::resizeEvent(event);
 
-    // QListView only auto re-lays-out on flow-direction (height) changes, not width, so a
-    // width-only resize would otherwise leave a stale item width and a spurious scrollbar.
+    // QListView auto re-lays-out on flow-direction (height) changes. A width-only resize
+    // does not trigger one.
     if(event->size().width() != event->oldSize().width()) {
         doItemsLayout();
     }

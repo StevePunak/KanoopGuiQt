@@ -7,8 +7,9 @@
 /**
  * @brief QLineEdit subclass with foreground and background color helpers.
  *
- * LineEdit provides setForegroundColor() and setBackgroundColor() as
- * convenient alternatives to manual stylesheet construction.
+ * LineEdit provides setForegroundColor() and setBackgroundColor().  Each call replaces
+ * the widget's whole stylesheet, so the second of the two setters discards the colour the
+ * first one applied.
  */
 class LIBKANOOPGUI_EXPORT LineEdit : public QLineEdit
 {

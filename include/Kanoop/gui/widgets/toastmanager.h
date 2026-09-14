@@ -18,8 +18,8 @@ class ToastWidget;
  *
  * ToastManager creates ToastWidget pop-ups positioned over the parent widget
  * and fades them out after a configurable delay.  Separate foreground/background
- * colors can be set for normal messages and error messages.  The toast size and
- * position within the parent are also configurable.
+ * colors can be set for normal messages and error messages.  The toast width is
+ * configurable; toasts are stacked upward from the bottom-left of the parent.
  */
 class LIBKANOOPGUI_EXPORT ToastManager : public QObject
 {
@@ -124,26 +124,28 @@ public:
     void setErrorBackgroundColor(const QColor& value) { _errorBackgroundColor = value; }
 
     /**
-     * @brief Return the fixed size of toast widgets.
+     * @brief Return the configured toast size.  Only the width is used; toast height is
+     *        derived from the wrapped message text.
      * @return Toast size
      */
     QSize size() const { return _size; }
 
     /**
-     * @brief Set the fixed size of toast widgets.
-     * @param value New toast size
+     * @brief Set the toast size.  Only the width is used.
+     * @param value New toast size; the width is used and the height is ignored
      */
     void resize(const QSize& value) { _size = value; }
 
     /**
-     * @brief Return the position of toasts within the parent widget.
+     * @brief Return the stored toast position.
      * @return Toast position in parent coordinates
      */
     QPoint pos() const { return _pos; }
 
     /**
-     * @brief Set the position of toasts within the parent widget.
-     * @param value New toast position in parent coordinates
+     * @brief Store a toast position.  Toasts are stacked upward from the bottom-left of
+     *        the parent.
+     * @param value Position in parent coordinates
      */
     void move(const QPoint& value) { _pos = value; }
 
