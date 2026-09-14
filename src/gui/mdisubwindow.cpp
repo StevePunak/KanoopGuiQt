@@ -54,8 +54,8 @@ void MdiSubWindow::showEvent(QShowEvent* event)
 {
     // ⚠ The flag must not become true until first-show geometry has been dispatched. Qt delivers
     // Move and Resize to a hidden widget before the Show event, so the placement openSubWindow()
-    // applied arrives while this is still false and is not stored. Setting it any earlier, in a
-    // constructor or on a line above this one, stores that placement as a user's choice.
+    // applied arrives while this is still false. Setting it any earlier, in a constructor or on a
+    // line above this one, stores that placement as a user's choice.
     if(!_formLoadComplete) {
         _formLoadComplete = true;
     }
