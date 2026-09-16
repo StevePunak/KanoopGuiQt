@@ -2,25 +2,29 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLayout>
 
 
 
 IconLabel::IconLabel(QWidget* parent) :
     QWidget(parent)
 {
-    createLayout(QString(), QIcon());
+    createLayout();
 }
 
 IconLabel::IconLabel(const QString& text, QWidget* parent) :
     QWidget(parent)
 {
-    createLayout(text, QIcon());
+    createLayout();
+    setText(text);
 }
 
 IconLabel::IconLabel(const QString& text, const QIcon& icon, QWidget* parent) :
     QWidget(parent)
 {
-    createLayout(text, icon);
+    createLayout();
+    setText(text);
+    setIcon(icon);
 }
 
 QString IconLabel::text() const
@@ -30,7 +34,7 @@ QString IconLabel::text() const
 
 void IconLabel::setText(const QString& text)
 {
-    createLayout(text, icon());
+    _label->setText(text);
 }
 
 QIcon IconLabel::icon() const
@@ -40,33 +44,28 @@ QIcon IconLabel::icon() const
 
 void IconLabel::setIcon(const QIcon& icon)
 {
-    createLayout(text(), icon);
+    _iconLabel->setPixmap(icon.pixmap(_iconLabel->size()));
 }
 
-void IconLabel::createLayout(const QString& text, const QIcon& icon)
+void IconLabel::setIconAlignment(Qt::Alignment alignment)
 {
-    if(_label != nullptr) {
-        delete _label;
-    }
-    if(_iconLabel != nullptr) {
-        delete _iconLabel;
-    }
+    layout()->setAlignment(_iconLabel, alignment);
+}
 
+void IconLabel::createLayout()
+{
     QFontMetrics fm(font());
     int dimension = fm.boundingRect("o").height();
 
-    _label = new QLabel(text, this);
+    _label = new QLabel(this);
     _iconLabel = new QLabel(this);
     _iconLabel->setFixedSize(dimension, dimension);
     _iconLabel->setScaledContents(true);
-    _iconLabel->setPixmap(icon.pixmap(_iconLabel->size()));
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(_iconLabel);
     layout->addWidget(_label);
-
-    setLayout(layout);
 }
 
 #include "Kanoop/gui/widgets/moc_iconlabel.cpp"

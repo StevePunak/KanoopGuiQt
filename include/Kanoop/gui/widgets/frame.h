@@ -11,7 +11,8 @@
  *
  * Frame exposes foregroundColor and backgroundColor as Qt properties,
  * allowing them to be set from Qt Designer or stylesheets and causing the
- * widget to repaint with the chosen colors.
+ * widget to repaint with the chosen colors.  The two colors are held
+ * independently, so setting one leaves the other in place.
  */
 class LIBKANOOPGUI_EXPORT Frame : public QFrame,
                                   public LoggingBaseClass
@@ -30,7 +31,7 @@ public:
 
     /**
      * @brief Return the current foreground color.
-     * @return Foreground (text) color
+     * @return Foreground (text) color, or an invalid QColor when none has been set
      */
     QColor foregroundColor() const { return _foregroundColor; }
 
@@ -42,7 +43,7 @@ public:
 
     /**
      * @brief Return the current background color.
-     * @return Background color
+     * @return Background color, or an invalid QColor when none has been set
      */
     QColor backgroundColor() const { return _backgroundColor; }
 
@@ -52,9 +53,19 @@ public:
      */
     void setBackgroundColor(const QColor& color);
 
+    /** @brief Clear the explicit foreground color so the widget paints from the palette. */
+    void setDefaultForegroundColor();
+
+    /** @brief Clear the explicit background color so the widget paints from the palette. */
+    void setDefaultBackgroundColor();
+
 private:
+    void applyStylesheet();
+
     QColor _foregroundColor;
     QColor _backgroundColor;
+    bool _foregroundExplicitlySet = false;
+    bool _backgroundExplicitlySet = false;
 };
 
 #endif // FRAME_H

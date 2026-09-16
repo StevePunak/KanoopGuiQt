@@ -237,14 +237,6 @@ public:
         }
     };
 
-    /**
-     * @brief Look up the string name registered for a header type integer.
-     * @param type Header type integer
-     * @return The registered name.  The queried map is a const empty map, so the result is
-     *         an empty string.
-     */
-    static QString typeToString(int type) { return _TableHeaderTypeToStringMap.value(type); }
-
 private:
     int _type = 0;
     QString _text;
@@ -252,12 +244,6 @@ private:
     QColor _columnTextColor;
     bool _visible = true;
     EntityMetadata _entityMetadata;
-
-    class TableHeaderTypeToStringMap : public QMap<int, QString>
-    {};
-
-
-    static const TableHeaderTypeToStringMap _TableHeaderTypeToStringMap;
 };
 
 #endif // TABLEHEADER_H

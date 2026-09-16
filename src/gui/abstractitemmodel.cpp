@@ -366,8 +366,7 @@ TableHeader::List AbstractItemModel::columnHeaders() const
 
 AbstractModelItem* AbstractItemModel::insertRootItem(int row, AbstractModelItem* item)
 {
-    QModelIndex insertIndex = index(row, 0, QModelIndex());
-    beginInsertRows(insertIndex, row, row);
+    beginInsertRows(QModelIndex(), row, row);
     _rootItems.insert(row, item);
     endInsertRows();
     return item;
@@ -376,9 +375,8 @@ AbstractModelItem* AbstractItemModel::insertRootItem(int row, AbstractModelItem*
 AbstractModelItem *AbstractItemModel::appendRootItem(AbstractModelItem *item)
 {
     int row = rowCount(QModelIndex());
-    QModelIndex insertIndex = index(row, 0, QModelIndex());
 
-    beginInsertRows(insertIndex, row, row);
+    beginInsertRows(QModelIndex(), row, row);
     _rootItems.append(item);
     endInsertRows();
 
@@ -393,18 +391,15 @@ void AbstractItemModel::appendRootItems(QList<AbstractModelItem*> items)
 
     int firstRow = rowCount(QModelIndex());
     int lastRow = firstRow + items.count() - 1;
-    QModelIndex insertIndex = index(firstRow, 0, QModelIndex());
 
-    beginInsertRows(insertIndex, firstRow, lastRow);
+    beginInsertRows(QModelIndex(), firstRow, lastRow);
     _rootItems.append(items);
     endInsertRows();
 }
 
 void AbstractItemModel::appendColumnHeader(int type, const QString &text)
 {
-    QString headerText = text.isEmpty() ? TableHeader::typeToString(type) : text;
-
-    TableHeader header(type, headerText, Qt::Horizontal);
+    TableHeader header(type, text, Qt::Horizontal);
     int col = _columnHeaders.count();
     beginInsertColumns(QModelIndex(), col, col);
     _columnHeaders.insert(col, header);
@@ -455,9 +450,7 @@ void AbstractItemModel::deleteColumnHeader(int section)
 
 void AbstractItemModel::appendRowHeader(int type, const QString &value)
 {
-    QString text = value.isEmpty() ? TableHeader::typeToString(type) : value;
-
-    TableHeader header(type, text, Qt::Vertical);
+    TableHeader header(type, value, Qt::Vertical);
     _rowHeaders.insert(_columnHeaders.count(), header);
 }
 
@@ -532,10 +525,12 @@ void AbstractItemModel::deleteRootItems(const QUuid &uuid)
 {
     QModelIndexList indexes = indexesOfEntityUuid(uuid);
     for(const QModelIndex& index : indexes) {
+        // The search is recursive, so an entry may already have been freed along with an
+        // earlier root that owned it - never call index.parent() or index.row() here.
         AbstractModelItem* item = static_cast<AbstractModelItem*>(index.internalPointer());
-        beginRemoveRows(index.parent(), index.row(), index.row());
-        deleteRootItem(item);
-        endRemoveRows();
+        if(_rootItems.contains(item)) {
+            deleteRootItem(item);
+        }
     }
 }
 
@@ -543,10 +538,12 @@ void AbstractItemModel::deleteRootItems(const EntityMetadata &metadata)
 {
     QModelIndexList indexes = indexesOfEntity(metadata.type(), metadata.data(KANOOP::DataRole), KANOOP::DataRole);
     for(const QModelIndex& index : indexes) {
+        // The search is recursive, so an entry may already have been freed along with an
+        // earlier root that owned it - never call index.parent() or index.row() here.
         AbstractModelItem* item = static_cast<AbstractModelItem*>(index.internalPointer());
-        beginRemoveRows(index.parent(), index.row(), index.row());
-        deleteRootItem(item);
-        endRemoveRows();
+        if(_rootItems.contains(item)) {
+            deleteRootItem(item);
+        }
     }
 }
 
@@ -607,6 +604,28 @@ void AbstractItemModel::emitRowChanged(const QModelIndex &rowIndex)
     QModelIndex firstColIndex = index(rowIndex.row(), 0, rowIndex.parent());
     QModelIndex lastColIndex = index(rowIndex.row(), columnCount(rowIndex) - 1, rowIndex.parent());
     emit dataChanged(firstColIndex, lastColIndex);
+}
+
+void AbstractItemModel::emitColumnChanged(const QModelIndex& parent, int column)
+{
+    int rows = rowCount(parent);
+    if(rows == 0) {
+        return;
+    }
+    emit dataChanged(index(0, column, parent), index(rows - 1, column, parent), { Qt::ForegroundRole });
+    for(int row = 0;row < rows;row++) {
+        emitColumnChanged(index(row, 0, parent), column);
+    }
+}
+
+void AbstractItemModel::setColumnTextColor(int type, const QColor &color)
+{
+    _columnHeaders.setTextColorForType(type, color);
+
+    int col = columnForHeader(type);
+    if(col != -1) {
+        emitColumnChanged(QModelIndex(), col);
+    }
 }
 
 QString AbstractItemModel::toString(const QModelIndex &index, bool includeText)

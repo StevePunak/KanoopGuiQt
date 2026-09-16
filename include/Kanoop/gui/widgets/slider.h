@@ -7,8 +7,8 @@
 /**
  * @brief QSlider subclass with an optional read-only mode.
  *
- * Slider exposes a readOnly property.  When set, mouse press events are ignored.
- * Keyboard and wheel input still change the value.
+ * Slider exposes a readOnly property.  When set, mouse, keyboard and wheel input no
+ * longer change the value, and the widget stays enabled.
  */
 class LIBKANOOPGUI_EXPORT Slider : public QSlider
 {
@@ -29,14 +29,13 @@ public:
 
     /**
      * @brief Return whether the slider is read-only.
-     * @return true if mouse presses are ignored.  Keyboard and wheel input still change
-     *         the value.
+     * @return true if mouse, keyboard and wheel input are ignored
      */
     bool isReadOnly() const { return _readOnly; }
 
     /**
      * @brief Enable or disable the read-only mode.
-     * @param value true to prevent user changes
+     * @param value true to suppress mouse, keyboard and wheel input
      */
     void setReadOnly(bool value) { _readOnly = value; }
 
@@ -45,6 +44,12 @@ signals:
 protected:
     /** @brief Suppress mouse presses when in read-only mode. */
     virtual void mousePressEvent(QMouseEvent* event) override;
+    /** @brief Suppress key presses when in read-only mode. */
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    /** @brief Suppress key releases when in read-only mode. */
+    virtual void keyReleaseEvent(QKeyEvent* event) override;
+    /** @brief Suppress wheel input when in read-only mode. */
+    virtual void wheelEvent(QWheelEvent* event) override;
 
 private:
     bool _readOnly = false;

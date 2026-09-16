@@ -23,6 +23,7 @@ ToastManager::ToastManager(QWidget *parent) :
     _parentWidget(parent),
     _beginFadeTime(TimeSpan::fromSeconds(3.5)),
     _fadeTime(TimeSpan::fromSeconds(10)),
+    _size(ToastWidget::DefaultWidth, 0),
     _messageBackgroundColor(ToastWidget::DefaultMessageBackground),
     _messageForegroundColor(ToastWidget::DefaultMessageForeground),
     _errorBackgroundColor(ToastWidget::DefaultErrorBackground),
@@ -37,10 +38,12 @@ void ToastManager::displayToast(const QString& text, const QColor& backgroundCol
     connect(toast, &ToastWidget::complete, this, &ToastManager::closeToast);
     _toasts.append(toast);
 
+    const int width = _size.width() > 0 ? _size.width() : ToastWidget::DefaultWidth;
+
     QFontMetrics fm(toast->font());
-    QRect maxRect(QPoint(0, 0), QSize(_size.width(), 500));
+    QRect maxRect(QPoint(0, 0), QSize(width, 500));
     QRect boundingRect = fm.boundingRect(maxRect, Qt::TextWordWrap, text);
-    QSize widgetSize(_size.width(), boundingRect.height() * 3);
+    QSize widgetSize(width, boundingRect.height() * 3);
     toast->setFixedSize(widgetSize);
     toast->show();
 
@@ -62,7 +65,7 @@ void ToastManager::performLayout()
 
 bool ToastManager::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == _parentWidget || event->type() == QEvent::Resize) {
+    if(watched == _parentWidget && event->type() == QEvent::Resize) {
         performLayout();
     }
     return false;

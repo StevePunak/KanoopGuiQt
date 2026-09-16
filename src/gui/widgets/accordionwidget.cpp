@@ -46,9 +46,12 @@ void AccordionWidget::removeItem(int index)
 
 void AccordionWidget::setItemVisible(int index, bool visible)
 {
-    QList<AccordionItem*> items = findChildren<AccordionItem*>(Qt::FindDirectChildrenOnly);
-    if(items.count() > index) {
-        items[index]->setVisible(visible);
+    QVBoxLayout* layout = static_cast<QVBoxLayout*>(AccordionWidget::layout());
+    if(index >= 0 && index < count()) {
+        AccordionItem* item = qobject_cast<AccordionItem*>(layout->itemAt(index)->widget());
+        if(item != nullptr) {
+            item->setVisible(visible);
+        }
     }
 }
 

@@ -47,8 +47,7 @@ public:
 
     /**
      * @brief Show or hide the panel at the given index.
-     * @param index Zero-based index into the child AccordionItems in construction order.
-     *              The other index-taking methods in this class use the layout index.
+     * @param index Zero-based index of the panel to show or hide
      * @param visible true to show, false to hide
      */
     void setItemVisible(int index, bool visible);
