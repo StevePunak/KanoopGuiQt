@@ -41,8 +41,8 @@ public:
 /**
  * @brief What MdiWindow::openSubWindow() records for a window it placed without a stored geometry of its own.
  *
- * A window with a per-instance name records the position and size it was opened at, so the store
- * describes what is on screen before the operator first moves or resizes it.
+ * A window whose name differs from its kind name records the position and size it was opened at,
+ * before the operator first moves or resizes it.
  */
 class TstMdiSubWindowPlacement : public QObject
 {

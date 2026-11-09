@@ -93,9 +93,9 @@ MdiSubWindow* MdiWindow::openSubWindow(MainWindowBase* window, int type)
         mdiSubWindow->resize(size);
     }
 
-    // Only a window with a per-instance name records its placement here. A window named after its
-    // kind shares one record with every other window of that kind, and the next one opened would
-    // read this record as its own and open on top of this one instead of cascading.
+    // Only a window whose name differs from its kind name records its placement here. A window
+    // named after its kind shares one record with every other window of that kind, so recording
+    // it would make the next one opened take this window's position.
     if(mdiSubWindow->objectName() != kindName) {
         if(window->persistPosition()) {
             GuiSettings::globalInstance()->setLastWindowPosition(mdiSubWindow, pos);
