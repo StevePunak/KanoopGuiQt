@@ -25,6 +25,7 @@ add_kanoop_gui_test(tst_stylesheets)
 add_kanoop_gui_test(tst_resources)
 add_kanoop_gui_test(tst_abstractmodelitem)
 add_kanoop_gui_test(tst_geometry_persistence)
+add_kanoop_gui_test(tst_mdisubwindow_placement)
 add_kanoop_gui_test(tst_standardmenus)
 add_kanoop_gui_test(tst_windowgeometry)
 
