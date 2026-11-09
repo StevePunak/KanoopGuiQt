@@ -146,6 +146,10 @@ private slots:
         MdiSubWindow* subWindow = host.openSubWindow(child, 1);
 
         QCOMPARE(_settings->widgetHasPersistentPosition(subWindow), false);
+
+        // The control: a window of the same kind that persists its position does record one.
+        MdiSubWindow* persisting = host.openSubWindow(new ChildWindow("Thing_b", "Thing"), 1);
+        QCOMPARE(_settings->widgetHasPersistentPosition(persisting), true);
     }
 };
 
