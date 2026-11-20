@@ -18,7 +18,8 @@ MdiSubWindow::MdiSubWindow(QWidget* parent) :
 void MdiSubWindow::moveEvent(QMoveEvent* event)
 {
     // Log::logText(LVL_DEBUG, QString("%1: move to %2").arg(objectName()).arg(Point(event->pos()).toString()));
-    if(GuiSettings::globalInstance() != nullptr && _formLoadComplete && isMaximized() == false) {
+    if(GuiSettings::globalInstance() != nullptr && _formLoadComplete &&
+       isMaximized() == false && isMinimized() == false) {
         GuiSettings::globalInstance()->setLastWindowPosition(this, event->pos());
         const QString kindName = geometryKindObjectName();
         if(kindName.isEmpty() == false) {
@@ -31,7 +32,8 @@ void MdiSubWindow::moveEvent(QMoveEvent* event)
 void MdiSubWindow::resizeEvent(QResizeEvent* event)
 {
     // Log::logText(LVL_DEBUG, QString("%1: resize to %2").arg(objectName()).arg(Size(event->size()).toString()));
-    if(GuiSettings::globalInstance() != nullptr && _formLoadComplete && isMaximized() == false) {
+    if(GuiSettings::globalInstance() != nullptr && _formLoadComplete &&
+       isMaximized() == false && isMinimized() == false) {
         GuiSettings::globalInstance()->setLastWindowSize(this, event->size());
         const QString kindName = geometryKindObjectName();
         if(kindName.isEmpty() == false) {
