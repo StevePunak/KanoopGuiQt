@@ -68,6 +68,24 @@ private:
         return result;
     }
 
+    /**
+     * @brief Opens a shown sub-window named Thing_a and places it at a normal geometry.
+     *
+     * The host is shown and exposed so the sub-window has had its first show and records moves
+     * and resizes from here on.
+     */
+    MdiSubWindow* openAtNormalGeometry(HostWindow& host, const QRect& normal)
+    {
+        MdiSubWindow* subWindow = host.openSubWindow(new ChildWindow("Thing_a", "Thing"), 1);
+        host.show();
+        if(QTest::qWaitForWindowExposed(&host) == false) {
+            return nullptr;
+        }
+        subWindow->setGeometry(normal);
+        QCoreApplication::processEvents();
+        return subWindow;
+    }
+
 private slots:
     void initTestCase()
     {
@@ -150,6 +168,58 @@ private slots:
         // The control: a window of the same kind that persists its position does record one.
         MdiSubWindow* persisting = host.openSubWindow(new ChildWindow("Thing_b", "Thing"), 1);
         QCOMPARE(_settings->widgetHasPersistentPosition(persisting), true);
+    }
+
+    void aMinimizedWindowKeepsItsNormalGeometry()
+    {
+        const QRect normal(100, 80, 900, 700);
+        HostWindow host;
+        MdiSubWindow* subWindow = openAtNormalGeometry(host, normal);
+        QVERIFY(subWindow != nullptr);
+
+        // The control: a normal move and resize is recorded, for the window and its kind.
+        QCOMPARE(storedPosition("Thing_a"), normal.topLeft());
+        QCOMPARE(storedSize("Thing_a"), normal.size());
+        QCOMPARE(storedSize("Thing"), normal.size());
+
+        subWindow->showMinimized();
+        QCoreApplication::processEvents();
+
+        // The minimize did change the geometry, so the records below saw its events.
+        QVERIFY(subWindow->isMinimized());
+        QVERIFY(subWindow->size() != normal.size());
+
+        QCOMPARE(storedPosition("Thing_a"), normal.topLeft());
+        QCOMPARE(storedSize("Thing_a"), normal.size());
+        QCOMPARE(storedPosition("Thing"), normal.topLeft());
+        QCOMPARE(storedSize("Thing"), normal.size());
+    }
+
+    void aShadedWindowKeepsItsNormalGeometry()
+    {
+        // Qt reports a shaded sub-window as minimized, so MdiSubWindow's minimized check covers it.
+        // This fails if a Qt release stops doing so.
+        const QRect normal(100, 80, 900, 700);
+        HostWindow host;
+        MdiSubWindow* subWindow = openAtNormalGeometry(host, normal);
+        QVERIFY(subWindow != nullptr);
+
+        // The control: a normal move and resize is recorded, for the window and its kind.
+        QCOMPARE(storedPosition("Thing_a"), normal.topLeft());
+        QCOMPARE(storedSize("Thing_a"), normal.size());
+        QCOMPARE(storedSize("Thing"), normal.size());
+
+        subWindow->showShaded();
+        QCoreApplication::processEvents();
+
+        // The shade did change the geometry, so the records below saw its events.
+        QVERIFY(subWindow->isShaded());
+        QVERIFY(subWindow->size() != normal.size());
+
+        QCOMPARE(storedPosition("Thing_a"), normal.topLeft());
+        QCOMPARE(storedSize("Thing_a"), normal.size());
+        QCOMPARE(storedPosition("Thing"), normal.topLeft());
+        QCOMPARE(storedSize("Thing"), normal.size());
     }
 };
 
